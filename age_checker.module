@@ -1,0 +1,111 @@
+<?php
+/**
+ * @file
+ * Hook implementations for the age_checker module.
+ */
+
+define('AGE_CHECKER_VISIBILITY_NOTLISTED', 0);
+define('AGE_CHECKER_VISIBILITY_LISTED', 1);
+
+/**
+ * Implements hook_menu().
+ */
+function age_checker_menu() {
+  $items['admin/config/people/age_checker'] = array(
+    'title'            => 'Age Checker Settings',
+    'description'      => 'Configure default behaviour of Age Checker Settings.',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('age_checker_admin_form'),
+    'access callback'  => 'user_access',
+    'access arguments' => array('administer age checker settings'),
+    'file'             => 'age_checker.admin.inc',
+  );
+
+  $items['admin/config/people/age_checker_mapping'] = array(
+    'title'            => 'Age Checker Mapping',
+    'description'      => 'Language to country mapping will take place.',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('age_checker_mapping_admin_form'),
+    'access callback'  => 'user_access',
+    'access arguments' => array('administer age checker settings'),
+    'file'             => 'age_checker.admin.inc',
+  );
+
+  $items['agegate'] = array(
+    'title' => 'Age Gate',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('agegate_form'),
+    'access callback' => TRUE,
+    );
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function age_checker_permission() {
+  return array(
+    'administer age checker settings' => array(
+      'title'       => $t('administer age checker settings'),
+      'description' => $t('Full administration access, only for admin.'),
+    ),
+  );
+}
+
+function agegate_form($form,&$form_submit) {
+  $form['day']['pattern'] = array(
+    '#type'          => 'textfield',
+    '#default_value' => t('DD'),
+    '#size'          => 2,
+    '#maxlength'     => 2,
+    '#id'            => 'age_checker_day',
+    );
+
+  $form['month']['pattern'] = array(
+    '#type'          => 'textfield',
+    '#default_value' => t('MM'),
+    '#size'          => 2,
+    '#maxlength'     => 2,
+    '#id'            => 'age_checker_month',
+    );
+
+  $form['year']['pattern'] = array(
+    '#type'          => 'textfield',
+    '#default_value' => t('YYYY'),
+    '#size'          => 4,
+    '#maxlength'     => 4,
+    '#id'            => 'age_checker_year',
+    );  
+    $countries = variable_get('countries', '');
+    $countries = explode(',', $countries);
+    
+  $form['list_of_countries'] = array(
+    '#type' => 'select',
+    '#options' => $countries,
+    '#weight' => 1,
+    '#required' => TRUE,
+    '#attributes' => array(
+    'tabindex' => '1',
+    ),
+  );
+    
+  $form['remember_me'] = array(
+    '#type' => 'checkbox',
+    '#weight' => 6,
+    '#title' => t('Remember my details (Do not select on shared computers)'),
+    '#default_value' => 0,
+    '#attributes' => array(
+    'tabindex' => '6',
+    ),
+   );
+    
+  $form['submit'] = array(
+    '#type'       => 'submit',
+    '#value'      => 'submit',
+    '#weight' => 7,
+    '#attributes' => array(
+      'onclick'   => "age_checker.verify();",
+    ),
+  );
+  return $form;
+}
