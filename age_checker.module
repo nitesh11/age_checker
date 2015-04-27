@@ -151,12 +151,13 @@ function age_checker_theme($existing, $type, $theme, $path) {
   return array(
     'age_checker' => array(
       'variables' => array(
-        'background_img' => NULL,
-        'agegate_logo' => NULL,
-        'content_below_logo' => NULL, 
-        'cookies_declaration' => NULL,
-        'responsible_drinking_statement' => NULL,
-        'copyright' => NULL,
+        'age_cheker_background_img' => NULL,
+        'age_cheker_logo' => NULL,
+        'age_checker_header_massage' => NULL,
+        'age_checker_form' => NULL, 
+        'age_checker_cookies_declaration' => NULL,
+        'age_checker_drinking_statement' => NULL,
+        'age_checker_copyright' => NULL,
       ),
     'template' => 'age_checker',
     ),
@@ -176,31 +177,31 @@ function agechecker_template() {
   $file_logo = file_load($fid_logo);
   $uri_logo  = $file_logo->uri;
   //content below logo
-  $content_below_logo = 'This is content below logo, this may be slogan or message';
+  $age_checker_header_massage = 'This is content below logo, this may be slogan or message';
   
   $languages = variable_get('language', 'Please provide values');
   $languages = explode(',', $languages);
    foreach ($languages as $language) {
     $language = trim($language);
-    //$content_below_logo = variable_get($language . 'content_below_logo', '');
+    //$age_checker_header_massage = variable_get($language . 'age_checker_header_massage', '');
    }
   //storing age_checker_form into $form variable  
-  $form = drupal_get_form('age_checker_form');
+  $age_checker_form = drupal_get_form('age_checker_form');
   //cookies description
-  $cookies_declaration = '*This site uses cookies. By providing your age, you are agreeing to the use of cookies as described in our privacy notice.';
-  //copyright
-  $copyright = 'Copyright © Site name 2015';
+  $age_checker_cookies_declaration = '*This site uses cookies. By providing your age, you are agreeing to the use of cookies as described in our privacy notice.';
+  //age checker copyright
+  $age_checker_copyright = 'Copyright © Site name 2015';
   //responsible drinking statement
-  $responsible_drinking_statement = 'For the people over the age of 21 only';
+  $age_checker_drinking_statement = 'For the people over the age of 21 only';
   //sending variable to template
   return theme('age_checker', 
-    array( 
-    'background_img' => theme('image', array('path' => $uri_bgimg)),
-    'agegate_logo' => theme('image', array('path' => $uri_logo)),
-    'content_below_logo' => $content_below_logo, 
-    'form' => $form,
-    'cookies_declaration' => $cookies_declaration,
-    'responsible_drinking_statement' => $responsible_drinking_statement,
-    'copyright' => $copyright,
+    array(
+    'age_cheker_background_img' => theme('image', array('path' => $uri_bgimg)),
+    'age_cheker_logo' => theme('image', array('path' => $uri_logo)),
+    'age_checker_header_massage' => $age_checker_header_massage, 
+    'age_checker_form' => $age_checker_form,
+    'age_checker_cookies_declaration' => $age_checker_cookies_declaration,
+    'age_checker_drinking_statement' => $age_checker_drinking_statement,
+    'age_checker_copyright' => $age_checker_copyright,
     ));
 }

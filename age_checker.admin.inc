@@ -151,7 +151,6 @@ function age_checker_admin_form_validate($form, &$form_state) {
 function age_checker_mapping_admin_form($form, &$form_state) {
   $form = array();
   $languages = variable_get('language', 'Please provide values');
-  dsm($languages);
   $languages = explode(',', $languages);
    foreach ($languages as $language) {
     $language = trim($language);
@@ -161,19 +160,36 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
     );
-    $form[$language . 'mapping'][$language . 'content_below_logo'] = array(
+    $form[$language . 'mapping'][$language . 'age_checker_header_massage'] = array(
       '#type' => 'textarea',
       '#title' => t('Please enter a text to place below logo'),
       '#description' => t('This content will be place below the header section of age gate'),
-      '#default_value' => variable_get($language . 'content_below_logo', ''),
+      '#default_value' => variable_get($language . 'age_checker_header_massage', ''),
+      '#required' => TRUE,
+    );
+    $form[$language . 'mapping'][$language . 'age_checker_copyright'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Please enter copyright'),
+      '#description' => t('Above content will be use as a copyright'),
+      '#default_value' => variable_get($language . 'age_checker_copyright', ''),
+      '#required' => TRUE,
+    );
+    // cookies declaration 
+    $form[$language . 'mapping'][$language . 'age_checker_cookies_declaration'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Please enter cookies declaration'),
+      '#description' => t('Above message will give description that this site is using cookies'),
+      '#default_value' => variable_get($language . 'age_checker_cookies_declaration', ''),
       '#required' => FALSE,
     );
-    $form[$language . 'mapping'][$language . 'copy_right_term_and_condition'] = array(
-      '#type' => 'textarea',
-      '#title' => t('Please enter copy right, terms & condition'),
-      '#description' => t('Above content will be use as a copy right, terms and condition'),
-      '#default_value' => variable_get($language . '_gov_max_donation_val', ''),
-      '#required' => FALSE,
+    // Responsible drinking statement
+    $form[$language . 'mapping'][$language . 'age_checker_drinking_statement'] = array(
+    '#type'          => 'textarea',
+    '#title'         => t('Responsible drinking statement'),
+    '#required'      => FALSE,
+    '#maxlength'     => 255,
+    '#default_value' => variable_get('age_checker_drinking_statement', ''),
+    '#description'   => t('Please enter responsible drinking statement'),
     );
     $countries = variable_get('countries', 'Please provide values');
     $countries = explode(',', $countries);
@@ -185,8 +201,8 @@ function age_checker_mapping_admin_form($form, &$form_state) {
     '#multiple' => TRUE,
 );
   // Message Before the Form.
-  $message_beforeform = variable_get('age_checker_before_form_text', array('value' => '', 'format' => NULL));
-  $form[$language . 'mapping'][$language . 'age_checker_before_form_text'] = array(
+  $message_beforeform = variable_get('age_gate_header', array('value' => '', 'format' => NULL));
+  $form[$language . 'mapping'][$language . 'age_gate_header'] = array(
     '#title'         => t('Enter before text'),
     '#type'          => 'text_format',
     '#rows'          => 6,
@@ -195,8 +211,8 @@ function age_checker_mapping_admin_form($form, &$form_state) {
     '#format'        => $message_beforeform['format'],
   );
   // Message After the Form.
-  $message_afterform = variable_get('age_checker_after_form_text', array('value' => '', 'format' => NULL));
-  $form[$language . 'mapping'][$language . 'age_checker_after_form_text'] = array(
+  $message_afterform = variable_get('age_gate_footer', array('value' => '', 'format' => NULL));
+  $form[$language . 'mapping'][$language . 'age_gate_footer'] = array(
     '#title'         => t('Enter after Text'),
     '#type'          => 'text_format',
     '#rows'          => 6,
@@ -208,7 +224,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
   $form[$language . 'mapping'][$language . 'age_checker_blank_error_msg'] = array(
     '#type'          => 'textarea',
     '#title'         => t('Age Checker Blank Validation Message'),
-    '#required'      => FALSE,
+    '#required'      => TRUE,
     '#maxlength'     => 255,
     '#default_value' => variable_get('age_checker_blank_error_msg', 'Date field can not be blank.'),
     '#description'   => t('Please enter message text to populate in age checker validation.'),
@@ -217,7 +233,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
     $form[$language . 'mapping'][$language . 'age_checker_dateformat_error_msg'] = array(
     '#type'          => 'textarea',
     '#title'         => t('Incorrect Date Format Validation Message'),
-    '#required'      => FALSE,
+    '#required'      => TRUE,
     '#maxlength'     => 255,
     '#default_value' => variable_get('age_checker_dateformat_error_msg', 'Please enter your date of birth in correct format.'),
     '#description'   => t('Please enter message text to populate in age checker validation.'),
@@ -235,7 +251,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
   $form[$language . 'mapping'][$language . 'age_checker_underage_error_msg'] = array(
     '#type'          => 'textarea',
     '#title'         => t('Under Age Validation Message'),
-    '#required'      => FALSE,
+    '#required'      => TRUE,
     '#maxlength'     => 255,
     '#default_value' => variable_get('age_checker_underage_error_msg', 'Sorry, you are Under age limit and are prohibited from entering this site!'),
     '#description'   => t('Please enter error message for under age checker validation'),
@@ -249,6 +265,8 @@ function age_checker_mapping_admin_form($form, &$form_state) {
     '#default_value' => variable_get('age_checker_button_text', 'Begin your discovery'),
     '#description'   => t('Please enter submit button text.'),
   );
+  
+  
   }
   return system_settings_form($form);
 }
@@ -268,7 +286,7 @@ function age_checker_default_drinking_age_admin_form() {
     '#default_value'    => isset($age_checker_threshold_age) ? $age_checker_threshold_age : '18',
     '#description'      => t('The minimum age a user can be to pass the age checker.'),
   );
-
+  //This option will help user to decide whether to display a remember me check box or not.
   $form['option_remember_me'] = array(
     '#type' => 'checkbox',
     '#title' => t('Would you like to display remember me check box'),
