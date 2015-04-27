@@ -31,12 +31,20 @@ function age_checker_menu() {
     'file'             => 'age_checker.admin.inc',
   );
 
+  $items['admin/config/people/age_checker_default_drinking_age'] = array(
+    'title'            => 'Default drinking age',
+    'description'      => 'Default age is 18 for all countries except USA which is 21',
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('age_checker_default_drinking_age_admin_form'),
+    'access callback'  => 'user_access',
+    'access arguments' => array('administer age checker settings'),
+    'file'             => 'age_checker.admin.inc',
+  );
   $items['agegate'] = array(
-    'title' => 'Age Gate',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('agegate_form'),
-    'access callback' => TRUE,
+    'page callback'    => 'agechecker_template',
+    'access callback'  => TRUE,
     );
+
   return $items;
 }
 
@@ -46,66 +54,154 @@ function age_checker_menu() {
 function age_checker_permission() {
   return array(
     'administer age checker settings' => array(
-      'title'       => $t('administer age checker settings'),
-      'description' => $t('Full administration access, only for admin.'),
+      'title'       => t('administer age checker settings'),
+      'description' => t('Full administration access, only for admin.'),
     ),
   );
 }
-
-function agegate_form($form,&$form_submit) {
-  $form['day']['pattern'] = array(
+/**
+ * Function for age checker form.
+ */
+function age_checker_form($form,&$form_submit) {
+  //day
+  $form['day'] = array(
     '#type'          => 'textfield',
-    '#default_value' => t('DD'),
     '#size'          => 2,
     '#maxlength'     => 2,
     '#id'            => 'age_checker_day',
+    '#weight'        => 1,
+    '#attributes'   => array(
+      'pattern'     => "[0-9]*",
+      'tabindex'    => '1',
+      'placeholder' => t('DD'),
+      ),
+    '#required' => TRUE,
     );
-
-  $form['month']['pattern'] = array(
+  //month
+  $form['month'] = array(
     '#type'          => 'textfield',
-    '#default_value' => t('MM'),
     '#size'          => 2,
     '#maxlength'     => 2,
     '#id'            => 'age_checker_month',
+    '#weight'        => 2,
+    '#attributes'   => array(
+      'pattern'     => "[0-9]*",
+      'tabindex'    => '2',
+      'placeholder' => t('MM'),
+      ),
+    '#required' => TRUE,
     );
-
-  $form['year']['pattern'] = array(
+  //year
+  $form['year'] = array(
     '#type'          => 'textfield',
-    '#default_value' => t('YYYY'),
     '#size'          => 4,
     '#maxlength'     => 4,
     '#id'            => 'age_checker_year',
-    );  
-    $countries = variable_get('countries', '');
-    $countries = explode(',', $countries);
-    
+    '#weight'        => 3,
+    '#attributes' => array(
+      'pattern' => "[0-9]*",
+      'tabindex' => '3',
+      'placeholder' => t('YYYY'),
+      ),
+    '#required' => TRUE,
+    );
+  //country list
+  $countries = variable_get('countries', '');
+  $countries = explode(',', $countries);
+    if(count($countries) > 1) {
   $form['list_of_countries'] = array(
     '#type' => 'select',
     '#options' => $countries,
     '#weight' => 1,
     '#required' => TRUE,
     '#attributes' => array(
-    'tabindex' => '1',
+    'tabindex' => '4',
     ),
   );
-    
+    }
+  //remember me checkbox
+  $option_remember_me = variable_get('option_remember_me', '');
+    if ($option_remember_me == 1) {
   $form['remember_me'] = array(
     '#type' => 'checkbox',
     '#weight' => 6,
     '#title' => t('Remember my details (Do not select on shared computers)'),
     '#default_value' => 0,
     '#attributes' => array(
-    'tabindex' => '6',
-    ),
-   );
-    
+      'tabindex' => '5',
+      ),
+    );
+  }
+  //submit button
   $form['submit'] = array(
-    '#type'       => 'submit',
-    '#value'      => 'submit',
+    '#type' => 'submit',
+    '#value' => 'submit',
     '#weight' => 7,
     '#attributes' => array(
       'onclick'   => "age_checker.verify();",
+      'tabindex' => '6',
+    ),
+   );
+  return $form;
+}
+/**
+ * Implements hook_theme().
+ */
+function age_checker_theme($existing, $type, $theme, $path) {
+  return array(
+    'age_checker' => array(
+      'variables' => array(
+        'age_cheker_background_img' => NULL,
+        'age_cheker_logo' => NULL,
+        'age_checker_header_massage' => NULL,
+        'age_checker_form' => NULL, 
+        'age_checker_cookies_declaration' => NULL,
+        'age_checker_drinking_statement' => NULL,
+        'age_checker_copyright' => NULL,
+      ),
+    'template' => 'age_checker',
     ),
   );
-  return $form;
+}
+
+/**
+ * Function agechecker_template
+ */
+function agechecker_template() {
+  //background image
+  $fid_bgimg = variable_get('age_checker_background_image', '');
+  $file_bgimg = file_load($fid_bgimg);
+  $uri_bgimg  = $file_bgimg->uri;
+  //logo
+  $fid_logo = variable_get('age_checker_logo', '');
+  $file_logo = file_load($fid_logo);
+  $uri_logo  = $file_logo->uri;
+  //content below logo
+  $age_checker_header_massage = 'This is content below logo, this may be slogan or message';
+  
+  $languages = variable_get('language', 'Please provide values');
+  $languages = explode(',', $languages);
+   foreach ($languages as $language) {
+    $language = trim($language);
+    //$age_checker_header_massage = variable_get($language . 'age_checker_header_massage', '');
+   }
+  //storing age_checker_form into $form variable  
+  $age_checker_form = drupal_get_form('age_checker_form');
+  //cookies description
+  $age_checker_cookies_declaration = '*This site uses cookies. By providing your age, you are agreeing to the use of cookies as described in our privacy notice.';
+  //age checker copyright
+  $age_checker_copyright = 'Copyright © Site name 2015';
+  //responsible drinking statement
+  $age_checker_drinking_statement = 'For the people over the age of 21 only';
+  //sending variable to template
+  return theme('age_checker', 
+    array(
+    'age_cheker_background_img' => theme('image', array('path' => $uri_bgimg)),
+    'age_cheker_logo' => theme('image', array('path' => $uri_logo)),
+    'age_checker_header_massage' => $age_checker_header_massage, 
+    'age_checker_form' => $age_checker_form,
+    'age_checker_cookies_declaration' => $age_checker_cookies_declaration,
+    'age_checker_drinking_statement' => $age_checker_drinking_statement,
+    'age_checker_copyright' => $age_checker_copyright,
+    ));
 }
