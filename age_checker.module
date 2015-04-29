@@ -282,8 +282,7 @@ function _get_geoip_data($url) {
 }
 
 function _get_country_name() {
-  // $ip_address = ip_address();
-  $ip_address = '41.47.255.255';
+  $ip_address = ip_address();
   //error_log($ip_address);
   $url = 'http://freegeoip.net/json/' . $ip_address;
   $geoip_data = _get_geoip_data($url);
@@ -296,8 +295,6 @@ function _get_country_name() {
       $country_list[$country_array[0]] = $country_array[1];
     }
     $country_name = isset($country_list[$country_code]) ? $country_list[$country_code] : '';
-    dsm($country_name);
-    dsm("d,j");
     if (isset($country_name) || $country_name !== '') {
       $country_name = $country_code;
     }
