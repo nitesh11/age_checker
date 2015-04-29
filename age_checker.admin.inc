@@ -9,6 +9,7 @@
  */
 function age_checker_admin_form() {
   $form = array();
+
     // Language for age checker.
   $form['lang'] = array(
     '#title'         => t('Age Checker Language'),
@@ -39,7 +40,6 @@ function age_checker_admin_form() {
     '#default_value' => variable_get('countries', ''),
     '#description'   => t('Please enter required language'),
   );
-  
   // Verification options for age checker.
   $form['options'] = array(
     '#title'         => t('Age Checker Options'),
@@ -47,7 +47,6 @@ function age_checker_admin_form() {
     '#collapsible'   => TRUE,
     '#collapsed'     => TRUE,
   );
-  
   // Cookie Expiration Time.
   $age_checker_cookie_expiration_time = variable_get('age_checker_cookie_expiration_time', '15');
   $form['options']['age_checker_cookie_expiration_time'] = array(
@@ -119,6 +118,14 @@ function age_checker_admin_form() {
       'file_validate_size'       => array(1000000),
     ),
   );
+
+  // Do you want Remember Me option.
+  $form['option_remember_me'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Would you like to display remember me check box'),
+    '#default_value' => 0,
+  );
+
   return system_settings_form($form);
 }
 
@@ -128,22 +135,33 @@ function age_checker_admin_form() {
 function age_checker_admin_form_validate($form, &$form_state) {
   //validation for countries
   $countries = $form_state['input']['countries'];
-  $countries = explode(',', $countries);
-      foreach ($countries as $country) {
-      if (preg_match('/[0-9]/', $country)) {
-      form_set_error('countries', t('Please enter proper country name'));
+  $countries = explode("\n", $countries);
+  $country_options = array();
+    foreach ($countries as $country) {
+      $country = explode('|', $country);
+      $country_options[$country[0]] = $country[1];
+      $countries_list = array_map('trim', $country_options);
     }
-  }
+    foreach ($countries_list as $country_list) {
+     if (preg_match('/[0-9]/', $country_list)) {
+        form_set_error('countries', t('Please enter proper country name'));
+      }
+    }
   //validation for languages
   $languages = $form_state['input']['language'];
-  $languages = explode(',', $languages);
-      foreach ($languages as $language) {
+  $languages = explode("\n", $languages);
+  $languages_options = array();
+    foreach ($languages as $language) {
+      $language = explode('|', $language);
+      $language_options[$language[0]] = $language[1];
+      $language_list = array_map('trim', $language_options);
+    }
+    foreach ($language_list as $language) {
       if (preg_match('/[0-9]/', $language)) {
-      form_set_error('language', t('Please enter proper language name'));
+        form_set_error('language', t('Please enter proper language name'));
     }
   }
 }
-
 /**
  * @file
  * Function for creating settings form to for basic configuration.
@@ -151,122 +169,138 @@ function age_checker_admin_form_validate($form, &$form_state) {
 function age_checker_mapping_admin_form($form, &$form_state) {
   $form = array();
   $languages = variable_get('language', 'Please provide values');
-  $languages = explode(',', $languages);
-   foreach ($languages as $language) {
-    $language = trim($language);
-    $form[$language . 'mapping'] = array(
+  $languages = explode("\n", $languages);
+  foreach ($languages as $language) {
+    $language = explode('|', $language);
+    $form[$language[0] . 'mapping'] = array(
       '#type' => 'fieldset',
-      '#title' => check_plain($language),
+      '#title' => check_plain($language[1]),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
     );
-    $form[$language . 'mapping'][$language . 'age_checker_header_massage'] = array(
+    $language = $language[0];
+    $form[$language . 'mapping'][$language . '_age_checker_header_message'] = array(
       '#type' => 'textarea',
       '#title' => t('Please enter a text to place below logo'),
       '#description' => t('This content will be place below the header section of age gate'),
-      '#default_value' => variable_get($language . 'age_checker_header_massage', ''),
+      '#default_value' => variable_get($language . '_age_checker_header_message', ''),
       '#required' => TRUE,
     );
-    $form[$language . 'mapping'][$language . 'age_checker_copyright'] = array(
+    $form[$language . 'mapping'][$language . '_age_checker_copyright'] = array(
       '#type' => 'textarea',
       '#title' => t('Please enter copyright'),
       '#description' => t('Above content will be use as a copyright'),
-      '#default_value' => variable_get($language . 'age_checker_copyright', ''),
+      '#default_value' => variable_get($language . '_age_checker_copyright', ''),
       '#required' => TRUE,
     );
     // cookies declaration 
-    $form[$language . 'mapping'][$language . 'age_checker_cookies_declaration'] = array(
+    $form[$language . 'mapping'][$language . '_age_checker_cookies_declaration'] = array(
       '#type' => 'textarea',
       '#title' => t('Please enter cookies declaration'),
       '#description' => t('Above message will give description that this site is using cookies'),
-      '#default_value' => variable_get($language . 'age_checker_cookies_declaration', ''),
+      '#default_value' => variable_get($language . '_age_checker_cookies_declaration', ''),
       '#required' => FALSE,
     );
     // Responsible drinking statement
-    $form[$language . 'mapping'][$language . 'age_checker_drinking_statement'] = array(
-    '#type'          => 'textarea',
-    '#title'         => t('Responsible drinking statement'),
-    '#required'      => FALSE,
-    '#maxlength'     => 255,
-    '#default_value' => variable_get('age_checker_drinking_statement', ''),
-    '#description'   => t('Please enter responsible drinking statement'),
+    $form[$language . 'mapping'][$language . '_age_checker_drinking_statement'] = array(
+      '#type'          => 'textarea',
+      '#title'         => t('Responsible drinking statement'),
+      '#required'      => FALSE,
+      '#maxlength'     => 255,
+      '#default_value' => variable_get($language . '_age_checker_drinking_statement', ''),
+      '#description'   => t('Please enter responsible drinking statement'),
     );
-    $countries = variable_get('countries', 'Please provide values');
-    $countries = explode(',', $countries);
-    $form[$language . 'mapping'][$language . 'country_list'] = array(
-    '#title' => t('Please select country'),
-    '#type' => 'select',
-    '#description' => t('please select country that would like to map with language'),
-    '#options' => $countries,
-    '#multiple' => TRUE,
-);
-  // Message Before the Form.
-  $message_beforeform = variable_get('age_gate_header', array('value' => '', 'format' => NULL));
-  $form[$language . 'mapping'][$language . 'age_gate_header'] = array(
-    '#title'         => t('Enter before text'),
-    '#type'          => 'text_format',
-    '#rows'          => 6,
-    '#default_value' => $message_beforeform['value'] ? $message_beforeform['value'] : '',
-    '#description'   => t('The message displayed before the Form.'),
-    '#format'        => $message_beforeform['format'],
-  );
-  // Message After the Form.
-  $message_afterform = variable_get('age_gate_footer', array('value' => '', 'format' => NULL));
-  $form[$language . 'mapping'][$language . 'age_gate_footer'] = array(
-    '#title'         => t('Enter after Text'),
-    '#type'          => 'text_format',
-    '#rows'          => 6,
-    '#default_value' => $message_afterform['value'] ? $message_afterform['value'] : '',
-    '#description'   => t('The message displayed after the Form'),
-    '#format'        => $message_afterform['format'],
-  );
-   // Age checker validation message.
-  $form[$language . 'mapping'][$language . 'age_checker_blank_error_msg'] = array(
-    '#type'          => 'textarea',
-    '#title'         => t('Age Checker Blank Validation Message'),
-    '#required'      => TRUE,
-    '#maxlength'     => 255,
-    '#default_value' => variable_get('age_checker_blank_error_msg', 'Date field can not be blank.'),
-    '#description'   => t('Please enter message text to populate in age checker validation.'),
-  );
-    // Incorrect Date Format Validation Message
-    $form[$language . 'mapping'][$language . 'age_checker_dateformat_error_msg'] = array(
-    '#type'          => 'textarea',
-    '#title'         => t('Incorrect Date Format Validation Message'),
-    '#required'      => TRUE,
-    '#maxlength'     => 255,
-    '#default_value' => variable_get('age_checker_dateformat_error_msg', 'Please enter your date of birth in correct format.'),
-    '#description'   => t('Please enter message text to populate in age checker validation.'),
-  );
+    //country list
+    $countries = variable_get('countries', '');
+    $countries = explode("\n", $countries);
+    $country_options = array();
+    foreach ($countries as $country) {
+      $country = explode('|', $country);
+      $country_options[$country[0]] = $country[1];
+      $result = array_map('trim', $country_options);
+    }
+    $form[$language . 'mapping'][$language . '_country_list'] = array(
+      '#title' => t('Please select country'),
+      '#type' => 'select',
+      '#description' => t('please select country that would like to map with language'),
+      '#default_value' => variable_get($language . '_country_list', ''),
+      '#options' => $result,
+      '#multiple' => TRUE,
+    );
+    // Message Before the Form.
+    $message_beforeform = variable_get($language . '_age_gate_header', array('value' => '', 'format' => NULL));
+    $form[$language . 'mapping'][$language . '_age_gate_header'] = array(
+      '#title'         => t('Enter before text'),
+      '#type'          => 'text_format',
+      '#rows'          => 6,
+      '#default_value' => $message_beforeform['value'] ? $message_beforeform['value'] : '',
+      '#description'   => t('The message displayed before the Form.'),
+      '#format'        => $message_beforeform['format'],
+    );
+    // Message After the Form.
+    $message_afterform = variable_get($language . '_age_gate_footer', array('value' => '', 'format' => NULL));
+    $form[$language . 'mapping'][$language . '_age_gate_footer'] = array(
+      '#title'         => t('Enter after Text'),
+      '#type'          => 'text_format',
+      '#rows'          => 6,
+      '#default_value' => $message_afterform['value'] ? $message_afterform['value'] : '',
+      '#description'   => t('The message displayed after the Form'),
+      '#format'        => $message_afterform['format'],
+    );
+     // Age checker validation message.
+    $form[$language . 'mapping'][$language . '_age_checker_blank_error_msg'] = array(
+      '#type'          => 'textarea',
+      '#title'         => t('Age Checker Blank Validation Message'),
+      '#required'      => TRUE,
+      '#maxlength'     => 255,
+      '#default_value' => variable_get($language . '_age_checker_blank_error_msg', 'Date field can not be blank.'),
+      '#description'   => t('Please enter message text to populate in age checker validation.'),
+    );
+      // Incorrect Date Format Validation Message
+    $form[$language . 'mapping'][$language . '_age_checker_dateformat_error_msg'] = array(
+      '#type'          => 'textarea',
+      '#title'         => t('Incorrect Date Format Validation Message'),
+      '#required'      => TRUE,
+      '#maxlength'     => 255,
+      '#default_value' => variable_get($language . '_age_checker_dateformat_error_msg', 'Please enter your date of birth in correct format.'),
+      '#description'   => t('Please enter message text to populate in age checker validation.'),
+    );
+      // Date Out Of Range Validation Message
+    $form[$language . 'mapping'][$language . '_age_checker_daterange_error_msg'] = array(
+      '#type'          => 'textarea',
+      '#title'         => t('Date Out Of Range Validation Message'),
+      '#required'      => FALSE,
+      '#maxlength'     => 255,
+      '#default_value' => variable_get($language . '_age_checker_daterange_error_msg', 'Please enter your date of birth in valid date range.'),
+      '#description'   => t('Please enter message text to populate in age checker validation.'),
+    );
+    // Error message for under age.
+    $form[$language . 'mapping'][$language . '_age_checker_underage_error_msg'] = array(
+      '#type'          => 'textarea',
+      '#title'         => t('Under Age Validation Message'),
+      '#required'      => TRUE,
+      '#maxlength'     => 255,
+      '#default_value' => variable_get($language . '_age_checker_underage_error_msg', 'Sorry, you are Under age limit and are prohibited from entering this site!'),
+      '#description'   => t('Please enter error message for under age checker validation'),
+    );
+    // Age checker submit button text.
+    $form[$language . 'mapping'][$language . '_age_checker_button_text'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Button Text'),
+      '#maxlength'     => 50,
+      '#required'      => FALSE,
+      '#default_value' => variable_get($language . '_age_checker_button_text', 'Begin your discovery'),
+      '#description'   => t('Please enter submit button text.'),
+    );
     // Date Out Of Range Validation Message
-    $form[$language . 'mapping'][$language . 'age_checker_daterange_error_msg'] = array(
-    '#type'          => 'textarea',
-    '#title'         => t('Date Out Of Range Validation Message'),
-    '#required'      => FALSE,
-    '#maxlength'     => 255,
-    '#default_value' => variable_get('age_checker_daterange_error_msg', 'Please enter your date of birth in valid date range.'),
-    '#description'   => t('Please enter message text to populate in age checker validation.'),
-  );
-  // Error message for under age.
-  $form[$language . 'mapping'][$language . 'age_checker_underage_error_msg'] = array(
-    '#type'          => 'textarea',
-    '#title'         => t('Under Age Validation Message'),
-    '#required'      => TRUE,
-    '#maxlength'     => 255,
-    '#default_value' => variable_get('age_checker_underage_error_msg', 'Sorry, you are Under age limit and are prohibited from entering this site!'),
-    '#description'   => t('Please enter error message for under age checker validation'),
-  );
-  // Age checker submit button text.
-  $form[$language . 'mapping'][$language . 'age_checker_button_text'] = array(
-    '#type'          => 'textfield',
-    '#title'         => t('Button Text'),
-    '#maxlength'     => 50,
-    '#required'      => FALSE,
-    '#default_value' => variable_get('age_checker_button_text', 'Begin your discovery'),
-    '#description'   => t('Please enter submit button text.'),
-  );
-  
-  
+    $form[$language . 'mapping'][$language . '_age_checker_footer_links'] = array(
+      '#type'          => 'textarea',
+      '#title'         => t('Age checker footer links'),
+      '#required'      => FALSE,
+      '#maxlength'     => 255,
+      '#default_value' => variable_get($language . '_age_checker_footer_links', ''),
+      '#description'   => t('Please enter footer links like, Privacy policy, Terms of use, cookie policy'),
+    );
   }
   return system_settings_form($form);
 }
@@ -274,24 +308,144 @@ function age_checker_mapping_admin_form($form, &$form_state) {
 /**
  * Form callback for age_checker admin settings.
  */
-function age_checker_default_drinking_age_admin_form() {
+function age_checker_country_configuration() {
   $form = array();
+
+  $country_options = array();
+  $countries = variable_get('countries', '');
+  $countries = explode("\n", $countries);
+  foreach ($countries as $country) {
+    $country_array = explode('|', $country);
+    $country_options[$country_array[0]] = $country_array[1];
+    $country_list = array_map('trim', $country_options);
+  }
+  $form['default_country_configuration'] = array(
+    '#title'         => t('Default Country Configuration'),
+    '#type'          => 'fieldset',
+    '#collapsible'   => TRUE,
+    '#collapsed'     => TRUE,
+  );
+  $form['default_country_configuration']['default_country'] = array(
+    '#type' => 'select',
+    '#description' => t('Select the default country of the site.'),
+    '#default_value' => variable_get('default_country'),
+    '#options' => $country_list,
+  );
+
+  $form['ages'] = array(
+    '#title'         => t('Threshold Ages of Countries'),
+    '#type'          => 'fieldset',
+    '#collapsible'   => TRUE,
+    '#collapsed'     => FALSE,
+  );
+
   // Minimum Age Checker.
-  $age_checker_threshold_age = variable_get('age_checker_threshold_age', 18);
-  $form['options']['age_checker_threshold_age'] = array(
-    '#title'            => t('Enter threshold age limit in whole years ie. 18'),
-    '#type'             => 'textfield',
-    '#size'             => 3,
-    '#element_validate' => array('element_validate_integer'),
-    '#default_value'    => isset($age_checker_threshold_age) ? $age_checker_threshold_age : '18',
-    '#description'      => t('The minimum age a user can be to pass the age checker.'),
+  foreach ($countries as $country) {
+    $country_array = explode('|', $country);
+    $form['ages'][$country_array[0] . '_threshold_ages'] = array(
+      '#prefix'           => '<div class="container-inline">',
+      '#suffix'           => '</div>',
+      '#title'            => $country_array[1],
+      '#default_value'    => variable_get($country_array[0] . '_threshold_ages', 18),
+      '#type'             => 'textfield',
+      '#size'             => 3,
+      '#element_validate' => array('element_validate_integer'),
+    );
+  }
+
+  // Getting the format of the date field.
+  $form['date_format'] = array(
+    '#title'         => t('Required Date Format'),
+    '#type'          => 'fieldset',
+    '#collapsible'   => TRUE,
+    '#collapsed'     => FALSE,
   );
-  //This option will help user to decide whether to display a remember me check box or not.
-  $form['option_remember_me'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Would you like to display remember me check box'),
-    '#default_value' => 0,
-  );
+
+  foreach ($countries as $country) {
+    $country_array = explode('|', $country);
+    $form['date_format'][$country_array[0]] = array(
+      '#title'         => $country_array[1],
+      '#type'          => 'fieldset',
+      '#collapsible'   => TRUE,
+      '#collapsed'     => TRUE,
+    );
+
+    // Fieldset for Changing the Date format.
+    $form['date_format'][$country_array[0]]['weight'] = array(
+      '#title'         => t('Changing the weight of the date field'),
+      '#type'          => 'fieldset',
+      '#collapsible'   => TRUE,
+      '#collapsed'     => TRUE,
+    );
+    // Changing the weight of Day field.
+    $form['date_format'][$country_array[0]]['weight'][$country_array[0] . '_day_weight'] = array(
+      '#title'            => t('Weight of Day Field :'),
+      '#prefix'           => '<div class="container-inline">',
+      '#suffix'           => '</div>',
+      '#default_value'    => variable_get($country_array[0] . '_day_weight', 1),
+      '#type'             => 'textfield',
+      '#size'             => 1,
+      '#element_validate' => array('element_validate_integer'),
+    );
+    // Changing the weight of Month field.
+    $form['date_format'][$country_array[0]]['weight'][$country_array[0] . '_month_weight'] = array(
+      '#title'            => t('Weight of Month Field :'),
+      '#prefix'           => '<div class="container-inline">',
+      '#suffix'           => '</div>',
+      '#default_value'    => variable_get($country_array[0] . '_month_weight', 2),
+      '#type'             => 'textfield',
+      '#size'             => 1,
+      '#element_validate' => array('element_validate_integer'),
+    );
+    // Changing the weight of Year field.
+    $form['date_format'][$country_array[0]]['weight'][$country_array[0] . '_year_weight'] = array(
+      '#title'            => t('Weight of Year field : '),
+      '#prefix'           => '<div class="container-inline">',
+      '#suffix'           => '</div>',
+      '#default_value'    => variable_get($country_array[0] . '_year_weight', 3),
+      '#type'             => 'textfield',
+      '#size'             => 1,
+      '#element_validate' => array('element_validate_integer'),
+    );
+
+    // Fieldset for Changing the Placeholder.
+    $form['date_format'][$country_array[0]]['placeholder'] = array(
+      '#title'         => t('Changing the placeholder of the date field'),
+      '#type'          => 'fieldset',
+      '#collapsible'   => TRUE,
+      '#collapsed'     => TRUE,
+    );
+    // Placeholder for Day format.
+    $form['date_format'][$country_array[0]]['placeholder'][$country_array[0] . '_day_placeholder'] = array(
+      '#type'             => 'textfield',
+      '#title'            => t('Day Placeholder :'),
+      '#prefix'           => '<div class="container-inline">',
+      '#suffix'           => '</div>',
+      '#required'         => FALSE,
+      '#default_value'    => variable_get($country_array[0] . '_day_placeholder', 'DD'),
+      '#size'             => 2,
+    );
+    // Placeholder for Month format.
+    $form['date_format'][$country_array[0]]['placeholder'][$country_array[0] . '_month_placeholder'] = array(
+      '#type'             => 'textfield',
+      '#title'            => t('Month Placeholder :'),
+      '#prefix'           => '<div class="container-inline">',
+      '#suffix'           => '</div>',
+      '#required'         => FALSE,
+      '#default_value'    => variable_get($country_array[0] . '_month_placeholder', 'MM'),
+      '#size'             => 2,
+    );
+    // Placeholder for Year format.
+    $form['date_format'][$country_array[0]]['placeholder'][$country_array[0] . '_year_placeholder'] = array(
+      '#type'             => 'textfield',
+      '#prefix'           => '<div class="container-inline">',
+      '#suffix'           => '</div>',
+      '#title'            => t('Year Placeholder :'),
+      '#required'         => FALSE,
+      '#default_value'    => variable_get($country_array[0] . '_year_placeholder', 'YYYY'),
+      '#size'             => 4,
+    );
+  }
+
   return system_settings_form($form);
 }
-
