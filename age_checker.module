@@ -340,14 +340,15 @@ function agechecker_template() {
   $language_code = _get_language_code();
 
   // Header text of the form.
-  $age_checker_header_message = variable_get($language_code . '_age_checker_header_message');
+  $age_checker_header_message_array = variable_get($language_code . '_age_gate_header');
+  $age_checker_header_message = $age_checker_header_message_array['value'];
   
   // Form Element.
   $age_checker_form = drupal_get_form('age_checker_form');
   
   // Footer text of the form.
-  $age_checker_footer_message = variable_get($language_code . '_age_gate_footer');
-
+  $age_checker_footer_message_array = variable_get($language_code . '_age_gate_footer');
+  $age_checker_footer_message = $age_checker_footer_message_array['value'];
   // sending variable to template
   return theme('age_checker', 
     array(
