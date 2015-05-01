@@ -18,15 +18,40 @@
  * - $age_checker_drinking_statement: This variable will provide a responsible  drinking age statement
  * - $age_checker_copyright: This variable will provide a copyright statement
  */
-print $age_cheker_background_img;
-print $age_cheker_logo;
-print $age_checker_header_message;
-print ( drupal_render($age_checker_form) );
+// print $age_cheker_background_img;
+// print $age_cheker_logo;
+// print $age_checker_header_message;
+// print ( drupal_render($age_checker_form) );
 // print ( drupal_render($age_checker_form['day']) );
 // print ( drupal_render($age_checker_form['month']) );
 // print ( drupal_render($age_checker_form['year']) );
 // print ( drupal_render($age_checker_form['remember_me']) );
 // print ( drupal_render($age_checker_form['submit']) );
-print $age_checker_cookies_declaration;
-print $age_checker_drinking_statement;
-print $age_checker_copyright;
+// print $age_checker_cookies_declaration;
+// print $age_checker_drinking_statement;
+// print $age_checker_copyright;
+
+
+?>
+
+<div id="age_checker_content" class="agegate_content">
+  <div id="age_checker_message">
+   <?php print $age_checker_header_message; ?>
+  </div>
+
+  <div id="age_checker_widget">
+    <?php print ( drupal_render($age_checker_form) );?>
+  </div>
+</div>
+
+<div id="age_checker_declaration">
+  <?php print $age_checker_cookies_declaration; ?>
+</div>
+
+<div id="age_checker_drinking_statement">
+  <?php print $age_checker_drinking_statement; ?>
+</div>
+
+<div id="age_checker_copyright">
+  <?php print $age_checker_copyright; ?>
+</div>

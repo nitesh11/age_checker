@@ -59,7 +59,7 @@ function age_checker_menu() {
   $items['agegate'] = array(
     'page callback'    => 'agechecker_template',
     'access callback'  => TRUE,
-    );
+  );
   return $items;
 }
 
@@ -97,6 +97,7 @@ function age_checker_form($form,&$form_submit) {
   if(count($result) > 1) {
     $form['list_of_countries'] = array(
       '#type' => 'select',
+      '#title' => '- Select your country of residence -',
       '#options' => $result,
       '#weight' => 1,
       '#default_value' => $selected_country,
@@ -155,7 +156,7 @@ function age_checker_form($form,&$form_submit) {
   $form['remember_me'] = array(
     '#type' => 'checkbox',
     '#weight' => 6,
-    '#title' => t('Remember my details (Do not select on shared computers)'),
+    '#title' => t('Remember me'),
     '#default_value' => 0,
     '#attributes' => array(
       'tabindex' => '5',
@@ -183,14 +184,20 @@ function age_checker_theme($existing, $type, $theme, $path) {
       'path' => AGE_GATE_TEMPLATE_PATH,
       'template' => 'age_checker',
       'variables' => array(
-        'age_cheker_background_img' => NULL,
-        'age_cheker_logo' => NULL,
         'age_checker_header_message' => NULL,
-        'age_checker_form' => NULL, 
+        'age_checker_form' => NULL,
         'age_checker_cookies_declaration' => NULL,
         'age_checker_drinking_statement' => NULL,
         'age_checker_copyright' => NULL,
       ),
+    ),
+    'age_checker_page' => array(
+      'template' => 'templates/age-checker-page',
+      'render element' => 'page',
+      'variables' => array(
+        'age_cheker_background_img' => NULL,
+        'age_cheker_logo' => NULL,
+      )
     ),
   );
 }
@@ -199,15 +206,7 @@ function age_checker_theme($existing, $type, $theme, $path) {
  * Function agechecker_template
  */
 function agechecker_template() {
-  //background image
-  $fid_bgimg = variable_get('age_checker_background_image', '');
-  $file_bgimg = file_load($fid_bgimg);
-  $uri_bgimg  = $file_bgimg->uri;
-  //logo
-  $fid_logo = variable_get('age_checker_logo', '');
-  $file_logo = file_load($fid_logo);
-  $uri_logo  = $file_logo->uri;
-  
+
   //getting all values from age_checker_mapping_admin_form
   $languages = variable_get('language', '');
   $languages = explode("\n", $languages);
@@ -223,25 +222,25 @@ function agechecker_template() {
   if (!isset($selected_country) || $selected_country == '') {
     $selected_country = _get_country_name();
   }
-  dsm($selected_country);
+
   foreach ($languages_result as $language_result) {
-    $age_checker_header_message = variable_get($language_result . 'age_checker_header_message', '');
+    $age_checker_header_message = variable_get($language_result . '_age_checker_header_message', '');
     $age_checker_header_message_array[$language_result] = $age_checker_header_message;
-        
+
     $age_checker_cookies_declaration = variable_get($language_result . 'age_checker_cookies_declaration', '');
     $age_checker_cookies_declaration_array[$language_result] = $age_checker_cookies_declaration;
-       
+
     $age_checker_drinking_statement = variable_get($language_result . 'age_checker_drinking_statement', '');
     $age_checker_drinking_statement_array[$language_result] = $age_checker_drinking_statement;
     $age_checker_copyright = variable_get($language_result . 'age_checker_copyright', '');
     $country_list = variable_get($language_result . 'country_list', '');
     $country_list_array[$language_result] = $country_list;
-    $age_gate_cookies[$language_result] = array('age_checker_header_message' => 
+    $age_gate_cookies[$language_result] = array('age_checker_header_message' =>
     $age_checker_header_message_array, 'countries' => $country_list_array);
     $_COOKIES['age_gate'] = $age_gate_cookies;
   }
-  dsm($_COOKIES['age_gate']);
-  //storing age_checker_form into $form variable  
+
+  //storing age_checker_form into $form variable
   $age_checker_form = drupal_get_form('age_checker_form');
   //cookies description
   $age_checker_cookies_declaration = '*This site uses cookies. By providing your age, you are agreeing to the use of cookies as described in our privacy notice.';
@@ -250,11 +249,9 @@ function agechecker_template() {
   //responsible drinking statement
   $age_checker_drinking_statement = 'For the people over the age of 21 only';
   //sending variable to template
-  return theme('age_checker', 
+  return theme('age_checker',
     array(
-    'age_cheker_background_img' => theme('image', array('path' => $uri_bgimg)),
-    'age_cheker_logo' => theme('image', array('path' => $uri_logo)),
-    'age_checker_header_message' => $age_checker_header_message, 
+    'age_checker_header_message' => $age_checker_header_message,
     'age_checker_form' => $age_checker_form,
     'age_checker_cookies_declaration' => $age_checker_cookies_declaration,
     'age_checker_drinking_statement' => $age_checker_drinking_statement,
@@ -283,6 +280,13 @@ function _get_geoip_data($url) {
 
 function _get_country_name() {
   $ip_address = ip_address();
+
+  static $country_name_po = array();
+
+  if (isset($country_name_po[$ip_address]) && ($country_name_po[$ip_address])) {
+    return $country_name_po[$ip_address];
+  }
+
   //error_log($ip_address);
   $url = 'http://freegeoip.net/json/' . $ip_address;
   $geoip_data = _get_geoip_data($url);
@@ -305,5 +309,29 @@ function _get_country_name() {
   else {
     $country_name = variable_get('default_country');
   }
+
+  $country_name_po[$ip_address] = $country_name;
+
   return $country_name;
+}
+
+
+/**
+ * @param $variables
+ */
+function age_checker_preprocess_page(&$variables){
+  //background image
+  $fid_bgimg = variable_get('age_checker_background_image', '');
+  $file_bgimg = file_load($fid_bgimg);
+  $uri_bgimg  = $file_bgimg->uri;
+  //logo
+  $fid_logo = variable_get('age_checker_logo', '');
+  $file_logo = file_load($fid_logo);
+  $uri_logo  = $file_logo->uri;
+
+  if (current_path() == "agegate") {
+    $variables['age_cheker_background_img'] = theme('image', array('path' => $uri_bgimg));
+    $variables['age_cheker_logo'] = theme('image', array('path' => $uri_logo));
+    $variables['theme_hook_suggestions'][] = 'age_checker_page';
+  }
 }
