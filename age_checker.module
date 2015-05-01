@@ -163,7 +163,7 @@ function age_checker_form($form,&$form_submit) {
   if(count($result) > 1) {
     $form['list_of_countries'] = array(
       '#type' => 'select',
-      '#title' => variable_get($langauge_code . '_select_list_label'),
+      '#title' => variable_get($language_code . '_select_list_label'),
       '#options' => $result,
       '#weight' => 0,
       '#id' => 'age_checker_country',
