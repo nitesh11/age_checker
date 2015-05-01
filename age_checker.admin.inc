@@ -10,7 +10,22 @@
 function age_checker_admin_form() {
   $form = array();
 
-    // Language for age checker.
+  // Do you want Remember Me option.
+  $form['option_remember_me'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Would you like to display remember me check box'),
+    '#default_value' => variable_get('option_remember_me', 0),
+  );
+  
+  // Variable to changing the GeoIP site.
+  $form['geoip_link'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Enter the url for getting the country name of user.'),
+    '#default_value' => variable_get('geoip_link', 'http://freegeoip.net/json/'),
+    '#description' => t('Site link'),
+  );
+
+  // Language for age checker.
   $form['lang'] = array(
     '#title'         => t('Age Checker Language'),
     '#type'          => 'fieldset',
@@ -48,29 +63,26 @@ function age_checker_admin_form() {
     '#collapsed'     => TRUE,
   );
   // Cookie Expiration Time.
-  $age_checker_cookie_expiration_time = variable_get('age_checker_cookie_expiration_time', '15');
   $form['options']['age_checker_cookie_expiration_time'] = array(
     '#title'            => t('Cookie expiration days'),
     '#type'             => 'textfield',
     '#field_suffix'     => t('Days'),
     '#size'             => 6,
     '#element_validate' => array('element_validate_integer'),
-    '#default_value'    => isset($age_checker_cookie_expiration_time) ? $age_checker_cookie_expiration_time : '15',
+    '#default_value'    => variable_get('age_checker_cookie_expiration_time', '15'),
     '#description'      => t('The number of days before the cookie set by age checker module expires, and the user must verify their age again (0 days will expire at end of session).'),
   );
   // Age Checker URL.
 
-  $under_age_url = variable_get('under_age_url', '');
   $form['options']['under_age_url'] = array(
     '#title'         => t('Enter underage page url'),
     '#type'          => 'textfield',
-    '#default_value' => isset($under_age_url) ? $under_age_url : '',
+    '#default_value' => variable_get('under_age_url', ''),
     '#required'      => TRUE,
     '#description'   => t('Please add http:// or https:// for external url  or create a drupal CMS page and enter Drupal path for internal CMS Page. E.g "under-age" for  http://www.example.com/sitename/under-age'),
   );
   
   // Age Checker Visibility.
-  $age_checker_visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
   $form['options']['age_checker_visibility'] = array(
     '#type'       => 'radios',
     '#title'      => t('Show Age Gate on specific pages'),
@@ -78,24 +90,22 @@ function age_checker_admin_form() {
       AGE_CHECKER_VISIBILITY_NOTLISTED => t('Show on all pages except those listed'),
       AGE_CHECKER_VISIBILITY_LISTED    => t('Show only on the listed pages'),
     ),
-    '#default_value' => isset($age_checker_visibility) ? $age_checker_visibility : AGE_CHECKER_VISIBILITY_NOTLISTED,
+    '#default_value' => variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED),
   );
   // Age checker specific pages.
-  $age_checker_pages = variable_get('age_checker_pages', 'admin/*');
   $form['options']['age_checker_pages'] = array(
     '#type'          => 'textarea',
     '#title'         => t('Type Age Gate specific pages'),
-    '#default_value' => isset($age_checker_pages) ? $age_checker_pages : 'admin/*\nuser',
+    '#default_value' => variable_get('age_checker_pages', 'admin/*'),
     '#description'   => t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are blog for the blog page and blog/* for every personal blog. <front> is the front page."),
   );
    
   // Images Age Checker.
-  $age_checker_background_image = variable_get('age_checker_background_image', '');
   $form['options']['age_checker_background_image'] = array(
     '#type'                    => 'managed_file',
     '#name'                    => 'backgroundimage_image',
     '#title'                   => t('Change the background'),
-    '#default_value'           => isset($age_checker_background_image) ? $age_checker_background_image : '',
+    '#default_value'           => variable_get('age_checker_background_image', ''),
     '#description'             => t("Here you can upload an image to the background!"),
     '#upload_location'         => 'public://images_age_checker/',
     '#upload_validators'       => array(
@@ -105,25 +115,17 @@ function age_checker_admin_form() {
   );
   
   // logo Age Checker.
-  $age_checker_logo = variable_get('age_checker_logo', '');
   $form['options']['age_checker_logo'] = array(
     '#type'                    => 'managed_file',
     '#name'                    => 'logo_agechecker',
     '#title'                   => t('Change the logo'),
-    '#default_value'           => isset($age_checker_logo) ? $age_checker_logo : '',
+    '#default_value'           => variable_get('age_checker_logo', ''),
     '#description'             => t("Here you can upload logo!"),
     '#upload_location'         => 'public://images_age_checker/',
     '#upload_validators'       => array(
       'file_validate_extensions' => array('gif png jpg jpeg'),
       'file_validate_size'       => array(1000000),
     ),
-  );
-
-  // Do you want Remember Me option.
-  $form['option_remember_me'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Would you like to display remember me check box'),
-    '#default_value' => 0,
   );
 
   return system_settings_form($form);
@@ -176,7 +178,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#type' => 'fieldset',
       '#title' => check_plain($language[1]),
       '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
+      '#collapsed' => TRUE,
     );
     $language = $language[0];
     $form[$language . 'mapping'][$language . '_age_checker_header_message'] = array(
