@@ -229,6 +229,16 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#options' => $result,
       '#multiple' => TRUE,
     );
+
+    // Label of Select list.
+    $form[$language . 'mapping'][$language . '_select_list_label'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Enter the text for label for the select list of country.'),
+      '#maxlength'     => 255,
+      '#required'      => FALSE,
+      '#default_value' => variable_get($language . '_select_list_label', 'Select your country'),
+    );
+
     // Message Before the Form.
     $message_beforeform = variable_get($language . '_age_gate_header', array('value' => '', 'format' => NULL));
     $form[$language . 'mapping'][$language . '_age_gate_header'] = array(

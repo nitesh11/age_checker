@@ -163,11 +163,10 @@ function age_checker_form($form,&$form_submit) {
   if(count($result) > 1) {
     $form['list_of_countries'] = array(
       '#type' => 'select',
-      '#title' => '- Select your country of residence -',
+      '#title' => variable_get($langauge_code . '_select_list_label'),
       '#options' => $result,
-      '#weight' => -1,
+      '#weight' => 0,
       '#id' => 'age_checker_country',
-      '#title' => t('djdkf.jfjf'),
       '#default_value' => $selected_country,
       '#attributes' => array(
         'tabindex' => '1',
@@ -186,9 +185,9 @@ function age_checker_form($form,&$form_submit) {
       'pattern'     => "[0-9]*",
       'tabindex'    => '2',
       'placeholder' => variable_get($selected_country . '_day_placeholder'),
-      ),
+    ),
     '#required' => TRUE,
-    );
+  );
   //month
   $form['month'] = array(
     '#type'          => 'textfield',
@@ -458,8 +457,7 @@ function _age_checker_visibility() {
  */
 function age_checker_show() {
   // User Access.
-  // if ((!user_access('administrator')) && (_age_checker_visibility() == 1)) {
-  if ((_age_checker_visibility() == 1)) {
+  if ((!user_access('administrator')) && (_age_checker_visibility() == 1)) {
     return TRUE;
   }
   return FALSE;
