@@ -15,11 +15,12 @@ define('AGE_CHECKER_VISIBILITY_LISTED', 1);
  * Implements hook_init().
  */
 function age_checker_init() {
+
   if (age_checker_show()) {
     $destination = drupal_get_path_alias();
     if ($destination == 'agegate' || $destination == 'node' || !isset($destination))
       $destination = '/';
-    $settings = array('myval' => 'some_value');
+    $settings = array();
     drupal_add_js(array('age_checker' => $settings), 'setting');
 
     $visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
@@ -30,14 +31,12 @@ function age_checker_init() {
     switch ($visibility) {
       case AGE_CHECKER_VISIBILITY_NOTLISTED:
         if (!drupal_match_path(drupal_get_path_alias($_GET['q']), $pages)) {
-          dsm("AGE_CHECKER_VISIBILITY_NOTLISTED");
           $verify = TRUE;
         }
         break;
 
       case AGE_CHECKER_VISIBILITY_LISTED:
         if (drupal_match_path(drupal_get_path_alias($_GET['q']), $pages)) {
-          dsm("AGE_CHECKER_VISIBILITY_LISTED");
           $verify = TRUE;
         }
         break;
@@ -63,8 +62,12 @@ function age_checker_init() {
           'blank_err_message' => variable_get($language_code . '_age_checker_blank_error_msg', ''),
           'dateformat_error'  => variable_get($language_code . '_age_checker_dateformat_error_msg', ''),
           'under_age_err_msg' => variable_get($language_code . '_age_checker_underage_error_msg', ''),
-          'date_rnge_err_msg' => variable_get($language_code . '_age_checker_daterange_error_msg', ''),
+          'date_range_err_msg' => variable_get($language_code . '_age_checker_daterange_error_msg', ''),
           'destination' => $destination,
+          'verify' => $verify,
+          'day_placeholder' => variable_get($selected_country . '_day_placeholder'),
+          'month_placeholder' => variable_get($selected_country . '_month_placeholder'),
+          'year_placeholder' => variable_get($selected_country . '_year_placeholder'),
         )), 'setting');
     }
   }
@@ -162,8 +165,9 @@ function age_checker_form($form,&$form_submit) {
       '#type' => 'select',
       '#options' => $result,
       '#weight' => -1,
+      '#id' => 'age_checker_country',
+      '#title' => t('djdkf.jfjf'),
       '#default_value' => $selected_country,
-      '#required' => TRUE,
       '#attributes' => array(
         'tabindex' => '1',
       ),
@@ -213,15 +217,16 @@ function age_checker_form($form,&$form_submit) {
     '#required' => TRUE,
     );
   //remember me checkbox
-  $option_remember_me = variable_get('option_remember_me', '');
-    if ($option_remember_me == 1) {
-  $form['remember_me'] = array(
-    '#type' => 'checkbox',
-    '#weight' => 6,
-    '#title' => t('Remember my details (Do not select on shared computers)'),
-    '#default_value' => 0,
-    '#attributes' => array(
-      'tabindex' => '5',
+  $option_remember_me = variable_get('option_remember_me');
+  if ($option_remember_me == 1) {
+    $form['remember_me'] = array(
+      '#type' => 'checkbox',
+      '#weight' => 6,
+      '#id' => 'age_checker_remember_me',
+      '#title' => variable_get($language_code . '_remember_me_text'),
+      '#default_value' => 0,
+      '#attributes' => array(
+        'tabindex' => '5',
       ),
     );
   }
@@ -235,6 +240,8 @@ function age_checker_form($form,&$form_submit) {
       'tabindex' => '6',
     ),
    );
+
+  $form['#attributes']['onsubmit'] = 'return false;';
   return $form;
 }
 /**
@@ -253,6 +260,7 @@ function age_checker_theme($existing, $type, $theme, $path) {
         'age_checker_cookies_declaration' => NULL,
         'age_checker_drinking_statement' => NULL,
         'age_checker_copyright' => NULL,
+        'footer' => NULL,
       ),
     ),
   );

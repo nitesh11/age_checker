@@ -294,6 +294,15 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#default_value' => variable_get($language . '_age_checker_button_text', 'Begin your discovery'),
       '#description'   => t('Please enter submit button text.'),
     );
+    // Remember Me Configuration.
+    $form[$language . 'mapping'][$language . '_remember_me_text'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Remember Me Text'),
+      '#maxlength'     => 255,
+      '#required'      => FALSE,
+      '#default_value' => variable_get($language . '_remember_me_text', 'Remember my details (Do not select on shared computers)'),
+      '#description'   => t('Please enter the remember me text.'),
+    );
     // Date Out Of Range Validation Message
     $form[$language . 'mapping'][$language . '_age_checker_footer_links'] = array(
       '#type'          => 'textarea',
