@@ -73,6 +73,57 @@ function age_checker_init() {
   }
 }
 
+/**
+ * Calculate visibility of age checker if set.
+ *
+ * Function copy from block.module, thanks for the original code.
+ *
+ * return boolean
+ */
+function _age_checker_visibility() {
+
+  $visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
+  $pages = variable_get('age_checker_pages');
+  // Convert path to lowercase. This allows comparison of the same path
+  // with different case. Ex: /Page, /page, /PAGE.
+  $pages = drupal_strtolower($pages);
+  if ($visibility < 2) {
+    // Convert the Drupal path to lowercase.
+    $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+    // Compare the lowercase internal and lowercase path alias (if any).
+    $page_match = drupal_match_path($path, $pages);
+
+    if ($path != $_GET['q']) {
+      $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+    }
+    // When $visibility has a value of 0,
+    // the age checker is displayed on all pages except those listed in $pages.
+    // When set to 1, it is displayed only on those
+    // pages listed in $pages.
+    $page_match = !($visibility xor $page_match);
+  }
+  elseif (module_exists('php')) {
+    $page_match = php_eval($pages);
+  }
+  else {
+    $page_match = FALSE;
+  }
+  return $page_match;
+}
+
+/**
+ * Function to control age checker display depending user and accesses.
+ *
+ * @return bool
+ *   True if must be shown
+ */
+function age_checker_show() {
+  // User Access.
+  if ((!user_access('administrator')) && (_age_checker_visibility() == 1)) {
+    return TRUE;
+  }
+  return FALSE;
+}
 
 /**
  * Implements hook_menu().
@@ -162,88 +213,98 @@ function age_checker_form($form,&$form_submit) {
   }
   if(count($result) > 1) {
     $form['list_of_countries'] = array(
-      '#type' => 'select',
-      '#title' => variable_get($language_code . '_select_list_label'),
-      '#options' => $result,
-      '#weight' => 0,
-      '#id' => 'age_checker_country',
+      '#type'          => 'select',
+      '#title'         => variable_get($language_code . '_select_list_label'),
+      '#options'       => $result,
+      '#weight'        => -1,
+      '#id'            => 'age_checker_country',
       '#default_value' => $selected_country,
-      '#attributes' => array(
-        'tabindex' => '1',
+      '#attributes'    => array(
+        'tabindex'     => '1',
       ),
     );
   }
 
-  //day
+  $form['age_checker_error_message'] = array(
+    '#type'   => 'markup',
+    '#markup' => '<div class="age_checker_error_message"> </div>',
+    '#weight' => 0,
+  );
+
+  // Day form Element.
   $form['day'] = array(
     '#type'         => 'textfield',
     '#size'         => 2,
     '#maxlength'    => 2,
     '#id'           => 'age_checker_day',
     '#weight'       => variable_get($selected_country . '_day_weight'),
+    '#required'     => TRUE,
     '#attributes'   => array(
       'pattern'     => "[0-9]*",
       'tabindex'    => '2',
       'placeholder' => variable_get($selected_country . '_day_placeholder'),
     ),
-    '#required' => TRUE,
   );
-  //month
+
+  // Month form Element.
   $form['month'] = array(
     '#type'          => 'textfield',
     '#size'          => 2,
     '#maxlength'     => 2,
     '#id'            => 'age_checker_month',
-    '#weight'       => variable_get($selected_country . '_month_weight'),
-    '#attributes'   => array(
-      'pattern'     => "[0-9]*",
-      'tabindex'    => '3',
-      'placeholder' => variable_get($selected_country . '_month_placeholder'),
-      ),
-    '#required' => TRUE,
-    );
-  //year
+    '#required'      => TRUE,
+    '#weight'        => variable_get($selected_country . '_month_weight'),
+    '#attributes'    => array(
+      'pattern'      => "[0-9]*",
+      'tabindex'     => '3',
+      'placeholder'  => variable_get($selected_country . '_month_placeholder'),
+    ),
+  );
+
+  // Year form Element.
   $form['year'] = array(
     '#type'          => 'textfield',
     '#size'          => 4,
     '#maxlength'     => 4,
     '#id'            => 'age_checker_year',
-    '#weight'       => variable_get($selected_country . '_year_weight'),
-    '#attributes' => array(
-      'pattern' => "[0-9]*",
-      'tabindex' => '4',
-      'placeholder' => variable_get($selected_country . '_year_placeholder'),
-      ),
-    '#required' => TRUE,
-    );
-  //remember me checkbox
+    '#weight'        => variable_get($selected_country . '_year_weight'),
+    '#required'      => TRUE,
+    '#attributes'    => array(
+      'pattern'      => "[0-9]*",
+      'tabindex'     => '4',
+      'placeholder'  => variable_get($selected_country . '_year_placeholder'),
+    ),
+  );
+
+  // Remember Me Checkbox.
   $option_remember_me = variable_get('option_remember_me');
   if ($option_remember_me == 1) {
     $form['remember_me'] = array(
-      '#type' => 'checkbox',
-      '#weight' => 6,
-      '#id' => 'age_checker_remember_me',
-      '#title' => variable_get($language_code . '_remember_me_text'),
+      '#type'          => 'checkbox',
+      '#weight'        => 5,
+      '#id'            => 'age_checker_remember_me',
+      '#title'         => variable_get($language_code . '_remember_me_text'),
       '#default_value' => 0,
-      '#attributes' => array(
-        'tabindex' => '5',
+      '#attributes'    => array(
+        'tabindex'     => '5',
       ),
     );
   }
   //submit button
   $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => variable_get($language_code . '_age_checker_button_text'),
-    '#weight' => 7,
+    '#type'       => 'submit',
+    '#value'      => variable_get($language_code . '_age_checker_button_text'),
+    '#weight'     => 6,
     '#attributes' => array(
       'onclick'   => "age_checker.verify();",
-      'tabindex' => '6',
+      'tabindex'  => '6',
     ),
    );
 
   $form['#attributes']['onsubmit'] = 'return false;';
   return $form;
 }
+
 /**
  * Implements hook_theme().
  */
@@ -255,10 +316,7 @@ function age_checker_theme($existing, $type, $theme, $path) {
       'variables' => array(
         'age_checker_header_message' => NULL,
         'age_checker_form' => NULL,
-        'age_checker_cookies_declaration' => NULL,
-        'age_checker_drinking_statement' => NULL,
-        'age_checker_copyright' => NULL,
-        'footer' => NULL,
+        'age_checker_footer_message' => NULL,
       ),
     ),
     'age_checker_page' => array(
@@ -267,6 +325,7 @@ function age_checker_theme($existing, $type, $theme, $path) {
       'variables' => array(
         'age_cheker_background_img' => NULL,
         'age_cheker_logo' => NULL,
+        'footer_links' => NULL,
       )
     ),
   );
@@ -276,61 +335,25 @@ function age_checker_theme($existing, $type, $theme, $path) {
  * Function agechecker_template
  */
 function agechecker_template() {
-
-  // Background image
-  $age_gate_background_image = '';
-  $fid_bgimg = variable_get('age_checker_background_image');
-  if ($fid_bgimg) {
-    $file_bgimg = file_load($fid_bgimg);
-    $uri_bgimg  = $file_bgimg->uri;
-    $age_gate_background_image = theme('image', array('path' => $uri_bgimg));
-  }
-
-  // Logo
-  $age_gate_logo = '';
-  $fid_logo = variable_get('age_checker_logo');
-  if ($fid_logo) {
-    $logo_file = file_load($fid_logo);
-    $uri_logo  = $logo_file->uri;
-    $age_gate_logo = theme('image', array('path' => $uri_logo));
-  }
   
   // Getting the language Code.
   $language_code = _get_language_code();
 
+  // Header text of the form.
   $age_checker_header_message = variable_get($language_code . '_age_checker_header_message');
   
-  //storing age_checker_form into $form variable  
+  // Form Element.
   $age_checker_form = drupal_get_form('age_checker_form');
   
-  //cookies description
-  $age_checker_cookies_declaration = variable_get($language_code . '_age_checker_cookies_declaration');
-  
-  //age checker copyright
-  $age_checker_copyright = variable_get($language_code . '_age_checker_copyright');
-  
-  //responsible drinking statement
-  $age_checker_drinking_statement = variable_get($language_code . '_age_checker_drinking_statement');
-
-  // Footer variables.
-  $footer_variable = variable_get($language_code . '_age_checker_footer_links');
-  $footer_array = explode("\n", $footer_variable);
-  foreach($footer_array as $footer_links) {
-    $footer_link = explode('|', $footer_links);
-    $footer[$footer_link[0]] = $footer_link[1];
-  }
+  // Footer text of the form.
+  $age_checker_footer_message = variable_get($language_code . '_age_gate_footer');
 
   // sending variable to template
   return theme('age_checker', 
     array(
-    'age_cheker_background_img' => $age_gate_background_image,
-    'age_cheker_logo' => $age_gate_logo,
     'age_checker_header_message' => $age_checker_header_message, 
     'age_checker_form' => $age_checker_form,
-    'age_checker_cookies_declaration' => $age_checker_cookies_declaration,
-    'age_checker_drinking_statement' => $age_checker_drinking_statement,
-    'age_checker_copyright' => $age_checker_copyright,
-    'footer' => $footer,
+    'age_checker_footer_message' => $age_checker_footer_message,
   ));
 }
 
@@ -358,25 +381,6 @@ function _get_language_code() {
         return $key;
       }
     }
-  }
-}
-
-/**
- * Implements a function to get country name.
- */
-function _get_geoip_data($url) {
-
-  // Free GeoIP configuration.
-  $request = drupal_http_request($url);
-  if ((is_object($request)) && (isset($request->data))) {
-    $response = json_decode($request->data);
-    if (!is_object($response) || $response->country_code == 'RD' || $response->country_code == '') {
-      return FALSE;
-    }
-    return $response;
-  }
-  else{
-    return FALSE;
   }
 }
 
@@ -412,73 +416,62 @@ function _get_country_name() {
 }
 
 /**
- * Calculate visibility of age checker if set.
- *
- * Function copy from block.module, thanks for the original code.
- *
- * return boolean
+ * Implements a function to get country name.
  */
-function _age_checker_visibility() {
+function _get_geoip_data($url) {
 
-  $visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
-  $pages = variable_get('age_checker_pages');
-  // Convert path to lowercase. This allows comparison of the same path
-  // with different case. Ex: /Page, /page, /PAGE.
-  $pages = drupal_strtolower($pages);
-  if ($visibility < 2) {
-    // Convert the Drupal path to lowercase.
-    $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
-    // Compare the lowercase internal and lowercase path alias (if any).
-    $page_match = drupal_match_path($path, $pages);
-
-    if ($path != $_GET['q']) {
-      $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+  // Free GeoIP configuration.
+  $request = drupal_http_request($url);
+  if ((is_object($request)) && (isset($request->data))) {
+    $response = json_decode($request->data);
+    if (!is_object($response) || $response->country_code == 'RD' || $response->country_code == '') {
+      return FALSE;
     }
-    // When $visibility has a value of 0,
-    // the age checker is displayed on all pages except those listed in $pages.
-    // When set to 1, it is displayed only on those
-    // pages listed in $pages.
-    $page_match = !($visibility xor $page_match);
+    return $response;
   }
-  elseif (module_exists('php')) {
-    $page_match = php_eval($pages);
+  else{
+    return FALSE;
   }
-  else {
-    $page_match = FALSE;
-  }
-  return $page_match;
-}
-
-/**
- * Function to control age checker display depending user and accesses.
- *
- * @return bool
- *   True if must be shown
- */
-function age_checker_show() {
-  // User Access.
-  if ((!user_access('administrator')) && (_age_checker_visibility() == 1)) {
-    return TRUE;
-  }
-  return FALSE;
 }
 
 /**
  * @param $variables
  */
 function age_checker_preprocess_page(&$variables){
-  //background image
-  $fid_bgimg = variable_get('age_checker_background_image', '');
-  $file_bgimg = file_load($fid_bgimg);
-  $uri_bgimg  = $file_bgimg->uri;
-  //logo
-  $fid_logo = variable_get('age_checker_logo', '');
-  $file_logo = file_load($fid_logo);
-  $uri_logo  = $file_logo->uri;
+
+  // Background image
+  $age_gate_background_image = '';
+  $fid_bgimg = variable_get('age_checker_background_image');
+  if ($fid_bgimg) {
+    $file_bgimg = file_load($fid_bgimg);
+    $uri_bgimg  = $file_bgimg->uri;
+    $age_gate_background_image = theme('image', array('path' => $uri_bgimg));
+  }
+
+  // Logo
+  $age_gate_logo = '';
+  $fid_logo = variable_get('age_checker_logo');
+  if ($fid_logo) {
+    $logo_file = file_load($fid_logo);
+    $uri_logo  = $logo_file->uri;
+    $age_gate_logo = theme('image', array('path' => $uri_logo));
+  }
+
+  // Getting the language code.
+  $language_code = _get_language_code();
+
+  // Footer variables.
+  $footer_variable = variable_get($language_code . '_age_checker_footer_links');
+  $footer_array = explode("\n", $footer_variable);
+  foreach($footer_array as $footer_links) {
+    $footer_link = explode('|', $footer_links);
+    $footer[$footer_link[0]] = $footer_link[1];
+  }
 
   if (current_path() == "agegate") {
-    $variables['age_cheker_background_img'] = theme('image', array('path' => $uri_bgimg));
-    $variables['age_cheker_logo'] = theme('image', array('path' => $uri_logo));
+    $variables['age_cheker_background_img'] = $age_gate_background_image;
+    $variables['age_cheker_logo'] = $age_gate_logo;
     $variables['theme_hook_suggestions'][] = 'age_checker_page';
+    $variables['footer_links'] = $footer;
   }
 }

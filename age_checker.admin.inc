@@ -181,13 +181,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#collapsed' => TRUE,
     );
     $language = $language[0];
-    $form[$language . 'mapping'][$language . '_age_checker_header_message'] = array(
-      '#type' => 'textarea',
-      '#title' => t('Please enter a text to place below logo'),
-      '#description' => t('This content will be place below the header section of age gate'),
-      '#default_value' => variable_get($language . '_age_checker_header_message', ''),
-      '#required' => TRUE,
-    );
+
     $form[$language . 'mapping'][$language . '_age_checker_copyright'] = array(
       '#type' => 'textarea',
       '#title' => t('Please enter copyright'),
@@ -195,24 +189,8 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#default_value' => variable_get($language . '_age_checker_copyright', ''),
       '#required' => TRUE,
     );
-    // cookies declaration 
-    $form[$language . 'mapping'][$language . '_age_checker_cookies_declaration'] = array(
-      '#type' => 'textarea',
-      '#title' => t('Please enter cookies declaration'),
-      '#description' => t('Above message will give description that this site is using cookies'),
-      '#default_value' => variable_get($language . '_age_checker_cookies_declaration', ''),
-      '#required' => FALSE,
-    );
-    // Responsible drinking statement
-    $form[$language . 'mapping'][$language . '_age_checker_drinking_statement'] = array(
-      '#type'          => 'textarea',
-      '#title'         => t('Responsible drinking statement'),
-      '#required'      => FALSE,
-      '#maxlength'     => 255,
-      '#default_value' => variable_get($language . '_age_checker_drinking_statement', ''),
-      '#description'   => t('Please enter responsible drinking statement'),
-    );
-    //country list
+
+    // Field for selecting the country for a particular language.
     $countries = variable_get('countries', '');
     $countries = explode("\n", $countries);
     $country_options = array();
@@ -239,36 +217,39 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#default_value' => variable_get($language . '_select_list_label', 'Select your country'),
     );
 
-    // Message Before the Form.
+    // Message to be added before the form.
     $message_beforeform = variable_get($language . '_age_gate_header', array('value' => '', 'format' => NULL));
     $form[$language . 'mapping'][$language . '_age_gate_header'] = array(
-      '#title'         => t('Enter before text'),
+      '#title'         => t('Enter the text to be placed before the form.'),
       '#type'          => 'text_format',
       '#rows'          => 6,
       '#default_value' => $message_beforeform['value'] ? $message_beforeform['value'] : '',
       '#description'   => t('The message displayed before the Form.'),
       '#format'        => $message_beforeform['format'],
     );
-    // Message After the Form.
+
+    // Message to be added after the form.
     $message_afterform = variable_get($language . '_age_gate_footer', array('value' => '', 'format' => NULL));
     $form[$language . 'mapping'][$language . '_age_gate_footer'] = array(
-      '#title'         => t('Enter after Text'),
+      '#title'         => t('Enter the text to be placed after the form.'),
       '#type'          => 'text_format',
       '#rows'          => 6,
       '#default_value' => $message_afterform['value'] ? $message_afterform['value'] : '',
       '#description'   => t('The message displayed after the Form'),
       '#format'        => $message_afterform['format'],
     );
-     // Age checker validation message.
+
+    // Age checker validation message.
     $form[$language . 'mapping'][$language . '_age_checker_blank_error_msg'] = array(
       '#type'          => 'textarea',
-      '#title'         => t('Age Checker Blank Validation Message'),
+      '#title'         => t('Age Checker Blank Error Message.'),
       '#required'      => TRUE,
       '#maxlength'     => 255,
       '#default_value' => variable_get($language . '_age_checker_blank_error_msg', 'Date field can not be blank.'),
       '#description'   => t('Please enter message text to populate in age checker validation.'),
     );
-      // Incorrect Date Format Validation Message
+
+    // Incorrect Date Format Validation Message
     $form[$language . 'mapping'][$language . '_age_checker_dateformat_error_msg'] = array(
       '#type'          => 'textarea',
       '#title'         => t('Incorrect Date Format Validation Message'),
@@ -286,6 +267,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#default_value' => variable_get($language . '_age_checker_daterange_error_msg', 'Please enter your date of birth in valid date range.'),
       '#description'   => t('Please enter message text to populate in age checker validation.'),
     );
+
     // Error message for under age.
     $form[$language . 'mapping'][$language . '_age_checker_underage_error_msg'] = array(
       '#type'          => 'textarea',
@@ -295,16 +277,18 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#default_value' => variable_get($language . '_age_checker_underage_error_msg', 'Sorry, you are Under age limit and are prohibited from entering this site!'),
       '#description'   => t('Please enter error message for under age checker validation'),
     );
+
     // Age checker submit button text.
     $form[$language . 'mapping'][$language . '_age_checker_button_text'] = array(
       '#type'          => 'textfield',
-      '#title'         => t('Button Text'),
+      '#title'         => t('Form Submit button Configuration.'),
       '#maxlength'     => 50,
       '#required'      => FALSE,
       '#default_value' => variable_get($language . '_age_checker_button_text', 'Begin your discovery'),
       '#description'   => t('Please enter submit button text.'),
     );
-    // Remember Me Configuration.
+
+    // Remember Me Text Configuration.
     $form[$language . 'mapping'][$language . '_remember_me_text'] = array(
       '#type'          => 'textfield',
       '#title'         => t('Remember Me Text'),
@@ -313,7 +297,8 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#default_value' => variable_get($language . '_remember_me_text', 'Remember my details (Do not select on shared computers)'),
       '#description'   => t('Please enter the remember me text.'),
     );
-    // Date Out Of Range Validation Message
+
+    // Configuration for adding Footer Links
     $form[$language . 'mapping'][$language . '_age_checker_footer_links'] = array(
       '#type'          => 'textarea',
       '#title'         => t('Age checker footer links'),

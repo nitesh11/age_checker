@@ -42,7 +42,7 @@
 
 
 
-#age_checker_message{
+#age_checker_header_message{
   font-size: 14px;
   color: #fff;
   font-family: Helvetica,Arial,sans-serif;
@@ -162,9 +162,7 @@
   cursor: pointer;
 }
 
-#age_checker_drinking_statement,
-#age_checker_copyright,
-#age_checker_declaration {
+#age_checker_footer_message {
   font-family: Helvetica,Arial,sans-serif;
   text-align: center;
   line-height: 1.25;
@@ -185,7 +183,7 @@ the container div of agegate
     width: 290px;
     padding: 0;
   }
-  #age_checker_message {
+  #age_checker_header_message {
     font-size: 12px;
   }
   #age_checker .form-item-day input,
@@ -231,9 +229,7 @@ the container div of agegate
     padding: 4px;
   }
 
-  #age_checker_drinking_statement,
-  #age_checker_copyright,
-  #age_checker_declaration {
+  #age_checker_footer_message {
     padding:5px 10px;
   }
 }
