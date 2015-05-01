@@ -217,7 +217,6 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#type'          => 'text_format',
       '#rows'          => 6,
       '#default_value' => $message_beforeform['value'] ? $message_beforeform['value'] : '',
-      '#description'   => t('The message displayed before the Form.'),
       '#format'        => $message_beforeform['format'],
     );
 
@@ -228,7 +227,6 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#type'          => 'text_format',
       '#rows'          => 6,
       '#default_value' => $message_afterform['value'] ? $message_afterform['value'] : '',
-      '#description'   => t('The message displayed after the Form'),
       '#format'        => $message_afterform['format'],
     );
 
