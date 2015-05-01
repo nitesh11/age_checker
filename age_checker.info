@@ -4,9 +4,5 @@ package = Age Gate
 core = 7.x
 version = 2.x
 configure = admin/config/people/age_checker
-<<<<<<< HEAD
 scripts[] = js/age_checker.js
-=======
-scripts[] = js/age_checker_custom.js
 stylesheets[all][] = css/age-checker.css
->>>>>>> a4406b36913cae93a799dd60aeb6a42ab206fe96

@@ -2,6 +2,21 @@ var age_checker = {};
 console.log(Drupal.settings.age_checker);
 // console.log(Drupal.settings.age_checker.currentdate);
 (function ($) {
+
+  $(document).ready(function() {
+    
+    var agegate_bg = $('.age-checker-bg img').attr('src');
+    $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
+    $('.age-checker-bg').remove();
+
+    $('#age_checker_country').change(function() {
+      var selected_country = $(this).find('option:selected').val();
+      var cookie_name = "country_selected=" + selected_country + "; path=/";
+      document.cookie = cookie_name;
+      location.reload();
+    });
+  });
+
   // Function to verify the age limits.
   age_checker.verify = function () {
     var now   = new Date(Drupal.settings.age_checker.currentdate);
@@ -111,16 +126,6 @@ console.log(Drupal.settings.age_checker);
       return false;
     }
   };
-
-  $('document').ready(function() {
-
-    $('#age_checker_country').change(function() {
-      var selected_country = $(this).find('option:selected').val();
-      var cookie_name = "country_selected=" + selected_country + "; path=/";
-      document.cookie = cookie_name;
-      location.reload();
-    });
-  });
 
 })(jQuery);
 
