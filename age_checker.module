@@ -122,7 +122,7 @@ function age_checker_menu() {
   $items['agegate'] = array(
     'page callback'    => 'agechecker_template',
     'access callback'  => TRUE,
-    );
+  );
   return $items;
 }
 
@@ -163,6 +163,7 @@ function age_checker_form($form,&$form_submit) {
   if(count($result) > 1) {
     $form['list_of_countries'] = array(
       '#type' => 'select',
+      '#title' => '- Select your country of residence -',
       '#options' => $result,
       '#weight' => -1,
       '#id' => 'age_checker_country',
@@ -253,15 +254,21 @@ function age_checker_theme($existing, $type, $theme, $path) {
       'path' => AGE_GATE_TEMPLATE_PATH,
       'template' => 'age_checker',
       'variables' => array(
-        'age_cheker_background_img' => NULL,
-        'age_cheker_logo' => NULL,
         'age_checker_header_message' => NULL,
-        'age_checker_form' => NULL, 
+        'age_checker_form' => NULL,
         'age_checker_cookies_declaration' => NULL,
         'age_checker_drinking_statement' => NULL,
         'age_checker_copyright' => NULL,
         'footer' => NULL,
       ),
+    ),
+    'age_checker_page' => array(
+      'template' => 'templates/age-checker-page',
+      'render element' => 'page',
+      'variables' => array(
+        'age_cheker_background_img' => NULL,
+        'age_cheker_logo' => NULL,
+      )
     ),
   );
 }
@@ -270,7 +277,7 @@ function age_checker_theme($existing, $type, $theme, $path) {
  * Function agechecker_template
  */
 function agechecker_template() {
-  
+
   // Background image
   $age_gate_background_image = '';
   $fid_bgimg = variable_get('age_checker_background_image');
@@ -399,6 +406,9 @@ function _get_country_name() {
   else {
     $country_name = variable_get('default_country');
   }
+
+  $country_name_po[$ip_address] = $country_name;
+
   return $country_name;
 }
 
@@ -453,4 +463,24 @@ function age_checker_show() {
     return TRUE;
   }
   return FALSE;
+}
+
+/**
+ * @param $variables
+ */
+function age_checker_preprocess_page(&$variables){
+  //background image
+  $fid_bgimg = variable_get('age_checker_background_image', '');
+  $file_bgimg = file_load($fid_bgimg);
+  $uri_bgimg  = $file_bgimg->uri;
+  //logo
+  $fid_logo = variable_get('age_checker_logo', '');
+  $file_logo = file_load($fid_logo);
+  $uri_logo  = $file_logo->uri;
+
+  if (current_path() == "agegate") {
+    $variables['age_cheker_background_img'] = theme('image', array('path' => $uri_bgimg));
+    $variables['age_cheker_logo'] = theme('image', array('path' => $uri_logo));
+    $variables['theme_hook_suggestions'][] = 'age_checker_page';
+  }
 }
