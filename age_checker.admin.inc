@@ -12,17 +12,17 @@ function age_checker_admin_form() {
 
   // Do you want Remember Me option.
   $form['option_remember_me'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Would you like to display remember me check box'),
+    '#type'          => 'checkbox',
+    '#title'         => t('Would you like to display remember me check box'),
     '#default_value' => variable_get('option_remember_me', 0),
   );
   
   // Variable to changing the GeoIP site.
   $form['geoip_link'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Enter the url for getting the country name of user.'),
+    '#type'          => 'textfield',
+    '#title'         => t('Enter the url for getting the country name of user.'),
     '#default_value' => variable_get('geoip_link', 'http://freegeoip.net/json/'),
-    '#description' => t('Site link'),
+    '#description'   => t('Site link'),
   );
 
   // Language for age checker.
@@ -102,13 +102,13 @@ function age_checker_admin_form() {
    
   // Images Age Checker.
   $form['options']['age_checker_background_image'] = array(
-    '#type'                    => 'managed_file',
-    '#name'                    => 'backgroundimage_image',
-    '#title'                   => t('Change the background'),
-    '#default_value'           => variable_get('age_checker_background_image', ''),
-    '#description'             => t("Here you can upload an image to the background!"),
-    '#upload_location'         => 'public://images_age_checker/',
-    '#upload_validators'       => array(
+    '#type'                      => 'managed_file',
+    '#name'                      => 'backgroundimage_image',
+    '#title'                     => t('Change the background'),
+    '#default_value'             => variable_get('age_checker_background_image', ''),
+    '#description'               => t("Here you can upload an image to the background!"),
+    '#upload_location'           => 'public://images_age_checker/',
+    '#upload_validators'         => array(
       'file_validate_extensions' => array('gif png jpg jpeg'),
       'file_validate_size'       => array(1000000),
     ),
@@ -116,13 +116,13 @@ function age_checker_admin_form() {
   
   // logo Age Checker.
   $form['options']['age_checker_logo'] = array(
-    '#type'                    => 'managed_file',
-    '#name'                    => 'logo_agechecker',
-    '#title'                   => t('Change the logo'),
-    '#default_value'           => variable_get('age_checker_logo', ''),
-    '#description'             => t("Here you can upload logo!"),
-    '#upload_location'         => 'public://images_age_checker/',
-    '#upload_validators'       => array(
+    '#type'                      => 'managed_file',
+    '#name'                      => 'logo_agechecker',
+    '#title'                     => t('Change the logo'),
+    '#default_value'             => variable_get('age_checker_logo', ''),
+    '#description'               => t("Here you can upload logo!"),
+    '#upload_location'           => 'public://images_age_checker/',
+    '#upload_validators'         => array(
       'file_validate_extensions' => array('gif png jpg jpeg'),
       'file_validate_size'       => array(1000000),
     ),
@@ -182,14 +182,6 @@ function age_checker_mapping_admin_form($form, &$form_state) {
     );
     $language = $language[0];
 
-    $form[$language . 'mapping'][$language . '_age_checker_copyright'] = array(
-      '#type' => 'textarea',
-      '#title' => t('Please enter copyright'),
-      '#description' => t('Above content will be use as a copyright'),
-      '#default_value' => variable_get($language . '_age_checker_copyright', ''),
-      '#required' => TRUE,
-    );
-
     // Field for selecting the country for a particular language.
     $countries = variable_get('countries', '');
     $countries = explode("\n", $countries);
@@ -199,22 +191,23 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       $country_options[$country[0]] = $country[1];
       $result = array_map('trim', $country_options);
     }
-    $form[$language . 'mapping'][$language . '_country_list'] = array(
-      '#title' => t('Please select country'),
-      '#type' => 'select',
-      '#description' => t('please select country that would like to map with language'),
-      '#default_value' => variable_get($language . '_country_list', ''),
-      '#options' => $result,
-      '#multiple' => TRUE,
-    );
 
-    // Label of Select list.
+    // Label of Country Field.
     $form[$language . 'mapping'][$language . '_select_list_label'] = array(
       '#type'          => 'textfield',
       '#title'         => t('Enter the text for label for the select list of country.'),
       '#maxlength'     => 255,
       '#required'      => FALSE,
       '#default_value' => variable_get($language . '_select_list_label', 'Select your country'),
+    );
+
+    $form[$language . 'mapping'][$language . '_country_list'] = array(
+      '#title'         => t('Please select country'),
+      '#type'          => 'select',
+      '#description'   => t('please select country that would like to map with language'),
+      '#default_value' => variable_get($language . '_country_list', ''),
+      '#options'       => $result,
+      '#multiple'      => TRUE,
     );
 
     // Message to be added before the form.
@@ -278,16 +271,6 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#description'   => t('Please enter error message for under age checker validation'),
     );
 
-    // Age checker submit button text.
-    $form[$language . 'mapping'][$language . '_age_checker_button_text'] = array(
-      '#type'          => 'textfield',
-      '#title'         => t('Form Submit button Configuration.'),
-      '#maxlength'     => 50,
-      '#required'      => FALSE,
-      '#default_value' => variable_get($language . '_age_checker_button_text', 'Begin your discovery'),
-      '#description'   => t('Please enter submit button text.'),
-    );
-
     // Remember Me Text Configuration.
     $form[$language . 'mapping'][$language . '_remember_me_text'] = array(
       '#type'          => 'textfield',
@@ -298,6 +281,16 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#description'   => t('Please enter the remember me text.'),
     );
 
+    // Age checker submit button text.
+    $form[$language . 'mapping'][$language . '_age_checker_button_text'] = array(
+      '#type'          => 'textfield',
+      '#title'         => t('Form Submit button Configuration.'),
+      '#maxlength'     => 50,
+      '#required'      => FALSE,
+      '#default_value' => variable_get($language . '_age_checker_button_text', 'Begin your discovery'),
+      '#description'   => t('Please enter submit button text.'),
+    );
+
     // Configuration for adding Footer Links
     $form[$language . 'mapping'][$language . '_age_checker_footer_links'] = array(
       '#type'          => 'textarea',
@@ -306,6 +299,14 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#maxlength'     => 255,
       '#default_value' => variable_get($language . '_age_checker_footer_links', ''),
       '#description'   => t('Please enter footer links like, Privacy policy, Terms of use, cookie policy'),
+    );
+    // Copy right text
+    $form[$language . 'mapping'][$language . '_age_checker_copyright'] = array(
+      '#type'          => 'textarea',
+      '#title'         => t('Please enter copyright'),
+      '#description'   => t('Above content will be use as a copyright'),
+      '#default_value' => variable_get($language . '_age_checker_copyright', ''),
+      '#required'      => TRUE,
     );
   }
   return system_settings_form($form);
@@ -332,10 +333,10 @@ function age_checker_country_configuration() {
     '#collapsed'     => TRUE,
   );
   $form['default_country_configuration']['default_country'] = array(
-    '#type' => 'select',
-    '#description' => t('Select the default country of the site.'),
+    '#type'          => 'select',
+    '#description'   => t('Select the default country of the site.'),
     '#default_value' => variable_get('default_country'),
-    '#options' => $country_list,
+    '#options'       => $country_list,
   );
 
   $form['ages'] = array(
@@ -428,8 +429,8 @@ function age_checker_country_configuration() {
       '#prefix'           => '<div class="container-inline">',
       '#suffix'           => '</div>',
       '#required'         => FALSE,
-      '#default_value'    => variable_get($country_array[0] . '_day_placeholder', 'DD'),
       '#size'             => 2,
+      '#default_value'    => variable_get($country_array[0] . '_day_placeholder', 'DD'),
     );
     // Placeholder for Month format.
     $form['date_format'][$country_array[0]]['placeholder'][$country_array[0] . '_month_placeholder'] = array(
@@ -438,8 +439,8 @@ function age_checker_country_configuration() {
       '#prefix'           => '<div class="container-inline">',
       '#suffix'           => '</div>',
       '#required'         => FALSE,
-      '#default_value'    => variable_get($country_array[0] . '_month_placeholder', 'MM'),
       '#size'             => 2,
+      '#default_value'    => variable_get($country_array[0] . '_month_placeholder', 'MM'),
     );
     // Placeholder for Year format.
     $form['date_format'][$country_array[0]]['placeholder'][$country_array[0] . '_year_placeholder'] = array(
@@ -448,10 +449,9 @@ function age_checker_country_configuration() {
       '#suffix'           => '</div>',
       '#title'            => t('Year Placeholder :'),
       '#required'         => FALSE,
-      '#default_value'    => variable_get($country_array[0] . '_year_placeholder', 'YYYY'),
       '#size'             => 4,
+      '#default_value'    => variable_get($country_array[0] . '_year_placeholder', 'YYYY'),
     );
   }
-
   return system_settings_form($form);
 }
