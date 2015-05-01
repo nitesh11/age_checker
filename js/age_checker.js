@@ -4,7 +4,7 @@ console.log(Drupal.settings.age_checker);
 (function ($) {
 
   $(document).ready(function() {
-    
+
     var agegate_bg = $('.age-checker-bg img').attr('src');
     $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
     $('.age-checker-bg').remove();
@@ -49,7 +49,6 @@ console.log(Drupal.settings.age_checker);
     }
     // if current year, form not set
     if ( age_checker_month === '' || age_checker_day === '' || age_checker_year === '' || age_checker_month === month_placeholder || age_checker_day === day_placeholder || age_checker_year === year_placeholder ) {
-      alert(blank_err_message);
       document.getElementById('age_checker_error_message').innerHTML = Drupal.t(blank_err_message);
       return false;
     }

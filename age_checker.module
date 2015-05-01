@@ -227,7 +227,7 @@ function age_checker_form($form,&$form_submit) {
 
   $form['age_checker_error_message'] = array(
     '#type'   => 'markup',
-    '#markup' => '<div class="age_checker_error_message"> </div>',
+    '#markup' => '<div id="age_checker_error_message"> </div>',
     '#weight' => 0,
   );
 
