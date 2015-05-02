@@ -48,7 +48,9 @@ function age_checker_init() {
     if ($verify) {
 
       if (current_path() != 'agegate'){
-        drupal_goto($base_url . '/agegate');
+        if (!function_exists('drush_main')) { 
+          drupal_goto($base_url . '/agegate');
+        }
       }
       else {
         // default_country
