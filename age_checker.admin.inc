@@ -216,7 +216,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title'         => t('Enter the text to be placed before the form.'),
       '#type'          => 'text_format',
       '#rows'          => 6,
-      '#default_value' => $message_beforeform['value'] ? $message_beforeform['value'] : '',
+      '#default_value' => isset($message_beforeform['value']) ? $message_beforeform['value'] : '',
       '#format'        => $message_beforeform['format'],
     );
 
@@ -226,7 +226,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title'         => t('Enter the text to be placed after the form.'),
       '#type'          => 'text_format',
       '#rows'          => 6,
-      '#default_value' => $message_afterform['value'] ? $message_afterform['value'] : '',
+      '#default_value' => isset($message_afterform['value']) ? $message_afterform['value'] : '',
       '#format'        => $message_afterform['format'],
     );
 
@@ -298,13 +298,16 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#default_value' => variable_get($language . '_age_checker_footer_links', ''),
       '#description'   => t('Please enter footer links like, Privacy policy, Terms of use, cookie policy'),
     );
+    
     // Copy right text
+    $copyright_text = variable_get($language . '_age_gate_header', array('value' => '', 'format' => NULL));
     $form[$language . 'mapping'][$language . '_age_checker_copyright'] = array(
-      '#type'          => 'textarea',
-      '#title'         => t('Please enter copyright'),
-      '#description'   => t('Above content will be use as a copyright'),
-      '#default_value' => variable_get($language . '_age_checker_copyright', ''),
-      '#required'      => TRUE,
+      '#type'          => 'text_format',
+      '#title'         => t('Please enter copyright text'),
+      '#description'   => t('This field is used for the footer copyright text.'),
+      '#rows'          => 6,
+      '#default_value' => isset($copyright_text['value']) ? $copyright_text['value'] : '',,
+      '#format'        => $copyright_text['format'],
     );
   }
   return system_settings_form($form);

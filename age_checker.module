@@ -20,12 +20,6 @@ function age_checker_init() {
   $destination = current_path();
   if (($_COOKIE['age_checker'] != 1) && ($_COOKIE['remember_me'] != 1)) {
     if (age_checker_show()) {
-      if ($destination == 'agegate' || $destination == 'node' || drupal_is_front_page())
-        $destination = $base_url;
-      else {
-        $destination = $base_url . '/' . $destination;
-      }
-
       $settings = array();
       drupal_add_js(array('age_checker' => $settings), 'setting');
 
@@ -60,8 +54,15 @@ function age_checker_init() {
           if (!isset($selected_country) || $selected_country == '') {
             $selected_country = _get_country_name();
           }
-          if (module_exists('locale'))
-            $destination = variable_get($selected_country . '_redirect_link');
+
+          if ($destination == 'agegate' || $destination == 'node' || drupal_is_front_page()) {
+            if (module_exists('locale'))
+              $destination = variable_get($selected_country . '_redirect_link');
+            else
+              $destination = $$base_url;
+          }
+          else
+            $destination = $base_url . '/' . $destination;
 
           // Getting the language_code.
           $language_code = _get_language_code();
@@ -146,8 +147,8 @@ function age_checker_show() {
  */
 function age_checker_menu() {
   $items['admin/config/people/age_checker'] = array(
-    'title'            => 'General Settings',
-    'description'      => 'General configuration of Age Checker Module',
+    'title'            => 'Age Checker Settings',
+    'description'      => 'General Age Checker configuration of Age Gate Module.',
     'page callback'    => 'drupal_get_form',
     'page arguments'   => array('age_checker_admin_form'),
     'access callback'  => 'user_access',
@@ -257,7 +258,7 @@ function age_checker_form($form,&$form_submit) {
     '#required'     => TRUE,
     '#attributes'   => array(
       'pattern'     => "[0-9]*",
-      'tabindex'    => '2',
+      'tabindex'    => variable_get($selected_country . '_day_weight'),
       'placeholder' => variable_get($selected_country . '_day_placeholder'),
     ),
   );
@@ -272,7 +273,7 @@ function age_checker_form($form,&$form_submit) {
     '#weight'        => variable_get($selected_country . '_month_weight'),
     '#attributes'    => array(
       'pattern'      => "[0-9]*",
-      'tabindex'     => '3',
+      'tabindex'     => variable_get($selected_country . '_month_weight'),
       'placeholder'  => variable_get($selected_country . '_month_placeholder'),
     ),
   );
@@ -287,7 +288,7 @@ function age_checker_form($form,&$form_submit) {
     '#required'      => TRUE,
     '#attributes'    => array(
       'pattern'      => "[0-9]*",
-      'tabindex'     => '4',
+      'tabindex'     => variable_get($selected_country . '_year_weight'),
       'placeholder'  => variable_get($selected_country . '_year_placeholder'),
     ),
   );
@@ -341,7 +342,8 @@ function age_checker_theme($existing, $type, $theme, $path) {
       'variables' => array(
         'age_cheker_background_img' => NULL,
         'age_cheker_logo' => NULL,
-        'footer_links' => NULL,
+        'age_checker_footer_links' => NULL,
+        'age_checker_copyright' => NULL,
       )
     ),
   );
@@ -485,10 +487,15 @@ function age_checker_preprocess_page(&$variables){
     $footer[$footer_link[0]] = $footer_link[1];
   }
 
+  // Copyright text.
+  $copyright_array = variable_get($language_code . '_age_checker_copyright');
+  $copyright = $copyright_array['value'];
+
   if (current_path() == "agegate") {
     $variables['age_cheker_background_img'] = $age_gate_background_image;
     $variables['age_cheker_logo'] = $age_gate_logo;
     $variables['theme_hook_suggestions'][] = 'age_checker_page';
-    $variables['footer_links'] = $footer;
+    $variables['age_checker_footer_links'] = $footer;
+    $variables['age_checker_copyright'] = $copyright;
   }
 }
