@@ -17,68 +17,70 @@ define('AGE_CHECKER_VISIBILITY_LISTED', 1);
 function age_checker_init() {
 
   global $base_url;
-  if (($_COOKIE['age_checker'] != 1) && (age_checker_show())) {
-    if ($destination == 'agegate' || $destination == 'node' || drupal_is_front_page())
-      $destination = $base_url;
-    else {
-      $destination = $base_url . '/' . drupal_get_path_alias();
-    }
-
-    $settings = array();
-    drupal_add_js(array('age_checker' => $settings), 'setting');
-
-    $visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
-    $pages      = variable_get('age_checker_pages', '');
-    $verify     = FALSE;
-
-    // Determine if this page should be behind age checker.
-    switch ($visibility) {
-      case AGE_CHECKER_VISIBILITY_NOTLISTED:
-        if (!drupal_match_path(drupal_get_path_alias($_GET['q']), $pages)) {
-          $verify = TRUE;
-        }
-        break;
-
-      case AGE_CHECKER_VISIBILITY_LISTED:
-        if (drupal_match_path(drupal_get_path_alias($_GET['q']), $pages)) {
-          $verify = TRUE;
-        }
-        break;
-    }
-    if ($verify) {
-
-      if (current_path() != 'agegate'){
-        if (!function_exists('drush_main')) { 
-          drupal_goto($base_url . '/agegate');
-        }
-      }
+  if (($_COOKIE['age_gate'] != 1) || ($_COOKIE['remember_me'] == 1)) {
+    if (age_checker_show()) {
+      if ($destination == 'agegate' || $destination == 'node' || drupal_is_front_page())
+        $destination = $base_url;
       else {
-        // default_country
-        $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : '';
-        if (!isset($selected_country) || $selected_country == '') {
-          $selected_country = _get_country_name();
-        }
+        $destination = $base_url . '/' . drupal_get_path_alias();
+      }
 
-        // Getting the language_code.
-        $language_code = _get_language_code();
-        
-        // Add module variables to JS.
-        drupal_add_js(array(
-          'age_checker' => array(
-            'cookie_expiration' => variable_get('age_checker_cookie_expiration_time', 15),
-            'currentdate'       => date("Y/m/d", time()),
-            'threshold_age'     => variable_get($selected_country . '_threshold_ages'),
-            'redirecturl'       => variable_get('under_age_url', '/'),
-            'blank_err_message' => variable_get($language_code . '_age_checker_blank_error_msg', ''),
-            'dateformat_error'  => variable_get($language_code . '_age_checker_dateformat_error_msg', ''),
-            'under_age_err_msg' => variable_get($language_code . '_age_checker_underage_error_msg', ''),
-            'date_range_err_msg' => variable_get($language_code . '_age_checker_daterange_error_msg', ''),
-            'destination' => $destination,
-            'verify' => $verify,
-            'day_placeholder' => variable_get($selected_country . '_day_placeholder'),
-            'month_placeholder' => variable_get($selected_country . '_month_placeholder'),
-            'year_placeholder' => variable_get($selected_country . '_year_placeholder'),
-          )), 'setting');
+      $settings = array();
+      drupal_add_js(array('age_checker' => $settings), 'setting');
+
+      $visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
+      $pages      = variable_get('age_checker_pages', '');
+      $verify     = FALSE;
+
+      // Determine if this page should be behind age checker.
+      switch ($visibility) {
+        case AGE_CHECKER_VISIBILITY_NOTLISTED:
+          if (!drupal_match_path(drupal_get_path_alias($_GET['q']), $pages)) {
+            $verify = TRUE;
+          }
+          break;
+
+        case AGE_CHECKER_VISIBILITY_LISTED:
+          if (drupal_match_path(drupal_get_path_alias($_GET['q']), $pages)) {
+            $verify = TRUE;
+          }
+          break;
+      }
+      if ($verify) {
+
+        if (current_path() != 'agegate'){
+          if (!function_exists('drush_main')) { 
+            drupal_goto($base_url . '/agegate');
+          }
+        }
+        else {
+          // default_country
+          $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : '';
+          if (!isset($selected_country) || $selected_country == '') {
+            $selected_country = _get_country_name();
+          }
+
+          // Getting the language_code.
+          $language_code = _get_language_code();
+          
+          // Add module variables to JS.
+          drupal_add_js(array(
+            'age_checker' => array(
+              'cookie_expiration' => variable_get('age_checker_cookie_expiration_time', 15),
+              'currentdate'       => date("Y/m/d", time()),
+              'threshold_age'     => variable_get($selected_country . '_threshold_ages'),
+              'redirecturl'       => variable_get('under_age_url', '/'),
+              'blank_err_message' => variable_get($language_code . '_age_checker_blank_error_msg', ''),
+              'dateformat_error'  => variable_get($language_code . '_age_checker_dateformat_error_msg', ''),
+              'under_age_err_msg' => variable_get($language_code . '_age_checker_underage_error_msg', ''),
+              'date_range_err_msg' => variable_get($language_code . '_age_checker_daterange_error_msg', ''),
+              'destination' => $destination,
+              'verify' => $verify,
+              'day_placeholder' => variable_get($selected_country . '_day_placeholder'),
+              'month_placeholder' => variable_get($selected_country . '_month_placeholder'),
+              'year_placeholder' => variable_get($selected_country . '_year_placeholder'),
+            )), 'setting');
+        }
       }
     }
   }

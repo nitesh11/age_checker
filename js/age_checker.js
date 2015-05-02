@@ -92,10 +92,13 @@ var age_checker = {};
     }
     else {
       // age limit ok
-      if(remember_me == 'undefined') {
-        var cookie_name = "age_checker=1; path=/; expires: " + Drupal.settings.age_checker.cookie_expiration;
-        document.cookie = cookie_name;
+      var cookie_name = "age_checker=1; path=/;";
+      document.cookie = cookie_name;
+      if(remember_me == "1") {
+        var remember_me_cookie_name = "remember_me=1; path=/; expires: " + Drupal.settings.age_checker.cookie_expiration;
+        document.cookie = remember_me_cookie_name;
       }
+
       window.location = destination;
     }
     return true;
