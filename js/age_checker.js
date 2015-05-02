@@ -1,6 +1,4 @@
 var age_checker = {};
-console.log(Drupal.settings.age_checker);
-// console.log(Drupal.settings.age_checker.currentdate);
 (function ($) {
 
   $(document).ready(function() {
@@ -19,6 +17,7 @@ console.log(Drupal.settings.age_checker);
 
   // Function to verify the age limits.
   age_checker.verify = function () {
+
     var now   = new Date(Drupal.settings.age_checker.currentdate);
     var date  = now.getDate();
     var month = now.getMonth() + 1;
@@ -39,6 +38,7 @@ console.log(Drupal.settings.age_checker);
     var dateformat_error  = Drupal.settings.age_checker.dateformat_error;
     var date_range_err_msg = Drupal.settings.age_checker.date_range_err_msg;
     var remember_me = $('#age_checker_remember_me:checked').val();
+    var destination = Drupal.settings.age_checker.destination;
 
     if ( age_checker_month > month ) {
       age--;
@@ -92,11 +92,11 @@ console.log(Drupal.settings.age_checker);
     }
     else {
       // age limit ok
-      if(remember_me != 'undefined') {
+      if(remember_me == 'undefined') {
         var cookie_name = "age_checker=1; path=/; expires: " + Drupal.settings.age_checker.cookie_expiration;
         document.cookie = cookie_name;
       }
-      window.location = "http://google.com";
+      window.location = destination;
     }
     return true;
   };
