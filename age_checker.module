@@ -60,6 +60,8 @@ function age_checker_init() {
           if (!isset($selected_country) || $selected_country == '') {
             $selected_country = _get_country_name();
           }
+          if (module_exists('locale'))
+            $destination = variable_get($selected_country . '_redirect_link');
 
           // Getting the language_code.
           $language_code = _get_language_code();

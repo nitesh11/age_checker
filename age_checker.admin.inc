@@ -316,6 +316,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
 function age_checker_country_configuration() {
   $form = array();
 
+  global $base_url;
   $country_options = array();
   $countries = variable_get('countries', '');
   $countries = explode("\n", $countries);
@@ -359,8 +360,8 @@ function age_checker_country_configuration() {
   }
 
   // Getting the format of the date field.
-  $form['date_format'] = array(
-    '#title'         => t('Required Date Format'),
+  $form['country_specific'] = array(
+    '#title'         => t('Country Specific Configuration'),
     '#type'          => 'fieldset',
     '#collapsible'   => TRUE,
     '#collapsed'     => FALSE,
@@ -368,22 +369,40 @@ function age_checker_country_configuration() {
 
   foreach ($countries as $country) {
     $country_array = explode('|', $country);
-    $form['date_format'][$country_array[0]] = array(
+    $form['country_specific'][$country_array[0]] = array(
       '#title'         => $country_array[1],
       '#type'          => 'fieldset',
       '#collapsible'   => TRUE,
       '#collapsed'     => TRUE,
     );
 
+    // Link for Multilingual site.
+    if (module_exists('locale')) {
+      // Fieldset for Changing the Date format.
+      $form['country_specific'][$country_array[0]]['multilingual'] = array(
+        '#title'         => t('Redirect links after age gate.'),
+        '#type'          => 'fieldset',
+        '#collapsible'   => TRUE,
+        '#collapsed'     => TRUE,
+      );
+      // Changing the weight of Day field.
+      $form['country_specific'][$country_array[0]]['multilingual'][$country_array[0] . '_redirect_link'] = array(
+        '#title'            => t('Redirect Link for ') . $country_array[1],
+        '#default_value'    => variable_get($country_array[0] . '_redirect_link', $base_url),
+        '#type'             => 'textfield',
+        '#size'             => 255,
+      );
+    }
+
     // Fieldset for Changing the Date format.
-    $form['date_format'][$country_array[0]]['weight'] = array(
+    $form['country_specific'][$country_array[0]]['weight'] = array(
       '#title'         => t('Changing the weight of the date field'),
       '#type'          => 'fieldset',
       '#collapsible'   => TRUE,
       '#collapsed'     => TRUE,
     );
     // Changing the weight of Day field.
-    $form['date_format'][$country_array[0]]['weight'][$country_array[0] . '_day_weight'] = array(
+    $form['country_specific'][$country_array[0]]['weight'][$country_array[0] . '_day_weight'] = array(
       '#title'            => t('Weight of Day Field :'),
       '#prefix'           => '<div class="container-inline">',
       '#suffix'           => '</div>',
@@ -393,7 +412,7 @@ function age_checker_country_configuration() {
       '#element_validate' => array('element_validate_integer'),
     );
     // Changing the weight of Month field.
-    $form['date_format'][$country_array[0]]['weight'][$country_array[0] . '_month_weight'] = array(
+    $form['country_specific'][$country_array[0]]['weight'][$country_array[0] . '_month_weight'] = array(
       '#title'            => t('Weight of Month Field :'),
       '#prefix'           => '<div class="container-inline">',
       '#suffix'           => '</div>',
@@ -403,7 +422,7 @@ function age_checker_country_configuration() {
       '#element_validate' => array('element_validate_integer'),
     );
     // Changing the weight of Year field.
-    $form['date_format'][$country_array[0]]['weight'][$country_array[0] . '_year_weight'] = array(
+    $form['country_specific'][$country_array[0]]['weight'][$country_array[0] . '_year_weight'] = array(
       '#title'            => t('Weight of Year field : '),
       '#prefix'           => '<div class="container-inline">',
       '#suffix'           => '</div>',
@@ -414,14 +433,14 @@ function age_checker_country_configuration() {
     );
 
     // Fieldset for Changing the Placeholder.
-    $form['date_format'][$country_array[0]]['placeholder'] = array(
+    $form['country_specific'][$country_array[0]]['placeholder'] = array(
       '#title'         => t('Changing the placeholder of the date field'),
       '#type'          => 'fieldset',
       '#collapsible'   => TRUE,
       '#collapsed'     => TRUE,
     );
     // Placeholder for Day format.
-    $form['date_format'][$country_array[0]]['placeholder'][$country_array[0] . '_day_placeholder'] = array(
+    $form['country_specific'][$country_array[0]]['placeholder'][$country_array[0] . '_day_placeholder'] = array(
       '#type'             => 'textfield',
       '#title'            => t('Day Placeholder :'),
       '#prefix'           => '<div class="container-inline">',
@@ -431,7 +450,7 @@ function age_checker_country_configuration() {
       '#default_value'    => variable_get($country_array[0] . '_day_placeholder', 'DD'),
     );
     // Placeholder for Month format.
-    $form['date_format'][$country_array[0]]['placeholder'][$country_array[0] . '_month_placeholder'] = array(
+    $form['country_specific'][$country_array[0]]['placeholder'][$country_array[0] . '_month_placeholder'] = array(
       '#type'             => 'textfield',
       '#title'            => t('Month Placeholder :'),
       '#prefix'           => '<div class="container-inline">',
@@ -441,7 +460,7 @@ function age_checker_country_configuration() {
       '#default_value'    => variable_get($country_array[0] . '_month_placeholder', 'MM'),
     );
     // Placeholder for Year format.
-    $form['date_format'][$country_array[0]]['placeholder'][$country_array[0] . '_year_placeholder'] = array(
+    $form['country_specific'][$country_array[0]]['placeholder'][$country_array[0] . '_year_placeholder'] = array(
       '#type'             => 'textfield',
       '#prefix'           => '<div class="container-inline">',
       '#suffix'           => '</div>',
