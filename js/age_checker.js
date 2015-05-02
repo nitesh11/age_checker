@@ -86,7 +86,6 @@ var age_checker = {};
       return false;
     }
     else if ( age < threshold_age ) {
-      // document.getElementById('age_checker_error_message').innerHTML = Drupal.t(under_age_err_msg);
       alert(Drupal.settings.age_checker.under_age_err_msg);
       window.location = Drupal.settings.age_checker.redirecturl;
     }
@@ -95,15 +94,12 @@ var age_checker = {};
       var cookie_name = "age_checker=1; path=/;";
       document.cookie = cookie_name;
       if(remember_me == "1") {
-        var remember_me_cookie_name = "remember_me=1; path=/; expires: " + Drupal.settings.age_checker.cookie_expiration;
-        document.cookie = remember_me_cookie_name;
+        setCookie('remember_me', 1, Drupal.settings.age_checker.cookie_expiration);
       }
-
       window.location = destination;
     }
     return true;
   };
-
 })(jQuery);
 
 
@@ -120,3 +116,9 @@ function getCookie(cname) {
   return "";
 }
 
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + "; " + expires;
+}
