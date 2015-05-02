@@ -86,9 +86,9 @@ var age_checker = {};
       return false;
     }
     else if ( age < threshold_age ) {
-      document.getElementById('age_checker_error_message').innerHTML = Drupal.t(under_age_err_msg);
-      setTimeout("age_checker.deny()", 2000);
-      return false;
+      // document.getElementById('age_checker_error_message').innerHTML = Drupal.t(under_age_err_msg);
+      alert(Drupal.settings.age_checker.under_age_err_msg);
+      window.location = Drupal.settings.age_checker.redirecturl;
     }
     else {
       // age limit ok
@@ -102,31 +102,6 @@ var age_checker = {};
       window.location = destination;
     }
     return true;
-  };
-
-  age_checker.deny = function() {
-    // Redirect user elsewhere.
-    var language_code = jQuery('#languagecode').val();
-    var language_value;
-    if( language_code === undefined || language_code === null || language_code.length <= 0 ) {
-      language_value = '';
-    }
-    else {
-      language_value = language_code + "/";
-    }
-    var redirect_url = Drupal.settings.age_checker.redirecturl;
-    if ( redirect_url.indexOf('http://') > -1 || redirect_url.indexOf('https://') > -1 ) {
-      window.location = redirect_url;
-      return false;
-    }
-    else if ( redirect_url.indexOf('node') > -1 ) {
-      window.location = Drupal.settings.basePath + redirect_url;
-      return false;
-    }
-    else {
-      window.location = Drupal.settings.basePath + language_value  +  redirect_url;
-      return false;
-    }
   };
 
 })(jQuery);

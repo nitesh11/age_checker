@@ -17,12 +17,13 @@ define('AGE_CHECKER_VISIBILITY_LISTED', 1);
 function age_checker_init() {
 
   global $base_url;
+  $destination = current_path();
   if (($_COOKIE['age_checker'] != 1) && ($_COOKIE['remember_me'] != 1)) {
     if (age_checker_show()) {
       if ($destination == 'agegate' || $destination == 'node' || drupal_is_front_page())
         $destination = $base_url;
       else {
-        $destination = $base_url . '/' . drupal_get_path_alias();
+        $destination = $base_url . '/' . $destination;
       }
 
       $settings = array();
@@ -79,6 +80,7 @@ function age_checker_init() {
               'day_placeholder' => variable_get($selected_country . '_day_placeholder'),
               'month_placeholder' => variable_get($selected_country . '_month_placeholder'),
               'year_placeholder' => variable_get($selected_country . '_year_placeholder'),
+              'redirecturl' => variable_get('under_age_url'),
             )), 'setting');
         }
       }
