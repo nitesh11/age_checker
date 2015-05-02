@@ -17,7 +17,7 @@ define('AGE_CHECKER_VISIBILITY_LISTED', 1);
 function age_checker_init() {
 
   global $base_url;
-  if (($_COOKIE['age_gate'] != 1) || ($_COOKIE['remember_me'] == 1)) {
+  if (($_COOKIE['age_checker'] != 1) && ($_COOKIE['remember_me'] != 1)) {
     if (age_checker_show()) {
       if ($destination == 'agegate' || $destination == 'node' || drupal_is_front_page())
         $destination = $base_url;
