@@ -24,7 +24,25 @@
   </div>
 
   <div class="site-footer">
-    <?php print render($page['footer']); ?>
+    <div class="region region-footer">
+      <ul class="menu">
+        <?php foreach ($age_checker_footer_links as $key => $value) { 
+          if (end($age_checker_footer_links) == $value) { ?>
+            <li class="leaf last">
+              <a href="<?php print $value ?>"> <?php print $key ?> </a>
+            </li>
+          <?php }
+          else { ?>
+            <li class="leaf">
+              <a href="<?php print $value ?>"> <?php print $key ?> </a> |
+            </li>
+          <?php }
+        } ?>
+      </ul>
+      <div class="footer_copyright_text">
+        <?php print render($age_checker_copyright); ?>
+      </div>
+    </div>
   </div>
 </div>
 
