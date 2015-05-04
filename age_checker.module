@@ -59,7 +59,7 @@ function age_checker_init() {
             if (module_exists('locale'))
               $destination = variable_get($selected_country . '_redirect_link');
             else
-              $destination = $$base_url;
+              $destination = $base_url;
           }
           else
             $destination = $base_url . '/' . $destination;
@@ -67,6 +67,21 @@ function age_checker_init() {
           // Getting the language_code.
           $language_code = _get_language_code();
           
+          // Auto Tab
+          $day_weight = variable_get($selected_country . '_day_weight');
+          $month_weight = variable_get($selected_country . '_month_weight');
+          $year_weight = variable_get($selected_country . '_year_weight');
+
+          $combine_array = array($day_weight, $month_weight, $year_weight);
+
+          asort($combine_array);
+
+          $i = 0;
+          foreach($combine_array as $key => $value) {
+            $id[$i] = get_id($key);
+            $i ++;
+          }
+
           // Add module variables to JS.
           drupal_add_js(array(
             'age_checker' => array(
@@ -84,11 +99,24 @@ function age_checker_init() {
               'month_placeholder' => variable_get($selected_country . '_month_placeholder'),
               'year_placeholder' => variable_get($selected_country . '_year_placeholder'),
               'redirecturl' => variable_get('under_age_url'),
+              'id_1' => $id[0],
+              'id_2' => $id[1],
+              'id_3' => $id[2],
             )), 'setting');
         }
       }
     }
   }
+}
+
+function get_id($key) {
+
+  if ($key == 0)    
+    return "#age_checker_day";
+  else if ($key == 1)
+    return "#age_checker_month";
+  else 
+    return "#age_checker_year";
 }
 
 /**
@@ -461,19 +489,27 @@ function age_checker_preprocess_page(&$variables){
   // Background image
   $age_gate_background_image = '';
   $fid_bgimg = variable_get('age_checker_background_image');
-  if ($fid_bgimg) {
-    $file_bgimg = file_load($fid_bgimg);
-    $uri_bgimg  = $file_bgimg->uri;
-    $age_gate_background_image = theme('image', array('path' => $uri_bgimg));
+  if (isset($fid_bgimg)) {
+    $file_background_obj = file_load($fid_bgimg);
+    if ($file_background_obj) {
+      $file_background_obj->status = FILE_STATUS_PERMANENT;
+      $bg_img_url       = file_create_url($file_background_obj->uri);
+      file_usage_add($file_background_obj, 'age_checker', 'image', 1);
+      $age_gate_background_image = theme('image', array('path' => $bg_img_url));
+    }
   }
 
   // Logo
   $age_gate_logo = '';
   $fid_logo = variable_get('age_checker_logo');
-  if ($fid_logo) {
-    $logo_file = file_load($fid_logo);
-    $uri_logo  = $logo_file->uri;
-    $age_gate_logo = theme('image', array('path' => $uri_logo));
+  if (isset($fid_logo)) {
+    $file_logo_obj = file_load($fid_logo);
+    if ($file_logo_obj) {
+      $file_logo_obj->status = FILE_STATUS_PERMANENT;
+      $logo_img_url       = file_create_url($file_logo_obj->uri);
+      file_usage_add($file_logo_obj, 'age_checker', 'image', 1);
+      $age_gate_logo = theme('image', array('path' => $logo_img_url));
+    }
   }
 
   // Getting the language code.

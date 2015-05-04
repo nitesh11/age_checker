@@ -1,7 +1,25 @@
 var age_checker = {};
+
 (function ($) {
 
   $(document).ready(function() {
+
+    if (window.location.pathname == '/agegate'){
+      var id1 = Drupal.settings.age_checker.id_1;
+      var id2 = Drupal.settings.age_checker.id_2;
+      var id3 = Drupal.settings.age_checker.id_3;
+
+      $(id1).keyup(function() {
+        if (this.value.length === this.maxLength) {
+          $(id2).focus();
+        }
+      });
+      $(id2).keyup(function() {
+        if (this.value.length === this.maxLength) {
+          $(id3).focus();
+        }
+      });
+    }
 
     var agegate_bg = $('.age-checker-bg img').attr('src');
     $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
