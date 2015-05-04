@@ -306,7 +306,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title'         => t('Please enter copyright text'),
       '#description'   => t('This field is used for the footer copyright text.'),
       '#rows'          => 6,
-      '#default_value' => isset($copyright_text['value']) ? $copyright_text['value'] : '',,
+      '#default_value' => isset($copyright_text['value']) ? $copyright_text['value'] : '',
       '#format'        => $copyright_text['format'],
     );
   }
