@@ -4,6 +4,10 @@ var age_checker = {};
 
   $(document).ready(function() {
 
+    var age_cookie = "age_checker=0; path=/;";
+    document.cookie = age_cookie;
+    var remember_cookie = "remember_me=0; path=/;";
+    document.cookie = remember_cookie;
     if (window.location.pathname == '/agegate'){
       var id1 = Drupal.settings.age_checker.id_1;
       var id2 = Drupal.settings.age_checker.id_2;

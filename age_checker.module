@@ -18,7 +18,7 @@ function age_checker_init() {
 
   global $base_url;
   $destination = current_path();
-  if (($_COOKIE['age_checker'] != 1) && ($_COOKIE['remember_me'] != 1) && ((isset($_COOKIE['age_checker'])) || (!isset($_COOKIE['age_checker']))) && ((isset($_COOKIE['remember_me'])) || (!isset($_COOKIE['remember_me'])))) {
+  if (($_COOKIE['age_checker'] != 1) && ($_COOKIE['remember_me'] != 1)) {
     if (age_checker_show()) {
       $settings = array();
       drupal_add_js(array('age_checker' => $settings), 'setting');
