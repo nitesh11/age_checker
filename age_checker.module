@@ -465,7 +465,7 @@ function _get_country_name() {
  * Implements a function to get country name.
  */
 function _get_geoip_data($url) {
-  
+
   $request = drupal_http_request($url);
   if ((is_object($request)) && (isset($request->data))) {
     return $request;
@@ -515,6 +515,7 @@ function age_checker_preprocess_page(&$variables){
   foreach($footer_array as $footer_links) {
     $footer_link = explode('|', $footer_links);
     $footer[$footer_link[0]] = $footer_link[1];
+    $footer = array_map('trim', $footer);
   }
 
   // Copyright text.
