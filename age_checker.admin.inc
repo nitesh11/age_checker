@@ -21,7 +21,7 @@ function age_checker_admin_form() {
   $form['geoip_link'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Enter the url for getting the country name of user.'),
-    '#default_value' => variable_get('geoip_link', 'http://freegeoip.net/json/'),
+    '#default_value' => variable_get('geoip_link', ''),
     '#description'   => t('Site link'),
   );
 
@@ -174,6 +174,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
   $languages = explode("\n", $languages);
   foreach ($languages as $language) {
     $language = explode('|', $language);
+    $language = array_map('trim', $language);
     $form[$language[0] . '_mapping'] = array(
       '#type' => 'fieldset',
       '#title' => check_plain($language[1]),
@@ -186,6 +187,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
     $countries = variable_get('countries', '');
     $countries = explode("\n", $countries);
     $country_options = array();
+    $country_options[0] = 'Select the Country';
     foreach ($countries as $country) {
       $country = explode('|', $country);
       $country_options[$country[0]] = $country[1];
@@ -321,6 +323,7 @@ function age_checker_mapping_admin_form_validate($form, &$form_state) {
   foreach ($countries as $country) {
     $country = explode('|', $country);
     $countries_array[] = trim($country[0]);
+    $result = array_map('trim', $countries_array);
   }
 
   $languages = variable_get('language');
@@ -328,13 +331,21 @@ function age_checker_mapping_admin_form_validate($form, &$form_state) {
   $count = 1;
   $flag = 0;
   $field_name = '';
+
+  // Get the list of all languages.
   foreach ($languages as $language) {
     $language = explode('|', $language);
-    $countries_array = array_diff($countries_array, $form_state['input'][$language[0] . '_country_list']);
-    if (count($countries_array) == 0 && (count($language) != $count)) {
+    $langs[] = trim($language[0]);
+  }
+
+  foreach ($langs as $lang) {
+    if (count($countries_array) == 0 && (count($langs) != $count)) {
       $flag = 1;
-      $field_name = $language[0] . '_country_list';
+      $field_name = $lang . '_country_list';
       break;
+    }
+    else {
+      $countries_array = array_diff($countries_array, $form_state['input'][$lang . '_country_list']);
     }
     $count++;
   }
@@ -386,6 +397,7 @@ function age_checker_country_configuration() {
   // Minimum Age Checker.
   foreach ($countries as $country) {
     $country_array = explode('|', $country);
+    $country_array = array_map('trim', $country_array);
     $form['ages'][$country_array[0] . '_threshold_ages'] = array(
       '#prefix'           => '<div class="container-inline">',
       '#suffix'           => '</div>',
@@ -407,6 +419,7 @@ function age_checker_country_configuration() {
 
   foreach ($countries as $country) {
     $country_array = explode('|', $country);
+    $country_array = array_map('trim', $country_array);
     $form['country_specific'][$country_array[0]] = array(
       '#title'         => $country_array[1],
       '#type'          => 'fieldset',
