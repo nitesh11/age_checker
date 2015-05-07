@@ -17,6 +17,7 @@
 #age_checker{
   height: 100%;
   background-size: 100% 100%;
+  font-family: "Open Sans",Helvetica,Arial,sans-serif;
 }
 
 #age_checker .logo{
@@ -49,7 +50,7 @@
   text-align: center;
   line-height: 1.25;
   letter-spacing: 0.3px;
-  padding: 50px 0 0 0;
+  padding: 50px 30px 10px 30px;
   margin: 0 auto;
   display: block;
 }
@@ -183,6 +184,7 @@ the container div of agegate
   }
   #age_checker_header_message {
     font-size: 12px;
+    padding: 50px 10px 5px 10px;
   }
   #age_checker .form-item-day input,
   #age_checker .form-item-month input {
@@ -229,5 +231,57 @@ the container div of agegate
 
   #age_checker_footer_message {
     padding:5px 10px;
+  }
+}
+
+.agegate-container-footer {
+  background: #fff;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+.agegate-footer {
+  background-color: #f8e514;
+  border-top: solid 2px white;
+  font-weight: 600;
+  width: 100%;
+}
+
+.agegatelinks-menu {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 5px;
+}
+
+ul.agegatelinks-menu li.leaf {
+  list-style: none;
+  display: inline;
+}
+
+ul.agegatelinks-menu li.leaf a {
+  color: #000;
+  text-decoration: underline;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.agegate_copyright_text {
+  text-align: center;
+  font-weight: bold;
+  background: white;
+  padding: 5px;
+  width: 100%;
+}
+
+@media screen and (max-width: 550px){
+  ul.agegatelinks-menu li.leaf a {
+    font-size: 11px;
+    font-weight: normal;
+  }
+  .agegatelinks-menu {
+    width:100%;
+    padding: 5px 2px;
   }
 }

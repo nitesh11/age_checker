@@ -23,10 +23,10 @@
     <?php print render($page['content']); ?>
   </div>
 
-  <div class="site-footer">
-    <div class="region region-footer">
-      <ul class="menu">
-        <?php foreach ($age_checker_footer_links as $key => $value) { 
+  <div class="agegate-container-footer">
+    <div class="agegate-footer">
+      <ul class="agegatelinks-menu">
+        <?php foreach ($age_checker_footer_links as $key => $value) {
           if (end($age_checker_footer_links) == $value) { ?>
             <li class="leaf last">
               <a href="<?php print $value ?>"> <?php print $key ?> </a>
@@ -39,7 +39,7 @@
           <?php }
         } ?>
       </ul>
-      <div class="footer_copyright_text">
+      <div class="agegate_copyright_text">
         <?php print render($age_checker_copyright); ?>
       </div>
     </div>

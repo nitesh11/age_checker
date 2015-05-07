@@ -3,6 +3,7 @@ var age_checker = {};
 (function ($) {
 
   $(window).load(function() {
+
     var age_cookie = "age_checker=0; path=/;";
     document.cookie = age_cookie;
     var remember_cookie = "remember_me=0; path=/;";
