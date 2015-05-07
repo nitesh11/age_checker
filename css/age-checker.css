@@ -1,3 +1,10 @@
+#age_checker li.expanded,
+#age_checker li.collapsed,
+#age_checker li.leaf {
+  padding: 0.2em 0 0 0;
+  margin: 0;
+}
+
 #age_checker ::-webkit-input-placeholder {
    color: #fff;
 }
@@ -262,7 +269,6 @@ ul.agegatelinks-menu li.leaf {
 
 ul.agegatelinks-menu li.leaf a {
   color: #000;
-  text-decoration: underline;
   font-size: 14px;
   font-weight: bold;
 }
