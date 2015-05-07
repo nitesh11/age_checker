@@ -514,8 +514,8 @@ function age_checker_preprocess_page(&$variables){
   $footer_array = explode("\n", $footer_variable);
   foreach($footer_array as $footer_links) {
     $footer_link = explode('|', $footer_links);
+    $footer_link = array_map('trim', $footer_link);
     $footer[$footer_link[0]] = $footer_link[1];
-    $footer = array_map('trim', $footer);
   }
 
   // Copyright text.
