@@ -21,7 +21,7 @@ function age_checker_admin_form() {
   $form['geoip_link'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Enter the url for getting the country name of user.'),
-    '#default_value' => variable_get('geoip_link', 'http://freegeoip.net/json/'),
+    '#default_value' => variable_get('geoip_link', ''),
     '#description'   => t('Site link'),
   );
 

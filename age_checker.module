@@ -433,12 +433,13 @@ function _get_language_code() {
 
 function _get_country_name() {
 
-  $ip_address = ip_address();
-
-  $url = variable_get('geoip_link') . $ip_address;
+  $url = variable_get('geoip_link');
   $geoip_data = _get_geoip_data($url);
   if(is_object($geoip_data)) {
-    $country_code = $geoip_data->country_code;
+    $country_data = $geoip_data->data;
+    $country_element = explode(':', $country_data);
+    $country_code = trim($country_element[1]);
+    
     $countries = variable_get('countries', '');
     $countries = explode("\n", $countries);
     foreach ($countries as $country) {
@@ -457,8 +458,6 @@ function _get_country_name() {
     $country_name = variable_get('default_country');
   }
 
-  $country_name_po[$ip_address] = $country_name;
-
   return $country_name;
 }
 
@@ -467,17 +466,9 @@ function _get_country_name() {
  */
 function _get_geoip_data($url) {
 
-  // Free GeoIP configuration.
-  $options = array(
-    'timeout' => 10,
-  );
-
-  $request = drupal_http_request($url, $options);
+  $request = drupal_http_request($url);
   if ((is_object($request)) && (isset($request->data))) {
     $response = json_decode($request->data);
-    if (!is_object($response) || $response->country_code == 'RD' || $response->country_code == '') {
-      return FALSE;
-    }
     return $response;
   }
   else{
