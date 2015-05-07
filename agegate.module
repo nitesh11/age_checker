@@ -5,7 +5,7 @@
  */
 define(
   'AGE_GATE_TEMPLATE_PATH',
-  drupal_get_path('module', 'age_checker') . '/templates'
+  drupal_get_path('module', 'agegate') . '/templates'
 );
 
 define('AGE_CHECKER_VISIBILITY_NOTLISTED', 0);
@@ -14,7 +14,7 @@ define('AGE_CHECKER_VISIBILITY_LISTED', 1);
 /**
  * Implements hook_init().
  */
-function age_checker_init() {
+function agegate_init() {
 
   global $base_url;
   $destination = current_path();
@@ -173,7 +173,7 @@ function age_checker_show() {
 /**
  * Implements hook_menu().
  */
-function age_checker_menu() {
+function agegate_menu() {
   $items['admin/config/people/age_checker'] = array(
     'title'            => 'Age Checker Settings',
     'description'      => 'General Age Checker configuration of Age Gate Module.',
@@ -181,7 +181,7 @@ function age_checker_menu() {
     'page arguments'   => array('age_checker_admin_form'),
     'access callback'  => 'user_access',
     'access arguments' => array('administer age checker settings'),
-    'file'             => 'age_checker.admin.inc',
+    'file'             => 'agegate.admin.inc',
   );
 
   $items['admin/config/people/age_checker/settings'] = array(
@@ -198,7 +198,7 @@ function age_checker_menu() {
     'page arguments'   => array('age_checker_mapping_admin_form'),
     'access callback'  => 'user_access',
     'access arguments' => array('administer age checker settings'),
-    'file'             => 'age_checker.admin.inc',
+    'file'             => 'agegate.admin.inc',
     'type'             => MENU_LOCAL_TASK,
     'weight'           => 1,
   );
@@ -210,7 +210,7 @@ function age_checker_menu() {
     'page arguments'   => array('age_checker_country_configuration'),
     'access callback'  => 'user_access',
     'access arguments' => array('administer age checker settings'),
-    'file'             => 'age_checker.admin.inc',
+    'file'             => 'agegate.admin.inc',
     'type'             => MENU_LOCAL_TASK,
     'weight'           => 2,
   );
@@ -225,7 +225,7 @@ function age_checker_menu() {
 /**
  * Implements hook_permission().
  */
-function age_checker_permission() {
+function agegate_permission() {
   return array(
     'administer age checker settings' => array(
       'title'       => t('administer age checker settings'),
@@ -236,7 +236,7 @@ function age_checker_permission() {
 /**
  * Function for age checker form.
  */
-function age_checker_form($form,&$form_submit) {
+function agegate_form($form,&$form_submit) {
 
   // Getting the langauge_code
   $language_code = _get_language_code();
@@ -253,8 +253,8 @@ function age_checker_form($form,&$form_submit) {
   $country_options = array();
   foreach ($countries as $country) {
     $country = explode('|', $country);
-    $country_options[$country[0]] = $country[1];
-    $result = array_map('trim', $country_options);
+    $country = array_map('trim', $country);
+    $result[$country[0]] = $country[1];
   }
   if(count($result) > 1) {
     $form['list_of_countries'] = array(
@@ -353,19 +353,19 @@ function age_checker_form($form,&$form_submit) {
 /**
  * Implements hook_theme().
  */
-function age_checker_theme($existing, $type, $theme, $path) {
+function agegate_theme($existing, $type, $theme, $path) {
   return array(
-    'age_checker' => array(
+    'agegate' => array(
       'path' => AGE_GATE_TEMPLATE_PATH,
-      'template' => 'age_checker',
+      'template' => 'agegate',
       'variables' => array(
         'age_checker_header_message' => NULL,
         'age_checker_form' => NULL,
         'age_checker_footer_message' => NULL,
       ),
     ),
-    'age_checker_page' => array(
-      'template' => 'templates/age-checker-page',
+    'agegate_page' => array(
+      'template' => 'templates/agegate-page',
       'render element' => 'page',
       'variables' => array(
         'age_cheker_background_img' => NULL,
@@ -390,13 +390,13 @@ function agechecker_template() {
   $age_checker_header_message = $age_checker_header_message_array['value'];
   
   // Form Element.
-  $age_checker_form = drupal_get_form('age_checker_form');
+  $age_checker_form = drupal_get_form('agegate_form');
   
   // Footer text of the form.
   $age_checker_footer_message_array = variable_get($language_code . '_age_gate_footer');
   $age_checker_footer_message = $age_checker_footer_message_array['value'];
   // sending variable to template
-  return theme('age_checker', 
+  return theme('agegate', 
     array(
     'age_checker_header_message' => $age_checker_header_message, 
     'age_checker_form' => $age_checker_form,
@@ -412,8 +412,8 @@ function _get_language_code() {
   $languages = explode("\n", $languages);
   foreach ($languages as $language) {
     $language = explode('|', $language);
+    $language = array_map('trim', $language);
     $languages_options[$language[0]] = $language[1];
-    $languages_result = array_map('trim', $languages_options);
   }
 
   $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : '';
@@ -421,7 +421,7 @@ function _get_language_code() {
     $selected_country = _get_country_name();
   }
 
-  foreach ($languages_result as $key => $value) {
+  foreach ($languages_options as $key => $value) {
     $countries_array = variable_get($key . '_country_list');
     foreach($countries_array as $country) {
       if ($country == $selected_country){
@@ -478,7 +478,7 @@ function _get_geoip_data($url) {
 /**
  * @param $variables
  */
-function age_checker_preprocess_page(&$variables){
+function agegate_preprocess_page(&$variables){
 
   // Background image
   $age_gate_background_image = '';
@@ -525,7 +525,7 @@ function age_checker_preprocess_page(&$variables){
   if (current_path() == "agegate") {
     $variables['age_cheker_background_img'] = $age_gate_background_image;
     $variables['age_cheker_logo'] = $age_gate_logo;
-    $variables['theme_hook_suggestions'][] = 'age_checker_page';
+    $variables['theme_hook_suggestions'][] = 'agegate_page';
     $variables['age_checker_footer_links'] = $footer;
     $variables['age_checker_copyright'] = $copyright;
   }
