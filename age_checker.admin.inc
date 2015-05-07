@@ -187,6 +187,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
     $countries = variable_get('countries', '');
     $countries = explode("\n", $countries);
     $country_options = array();
+    $country_options[0] = 'Select the Country';
     foreach ($countries as $country) {
       $country = explode('|', $country);
       $country_options[$country[0]] = $country[1];
@@ -322,7 +323,7 @@ function age_checker_mapping_admin_form_validate($form, &$form_state) {
   foreach ($countries as $country) {
     $country = explode('|', $country);
     $countries_array[] = trim($country[0]);
-    $result = array_map('trim', $country_array);
+    $result = array_map('trim', $countries_array);
   }
 
   $languages = variable_get('language');
@@ -396,7 +397,7 @@ function age_checker_country_configuration() {
   // Minimum Age Checker.
   foreach ($countries as $country) {
     $country_array = explode('|', $country);
-    $country_array = trim($country_array[0]);
+    $country_array = array_map('trim', $country_array);
     $form['ages'][$country_array[0] . '_threshold_ages'] = array(
       '#prefix'           => '<div class="container-inline">',
       '#suffix'           => '</div>',
