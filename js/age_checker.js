@@ -4,6 +4,10 @@ var age_checker = {};
 
   $(document).ready(function() {
 
+    var agegate_bg = $('.age-checker-bg img').attr('src');
+    $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
+    $('.age-checker-bg').remove();
+
     var age_cookie = "age_checker=0; path=/;";
     document.cookie = age_cookie;
     var remember_cookie = "remember_me=0; path=/;";
@@ -25,9 +29,7 @@ var age_checker = {};
       });
     }
 
-    var agegate_bg = $('.age-checker-bg img').attr('src');
-    $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
-    $('.age-checker-bg').remove();
+
 
     $('#age_checker_country').change(function() {
       var selected_country = $(this).find('option:selected').val();
