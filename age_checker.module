@@ -439,7 +439,7 @@ function _get_country_name() {
     $country_data = $geoip_data->data;
     $country_element = explode(':', $country_data);
     $country_code = trim($country_element[1]);
-    
+
     $countries = variable_get('countries', '');
     $countries = explode("\n", $countries);
     foreach ($countries as $country) {
@@ -465,11 +465,10 @@ function _get_country_name() {
  * Implements a function to get country name.
  */
 function _get_geoip_data($url) {
-
+  
   $request = drupal_http_request($url);
   if ((is_object($request)) && (isset($request->data))) {
-    $response = json_decode($request->data);
-    return $response;
+    return $request;
   }
   else{
     return FALSE;
