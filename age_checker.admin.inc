@@ -328,13 +328,21 @@ function age_checker_mapping_admin_form_validate($form, &$form_state) {
   $count = 1;
   $flag = 0;
   $field_name = '';
+
+  // Get the list of all languages.
   foreach ($languages as $language) {
     $language = explode('|', $language);
-    $countries_array = array_diff($countries_array, $form_state['input'][$language[0] . '_country_list']);
-    if (count($countries_array) == 0 && (count($language) != $count)) {
+    $langs[] = $language[0];
+  }
+
+  foreach ($langs as $lang) {
+    if (count($countries_array) == 0 && (count($langs) != $count)) {
       $flag = 1;
-      $field_name = $language[0] . '_country_list';
+      $field_name = $lang . '_country_list';
       break;
+    }
+    else {
+      $countries_array = array_diff($countries_array, $form_state['input'][$lang . '_country_list']);
     }
     $count++;
   }
