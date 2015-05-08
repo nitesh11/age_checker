@@ -18,7 +18,7 @@ function sabm_age_gate_init() {
 
   global $base_url;
   $destination = current_path();
-  if (($_COOKIE['age_checker'] != 1) && ($_COOKIE['remember_me'] != 1)) {
+  if (($_COOKIE['age_checker'] != 1) && ($_COOKIE['remember_me'] != 1) && (isset($_COOKIE['age_checker'])) && (isset($_COOKIE['remember_me']))) {
     if (age_checker_show()) {
       $settings = array();
       drupal_add_js(array('age_checker' => $settings), 'setting');
@@ -30,13 +30,13 @@ function sabm_age_gate_init() {
       // Determine if this page should be behind age checker.
       switch ($visibility) {
         case AGE_CHECKER_VISIBILITY_NOTLISTED:
-          if (!drupal_match_path(drupal_get_path_alias($_GET['q']), $pages)) {
+          if (!drupal_match_path(drupal_get_path_alias(current_path()), $pages)) {
             $verify = TRUE;
           }
           break;
 
         case AGE_CHECKER_VISIBILITY_LISTED:
-          if (drupal_match_path(drupal_get_path_alias($_GET['q']), $pages)) {
+          if (drupal_match_path(drupal_get_path_alias(current_path()), $pages)) {
             $verify = TRUE;
           }
           break;
@@ -50,10 +50,7 @@ function sabm_age_gate_init() {
         }
         else {
           // default_country
-          $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : '';
-          if (!isset($selected_country) || $selected_country == '') {
-            $selected_country = _get_country_name();
-          }
+          $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : _get_country_name();
 
           if ($destination == 'agegate' || $destination == 'node' || drupal_is_front_page()) {
             if (module_exists('locale'))
@@ -135,12 +132,12 @@ function _age_checker_visibility() {
   $pages = drupal_strtolower($pages);
   if ($visibility < 2) {
     // Convert the Drupal path to lowercase.
-    $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+    $path = drupal_strtolower(drupal_get_path_alias(current_path()));
     // Compare the lowercase internal and lowercase path alias (if any).
     $page_match = drupal_match_path($path, $pages);
 
-    if ($path != $_GET['q']) {
-      $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+    if ($path != current_path()) {
+      $page_match = $page_match || drupal_match_path(current_path(), $pages);
     }
     // When $visibility has a value of 0,
     // the age checker is displayed on all pages except those listed in $pages.
@@ -160,7 +157,7 @@ function _age_checker_visibility() {
 /**
  * Function to control age checker display depending user and accesses.
  *
- * @return bool
+ * @return boolean
  *   True if must be shown
  */
 function age_checker_show() {
@@ -242,10 +239,7 @@ function sabm_age_gate_form($form,&$form_submit) {
   $language_code = _get_language_code();
 
   // default_country
-  $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : '';
-  if (!isset($selected_country) || $selected_country == '') {
-    $selected_country = _get_country_name();
-  }
+  $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : _get_country_name();
 
   //country list
   $countries = variable_get('countries', '');
@@ -416,10 +410,7 @@ function _get_language_code() {
     $languages_options[$language[0]] = $language[1];
   }
 
-  $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : '';
-  if (!isset($selected_country) || $selected_country == '') {
-    $selected_country = _get_country_name();
-  }
+  $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : _get_country_name();
 
   foreach ($languages_options as $key => $value) {
     $countries_array = variable_get($key . '_country_list');
