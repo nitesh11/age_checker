@@ -5,7 +5,7 @@
  */
 define(
   'AGE_GATE_TEMPLATE_PATH',
-  drupal_get_path('module', 'agegate') . '/templates'
+  drupal_get_path('module', 'sabm_age_gate') . '/templates'
 );
 
 define('AGE_CHECKER_VISIBILITY_NOTLISTED', 0);
@@ -14,7 +14,7 @@ define('AGE_CHECKER_VISIBILITY_LISTED', 1);
 /**
  * Implements hook_init().
  */
-function agegate_init() {
+function sabm_age_gate_init() {
 
   global $base_url;
   $destination = current_path();
@@ -173,7 +173,7 @@ function age_checker_show() {
 /**
  * Implements hook_menu().
  */
-function agegate_menu() {
+function sabm_age_gate_menu() {
   $items['admin/config/people/age_checker'] = array(
     'title'            => 'Age Checker Settings',
     'description'      => 'General Age Checker configuration of Age Gate Module.',
@@ -181,7 +181,7 @@ function agegate_menu() {
     'page arguments'   => array('age_checker_admin_form'),
     'access callback'  => 'user_access',
     'access arguments' => array('administer age checker settings'),
-    'file'             => 'agegate.admin.inc',
+    'file'             => 'sabm_age_gate.admin.inc',
   );
 
   $items['admin/config/people/age_checker/settings'] = array(
@@ -198,7 +198,7 @@ function agegate_menu() {
     'page arguments'   => array('age_checker_mapping_admin_form'),
     'access callback'  => 'user_access',
     'access arguments' => array('administer age checker settings'),
-    'file'             => 'agegate.admin.inc',
+    'file'             => 'sabm_age_gate.admin.inc',
     'type'             => MENU_LOCAL_TASK,
     'weight'           => 1,
   );
@@ -210,7 +210,7 @@ function agegate_menu() {
     'page arguments'   => array('age_checker_country_configuration'),
     'access callback'  => 'user_access',
     'access arguments' => array('administer age checker settings'),
-    'file'             => 'agegate.admin.inc',
+    'file'             => 'sabm_age_gate.admin.inc',
     'type'             => MENU_LOCAL_TASK,
     'weight'           => 2,
   );
@@ -225,7 +225,7 @@ function agegate_menu() {
 /**
  * Implements hook_permission().
  */
-function agegate_permission() {
+function sabm_age_gate_permission() {
   return array(
     'administer age checker settings' => array(
       'title'       => t('administer age checker settings'),
@@ -236,7 +236,7 @@ function agegate_permission() {
 /**
  * Function for age checker form.
  */
-function agegate_form($form,&$form_submit) {
+function sabm_age_gate_form($form,&$form_submit) {
 
   // Getting the langauge_code
   $language_code = _get_language_code();
@@ -353,19 +353,19 @@ function agegate_form($form,&$form_submit) {
 /**
  * Implements hook_theme().
  */
-function agegate_theme($existing, $type, $theme, $path) {
+function sabm_age_gate_theme($existing, $type, $theme, $path) {
   return array(
-    'agegate' => array(
+    'sabm_age_gate' => array(
       'path' => AGE_GATE_TEMPLATE_PATH,
-      'template' => 'agegate',
+      'template' => 'sabm_age_gate',
       'variables' => array(
         'age_checker_header_message' => NULL,
         'age_checker_form' => NULL,
         'age_checker_footer_message' => NULL,
       ),
     ),
-    'agegate_page' => array(
-      'template' => 'templates/agegate-page',
+    'sabm_age_gate_page' => array(
+      'template' => 'templates/sabm_age_gate-page',
       'render element' => 'page',
       'variables' => array(
         'age_cheker_background_img' => NULL,
@@ -390,13 +390,13 @@ function agechecker_template() {
   $age_checker_header_message = $age_checker_header_message_array['value'];
   
   // Form Element.
-  $age_checker_form = drupal_get_form('agegate_form');
+  $age_checker_form = drupal_get_form('sabm_age_gate_form');
   
   // Footer text of the form.
   $age_checker_footer_message_array = variable_get($language_code . '_age_gate_footer');
   $age_checker_footer_message = $age_checker_footer_message_array['value'];
   // sending variable to template
-  return theme('agegate', 
+  return theme('sabm_age_gate', 
     array(
     'age_checker_header_message' => $age_checker_header_message, 
     'age_checker_form' => $age_checker_form,
@@ -478,7 +478,7 @@ function _get_geoip_data($url) {
 /**
  * @param $variables
  */
-function agegate_preprocess_page(&$variables){
+function sabm_age_gate_preprocess_page(&$variables){
 
   // Background image
   $age_gate_background_image = '';
@@ -525,7 +525,7 @@ function agegate_preprocess_page(&$variables){
   if (current_path() == "agegate") {
     $variables['age_cheker_background_img'] = $age_gate_background_image;
     $variables['age_cheker_logo'] = $age_gate_logo;
-    $variables['theme_hook_suggestions'][] = 'agegate_page';
+    $variables['theme_hook_suggestions'][] = 'sabm_age_gate_page';
     $variables['age_checker_footer_links'] = $footer;
     $variables['age_checker_copyright'] = $copyright;
   }

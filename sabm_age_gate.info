@@ -5,6 +5,6 @@ core = 7.x
 version = 2.x
 configure = admin/config/people/age_checker
 
-scripts[] = js/agegate.js
+scripts[] = js/sabm_age_gate.js
 
-stylesheets[all][] = css/agegate.css
+stylesheets[all][] = css/sabm_age_gate.css
