@@ -127,7 +127,7 @@ function age_checker_admin_form() {
       'file_validate_size'       => array(1000000),
     ),
   );
-
+  
   return system_settings_form($form);
 }
 
@@ -139,28 +139,34 @@ function age_checker_admin_form_validate($form, &$form_state) {
   $countries = $form_state['input']['countries'];
   $countries = explode("\n", $countries);
   $country_options = array();
-    foreach ($countries as $country) {
-      $country = explode('|', $country);
-      $country_options[$country[0]] = $country[1];
-      $countries_list = array_map('trim', $country_options);
+  foreach ($countries as $country) {
+    $country = explode('|', $country);
+    if ($country[1] == '') {
+      form_set_error('countries', t('Please remove the extra space.'));
     }
-    foreach ($countries_list as $country_list) {
-     if (preg_match('/[0-9]/', $country_list)) {
-        form_set_error('countries', t('Please enter proper country name'));
-      }
+    $country_options[$country[0]] = $country[1];
+    $countries_list = array_map('trim', $country_options);
+  }
+  foreach ($countries_list as $country_list) {
+   if (preg_match('/[0-9]/', $country_list)) {
+      form_set_error('countries', t('Please enter proper country name'));
     }
+  }
   //validation for languages
   $languages = $form_state['input']['language'];
   $languages = explode("\n", $languages);
   $languages_options = array();
-    foreach ($languages as $language) {
-      $language = explode('|', $language);
-      $language_options[$language[0]] = $language[1];
-      $language_list = array_map('trim', $language_options);
+  foreach ($languages as $language) {
+    $language = explode('|', $language);
+    if ($language[1] == '') {
+      form_set_error('language', t('Please remove the extra space.'));
     }
-    foreach ($language_list as $language) {
-      if (preg_match('/[0-9]/', $language)) {
-        form_set_error('language', t('Please enter proper language name'));
+    $language_options[$language[0]] = $language[1];
+    $language_list = array_map('trim', $language_options);
+  }
+  foreach ($language_list as $language) {
+    if (preg_match('/[0-9]/', $language)) {
+      form_set_error('language', t('Please enter proper language name'));
     }
   }
 }
