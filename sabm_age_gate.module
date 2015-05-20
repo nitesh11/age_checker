@@ -3,22 +3,24 @@
  * @file
  * Hook implementations for the age_checker module.
  */
-define(
-  'AGE_GATE_TEMPLATE_PATH',
-  drupal_get_path('module', 'sabm_age_gate') . '/templates'
-);
 
 define('AGE_CHECKER_VISIBILITY_NOTLISTED', 0);
 define('AGE_CHECKER_VISIBILITY_LISTED', 1);
 
 /**
- * Implements hook_init().
+ * Implements hook_boot().
  */
-function sabm_age_gate_init() {
+function sabm_age_gate_boot() {
 
+  drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
+
+  define('AGE_GATE_TEMPLATE_PATH',drupal_get_path('module', 'sabm_age_gate') . '/templates');
+  
   global $base_url;
   $destination = current_path();
-  if (($_COOKIE['age_checker'] != 1) && ($_COOKIE['remember_me'] != 1) && ((isset($_COOKIE['age_checker'])) || !(isset($_COOKIE['age_checker']))) && ((isset($_COOKIE['remember_me'])) || !(isset($_COOKIE['remember_me'])))) {
+  $age_gate_cookie = isset($_COOKIE['age_checker']) ? $_COOKIE['age_checker'] : 0;
+  $remember_me_cookie = isset($_COOKIE['remember_me']) ? $_COOKIE['remember_me'] : 0;
+  if (($age_gate_cookie != 1) && ($remember_me_cookie != 1)) {
     if (age_checker_show()) {
       $settings = array();
       drupal_add_js(array('age_checker' => $settings), 'setting');

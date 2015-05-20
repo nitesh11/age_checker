@@ -1,5 +1,5 @@
-name = Age Gate
-description = This module will provide an age gate.
+name = Sabmiller Age Gate
+description = This module will provide an age gate for Sabmiller sites.
 package = Age Gate
 core = 7.x
 version = 2.x
