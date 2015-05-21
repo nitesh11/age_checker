@@ -16,14 +16,6 @@ function age_checker_admin_form() {
     '#title'         => t('Would you like to display remember me check box'),
     '#default_value' => variable_get('option_remember_me', 0),
   );
-  
-  // Variable to changing the GeoIP site.
-  $form['geoip_link'] = array(
-    '#type'          => 'textfield',
-    '#title'         => t('Enter the url for getting the country name of user.'),
-    '#default_value' => variable_get('geoip_link', ''),
-    '#description'   => t('Site link'),
-  );
 
   // Language for age checker.
   $form['lang'] = array(
@@ -34,11 +26,11 @@ function age_checker_admin_form() {
   );
   $form['lang']['language'] = array(
     '#type'          => 'textarea',
-    '#title'         => t('Please enter your language'),
+    '#title'         => t('Please enter the list of languages in key|value pair.'),
     '#required'      => TRUE,
     '#maxlength'     => 255,
     '#default_value' => variable_get('language', ''),
-    '#description'   => t('Please enter required language'),
+    '#description'   => t('Please enter required language in key|value format for e.g. es|Español. The name of the key should not have any space.'),
   );
   // Countries
   $form['country'] = array(
@@ -49,11 +41,11 @@ function age_checker_admin_form() {
   );
   $form['country']['countries'] = array(
     '#type'          => 'textarea',
-    '#title'         => t('Please enter your countries'),
+    '#title'         => t('Please enter the list of countries in key|value pair.'),
     '#required'      => TRUE,
     '#maxlength'     => 255,
     '#default_value' => variable_get('countries', ''),
-    '#description'   => t('Please enter required language'),
+    '#description'   => t('Please enter required country in localized language e.g. ES|España. The key should be picked up from A2 (ISO) column of http://www.worldatlas.com/aatlas/ctycodes.htm site depending on the value of the country.'),
   );
   // Verification options for age checker.
   $form['options'] = array(

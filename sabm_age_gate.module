@@ -426,7 +426,8 @@ function _get_language_code() {
 
 function _get_country_name() {
 
-  $url = variable_get('geoip_link');
+  global $base_url;
+  $url = $base_url . '/acquia_test.php';
   $geoip_data = _get_geoip_data($url);
   if(is_object($geoip_data)) {
     $country_data = $geoip_data->data;
