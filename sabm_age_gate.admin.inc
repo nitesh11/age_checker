@@ -300,7 +300,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
     );
     
     // Copy right text
-    $copyright_text = variable_get($language . '_age_gate_header', array('value' => '', 'format' => NULL));
+    $copyright_text = variable_get($language . '_age_checker_copyright', array('value' => '', 'format' => NULL));
     $form[$language . '_mapping'][$language . '_age_checker_copyright'] = array(
       '#type'          => 'text_format',
       '#title'         => t('Please enter copyright text'),
