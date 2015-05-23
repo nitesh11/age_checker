@@ -1,8 +1,12 @@
 var age_checker = {};
 
 (function ($) {
-  
+
   $(document).ready(function() {
+
+    var agegate_bg = $('.age-checker-bg img').attr('src');
+    $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
+    $('.age-checker-bg').remove();
 
     if (window.location.pathname == '/agegate'){
       var id1 = Drupal.settings.age_checker.id_1;
@@ -20,10 +24,6 @@ var age_checker = {};
         }
       });
     }
-
-    var agegate_bg = $('.age-checker-bg img').attr('src');
-    $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
-    $('.age-checker-bg').remove();
 
     $('#age_checker_country').change(function() {
       var selected_country = $(this).find('option:selected').val();
