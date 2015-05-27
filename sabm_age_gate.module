@@ -406,6 +406,7 @@ function _get_language_code() {
   $languages_options = array();
   $languages = variable_get('language', '');
   $languages = explode("\n", $languages);
+
   foreach ($languages as $language) {
     $language = explode('|', $language);
     $language = array_map('trim', $language);
@@ -413,7 +414,6 @@ function _get_language_code() {
   }
 
   $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : _get_country_name();
-
   foreach ($languages_options as $key => $value) {
     $countries_array = variable_get($key . '_country_list');
     foreach($countries_array as $country) {
@@ -429,6 +429,9 @@ function _get_country_name() {
   global $base_url;
   $url = $base_url . '/acquia_test.php';
   $geoip_data = _get_geoip_data($url);
+
+  $default_country = variable_get('default_country');
+
   if(is_object($geoip_data)) {
     $country_data = $geoip_data->data;
     $country_element = explode(':', $country_data);
@@ -438,18 +441,18 @@ function _get_country_name() {
     $countries = explode("\n", $countries);
     foreach ($countries as $country) {
       $country_array = explode('|', $country);
-      $country_list[$country_array[0]] = $country_array[1];
-    }
-    $country_name = isset($country_list[$country_code]) ? $country_list[$country_code] : '';
-    if (isset($country_name) || $country_name !== '') {
-      $country_name = $country_code;
-    }
-    else {
-      $country_name = variable_get('default_country');
+      $country_list[trim($country_array[0])] = trim($country_array[1]);
+      if (trim($country_array[0]) == $country_code) {
+        $country_name = $country_code;
+        break;
+      }
+      else {
+        $country_name = $default_country;
+      }
     }
   }
   else {
-    $country_name = variable_get('default_country');
+    $country_name = $default_country;
   }
 
   return $country_name;
