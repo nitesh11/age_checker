@@ -7,7 +7,10 @@ var age_checker = {};
     var agegate_bg = $('.age-checker-bg img').attr('src');
     $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
     $('.age-checker-bg').remove();
-
+    
+    if (screen.width < 480) {
+      $('head').append('<meta name="viewport" content="width=device-width, initial-scale=1">');
+    }
     if (window.location.pathname == '/agegate'){
       var id1 = Drupal.settings.age_checker.id_1;
       var id2 = Drupal.settings.age_checker.id_2;

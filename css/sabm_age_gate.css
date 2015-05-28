@@ -187,8 +187,8 @@ the container div of agegate
 
 @media screen and (max-width: 550px){
   #age_checker .agegate-container {
-    width: 290px;
-    padding: 0;
+    width: 96%;
+    padding: 2%;
   }
   #age_checker_header_message {
     font-size: 12px;
