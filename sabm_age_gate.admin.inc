@@ -87,9 +87,9 @@ function age_checker_admin_form() {
   // Age checker specific pages.
   $form['options']['age_checker_pages'] = array(
     '#type'          => 'textarea',
-    '#title'         => t('Type Age Gate specific pages'),
+    '#title'         => t('Age gate exception pages'),
     '#default_value' => variable_get('age_checker_pages', 'admin/*'),
-    '#description'   => t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are blog for the blog page and blog/* for every personal blog. <front> is the front page."),
+    '#description'   => t("Enter the path of the page e.g. enter 'blog' for the blog main page and 'blog/*' for the blog main page and its subpages."),
   );
    
   // Images Age Checker.
