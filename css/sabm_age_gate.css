@@ -25,6 +25,8 @@
   height: 100%;
   background-size: 100% 100%;
   font-family: "Open Sans",Helvetica,Arial,sans-serif;
+  display: table;
+  width: 100%;
 }
 
 #age_checker .logo{
@@ -291,6 +293,11 @@ ul.agegatelinks-menu li.leaf a {
     width:100%;
     padding: 5px 2px;
   }
+  .agegate-container-footer {
+    position: relative;
+  }
+}
+@media screen and (max-width: 960px) {
   .agegate-container-footer {
     position: relative;
   }
