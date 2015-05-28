@@ -8,7 +8,7 @@ var age_checker = {};
     $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
     $('.age-checker-bg').remove();
 
-    if (window.location.pathname == '/agegate'){
+    if (window.location.pathname == '/agegate' && Drupal.settings.age_checker !== undefined){
       var id1 = Drupal.settings.age_checker.id_1;
       var id2 = Drupal.settings.age_checker.id_2;
       var id3 = Drupal.settings.age_checker.id_3;
