@@ -129,8 +129,8 @@ function _age_checker_visibility() {
 
   $visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
   $pages = variable_get('age_checker_pages');
-  // Convert path to lowercase. This allows comparison of the same path
-  // with different case. Ex: /Page, /page, /PAGE.
+
+  // Convert path to lowercase. This allows comparison of the same path with different case. Ex: /Page, /page, /PAGE.
   $pages = drupal_strtolower($pages);
   if ($visibility < 2) {
     // Convert the Drupal path to lowercase.
@@ -141,10 +141,8 @@ function _age_checker_visibility() {
     if ($path != current_path()) {
       $page_match = $page_match || drupal_match_path(current_path(), $pages);
     }
-    // When $visibility has a value of 0,
-    // the age checker is displayed on all pages except those listed in $pages.
-    // When set to 1, it is displayed only on those
-    // pages listed in $pages.
+
+    // When $visibility has a value of 0, the age checker is displayed on all pages except those listed in $pages. When set to 1, it is displayed only on those pages listed in $pages.
     $page_match = !($visibility xor $page_match);
   }
   elseif (module_exists('php')) {
@@ -240,10 +238,10 @@ function sabm_age_gate_form($form,&$form_submit) {
   // Getting the langauge_code
   $language_code = _get_language_code();
 
-  // default_country
+  // Default Country
   $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : _get_country_name();
 
-  //country list
+  // Country list
   $countries = variable_get('countries', '');
   $countries = explode("\n", $countries);
   $country_options = array();
@@ -331,7 +329,8 @@ function sabm_age_gate_form($form,&$form_submit) {
       ),
     );
   }
-  //submit button
+
+  // Submit button
   $form['submit'] = array(
     '#type'       => 'submit',
     '#value'      => variable_get($language_code . '_age_checker_button_text'),
@@ -391,7 +390,7 @@ function agechecker_template() {
   // Footer text of the form.
   $age_checker_footer_message_array = variable_get($language_code . '_age_gate_footer');
   $age_checker_footer_message = $age_checker_footer_message_array['value'];
-  // sending variable to template
+  // Sending variable to template
   return theme('sabm_age_gate', 
     array(
     'age_checker_header_message' => $age_checker_header_message, 
@@ -426,50 +425,26 @@ function _get_language_code() {
 
 function _get_country_name() {
 
-  global $base_url;
-  $url = $base_url . '/acquia_test.php';
-  $geoip_data = _get_geoip_data($url);
+  // Get the country code.
+  $country_code = $_SERVER['HTTP_X_GEO_COUNTRY'];
 
+  // Get the default country.
   $default_country = variable_get('default_country');
 
-  if(is_object($geoip_data)) {
-    $country_data = $geoip_data->data;
-    $country_element = explode(':', $country_data);
-    $country_code = trim($country_element[1]);
-
-    $countries = variable_get('countries', '');
-    $countries = explode("\n", $countries);
-    foreach ($countries as $country) {
-      $country_array = explode('|', $country);
-      $country_list[trim($country_array[0])] = trim($country_array[1]);
-      if (trim($country_array[0]) == $country_code) {
-        $country_name = $country_code;
-        break;
-      }
-      else {
-        $country_name = $default_country;
-      }
+  $countries = variable_get('countries', '');
+  $countries = explode("\n", $countries);
+  foreach ($countries as $country) {
+    $country_array = explode('|', $country);
+    $country_list[trim($country_array[0])] = trim($country_array[1]);
+    if (trim($country_array[0]) == $country_code) {
+      $country_name = $country_code;
+      break;
+    }
+    else {
+      $country_name = $default_country;
     }
   }
-  else {
-    $country_name = $default_country;
-  }
-
   return $country_name;
-}
-
-/**
- * Implements a function to get country name.
- */
-function _get_geoip_data($url) {
-
-  $request = drupal_http_request($url);
-  if ((is_object($request)) && (isset($request->data))) {
-    return $request;
-  }
-  else{
-    return FALSE;
-  }
 }
 
 /**

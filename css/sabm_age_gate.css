@@ -302,3 +302,7 @@ ul.agegatelinks-menu li.leaf a {
     position: relative;
   }
 }
+
+.sample_link {
+  font-weight: bold;
+}
