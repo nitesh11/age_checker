@@ -16,10 +16,18 @@ function sabm_age_gate_boot() {
 
   define('AGE_GATE_TEMPLATE_PATH',drupal_get_path('module', 'sabm_age_gate') . '/templates');
   
+  global $user;
   global $base_url;
+
   $destination = current_path();
   $age_gate_cookie = isset($_COOKIE['age_checker']) ? $_COOKIE['age_checker'] : 0;
   $remember_me_cookie = isset($_COOKIE['remember_me']) ? $_COOKIE['remember_me'] : 0;
+
+  // Setting up cookie in case of logged in users.
+  if ($user->uid > 0) {
+    setcookie('age_checker', 1, 0, $GLOBALS['base_path'], NULL, false, true);
+  }
+  
   if (($age_gate_cookie != 1) && ($remember_me_cookie != 1)) {
     if (age_checker_show()) {
       $settings = array();
