@@ -216,7 +216,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title'         => t('Welcome and LDA copy'),
       '#type'          => 'text_format',
       '#rows'          => 6,
-      '#default_value' => isset($message_beforeform['value']) ? check_plain($message_beforeform['value']) : '',
+      '#default_value' => isset($message_beforeform['value']) ? $message_beforeform['value'] : '',
       '#description'   => t('e.g. You must be of legal drinking age to enter this site. Enter you date of birth below.'),
       '#format'        => $message_beforeform['format'],
     );
@@ -227,7 +227,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title'         => t('Cookie consent statement copy'),
       '#type'          => 'text_format',
       '#rows'          => 6,
-      '#default_value' => isset($message_afterform['value']) ? check_plain($message_afterform['value']) : '',
+      '#default_value' => isset($message_afterform['value']) ? $message_afterform['value'] : '',
       '#description'   => t('e.g This website uses cookies that are stored on your computer in order to enhance your experience. By providing your date of birth, you also agree to the use of cookies.'),
       '#format'        => $message_afterform['format'],
     );
@@ -308,7 +308,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title'         => t('Please enter copyright text'),
       '#description'   => t('This field is used for the footer copyright text.'),
       '#rows'          => 6,
-      '#default_value' => isset($copyright_text['value']) ? check_plain($copyright_text['value']) : '',
+      '#default_value' => isset($copyright_text['value']) ? $copyright_text['value'] : '',
       '#description'   => t('Copyright © 2015 Brand name. All rights reserved'),
       '#format'        => $copyright_text['format'],
     );
