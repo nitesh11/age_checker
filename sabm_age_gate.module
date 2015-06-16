@@ -359,8 +359,7 @@ function sabm_age_gate_form($form,&$form_submit) {
 function sabm_age_gate_theme($existing, $type, $theme, $path) {
   return array(
     'sabm_age_gate' => array(
-      'path' => AGE_GATE_TEMPLATE_PATH,
-      'template' => 'sabm_age_gate',
+      'template' => 'templates/sabm_age_gate',
       'variables' => array(
         'age_checker_header_message' => NULL,
         'age_checker_form' => NULL,
