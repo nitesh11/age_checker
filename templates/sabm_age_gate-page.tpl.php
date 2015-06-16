@@ -24,25 +24,30 @@
   </div>
 
   <div class="agegate-container-footer">
-    <div class="agegate-footer">
-      <ul class="agegatelinks-menu">
-        <?php foreach ($age_checker_footer_links as $key => $value) {
-          if (end($age_checker_footer_links) == $value) { ?>
-            <li class="leaf last">
-              <a href="<?php print $value ?>"> <?php print $key ?> </a>
-            </li>
-          <?php }
-          else { ?>
-            <li class="leaf">
-              <a href="<?php print $value ?>"> <?php print $key ?> </a> |
-            </li>
-          <?php }
-        } ?>
-      </ul>
+    <?php if (count($age_checker_footer_links) > 0) { ?>
+      <div class="agegate-footer">
+        <ul class="agegatelinks-menu">
+          <?php 
+            foreach ($age_checker_footer_links as $key => $value) {
+              if (end($age_checker_footer_links) == $value) { ?>
+                <li class="leaf last">
+                  <a href="<?php print $value ?>"> <?php print $key ?> </a>
+                </li>
+              <?php }
+              else { ?>
+                <li class="leaf">
+                  <a href="<?php print $value ?>"> <?php print $key ?> </a> |
+                </li>
+              <?php }
+            } ?>
+        </ul>
+      </div>
+    <?php } ?>
+    <?php if (!empty($age_checker_copyright)) { ?>
       <div class="agegate_copyright_text">
         <?php print render($age_checker_copyright); ?>
       </div>
-    </div>
+    <?php } ?>
   </div>
 </div>
 

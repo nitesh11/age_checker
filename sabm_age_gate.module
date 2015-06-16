@@ -27,7 +27,7 @@ function sabm_age_gate_boot() {
   if ($user->uid > 0) {
     setcookie('age_checker', 1, 0, $GLOBALS['base_path'], NULL, false, true);
   }
-  
+
   if (($age_gate_cookie != 1) && ($remember_me_cookie != 1)) {
     if (age_checker_show()) {
       $settings = array();
@@ -490,17 +490,24 @@ function sabm_age_gate_preprocess_page(&$variables){
   $language_code = _get_language_code();
 
   // Footer variables.
-  $footer_variable = variable_get($language_code . '_age_checker_footer_links');
-  $footer_array = explode("\n", $footer_variable);
-  foreach($footer_array as $footer_links) {
-    $footer_link = explode('|', $footer_links);
-    $footer_link = array_map('trim', $footer_link);
-    $footer[$footer_link[0]] = $footer_link[1];
+  $footer = array();
+  $footer_variable = variable_get($language_code . '_age_checker_footer_links', '');
+  if ($footer_variable != '') {
+    $footer_array = explode("\n", $footer_variable);
+    foreach($footer_array as $footer_links) {
+      $footer_link = explode('|', $footer_links);
+      $footer_link = array_map('trim', $footer_link);
+      $footer[$footer_link[0]] = $footer_link[1];
+    }
   }
 
   // Copyright text.
-  $copyright_array = variable_get($language_code . '_age_checker_copyright');
-  $copyright = $copyright_array['value'];
+  $copyright = '';
+  $copyright_array = variable_get($language_code . '_age_checker_copyright', '');
+  if ($copyright_array != '') {
+    $copyright = $copyright_array['value'];
+  }
+
 
   if (current_path() == "agegate") {
     $variables['age_cheker_background_img'] = $age_gate_background_image;
