@@ -116,6 +116,18 @@ function sabm_age_gate_boot() {
   }
 }
 
+/**
+ * Implements hook_init().
+ */
+function sabm_age_gate_init() {
+  /*
+   *drupal_add_css(drupal_get_path('module', 'book') . '/book.css');
+   */
+  if (current_path() == 'agegate') {
+    drupal_page_is_cacheable(FALSE);
+  }
+}
+
 function get_id($key) {
 
   if ($key == 0)    
@@ -420,6 +432,7 @@ function _get_language_code() {
   }
 
   $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : _get_country_name();
+
   foreach ($languages_options as $key => $value) {
     $countries_array = variable_get($key . '_country_list');
     foreach($countries_array as $country) {
