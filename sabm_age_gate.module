@@ -59,6 +59,10 @@ function sabm_age_gate_boot() {
           }
         }
         else {
+
+          // Disable caching for agegate page.
+          drupal_page_is_cacheable(FALSE);
+
           // default_country
           $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : _get_country_name();
 
@@ -113,18 +117,6 @@ function sabm_age_gate_boot() {
         }
       }
     }
-  }
-}
-
-/**
- * Implements hook_init().
- */
-function sabm_age_gate_init() {
-  /*
-   *drupal_add_css(drupal_get_path('module', 'book') . '/book.css');
-   */
-  if (current_path() == 'agegate') {
-    drupal_page_is_cacheable(FALSE);
   }
 }
 
