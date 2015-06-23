@@ -36,7 +36,7 @@ function sabm_age_gate_uninstall() {
   variable_del('default_country');
 
   // Deleting all the dependent variables.
-  $delete_variables = ['%_select_list_label', '%_country_list', '%_age_gate_header', '%_age_gate_footer', '%_age_checker_blank_error_msg', '%_age_checker_dateformat_error_msg', '%_age_checker_daterange_error_msg', '%_age_checker_underage_error_msg', '%_remember_me_text', '%_age_checker_button_text', '%_age_checker_footer_links', '%_age_checker_copyright', '%_threshold_ages', '%_redirect_link', '%_day_weight', '%_month_weight', '%_year_weight', '%_day_placeholder', '%_month_placeholder', '%_year_placeholder'];
+  $delete_variables = array('%_select_list_label', '%_country_list', '%_age_gate_header', '%_age_gate_footer', '%_age_checker_blank_error_msg', '%_age_checker_dateformat_error_msg', '%_age_checker_daterange_error_msg', '%_age_checker_underage_error_msg', '%_remember_me_text', '%_age_checker_button_text', '%_age_checker_footer_links', '%_age_checker_copyright', '%_threshold_ages', '%_redirect_link', '%_day_weight', '%_month_weight', '%_year_weight', '%_day_placeholder', '%_month_placeholder', '%_year_placeholder');
 
 	foreach ($delete_variables as $variable) {
   	db_delete('variable')
