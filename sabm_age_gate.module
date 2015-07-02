@@ -29,7 +29,7 @@ function sabm_age_gate_boot() {
   }
 
   if (($age_gate_cookie != 1) && ($remember_me_cookie != 1)) {
-    if (age_checker_show()) {
+    if (sabmiller_age_gate_show()) {
       $settings = array();
       drupal_add_js(array('age_checker' => $settings), 'setting');
 
@@ -137,7 +137,7 @@ function get_id($key) {
  *
  * return boolean
  */
-function _age_checker_visibility() {
+function sabmiller_age_gate_visibility() {
 
   $visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
   $pages = variable_get('age_checker_pages');
@@ -172,9 +172,9 @@ function _age_checker_visibility() {
  * @return boolean
  *   True if must be shown
  */
-function age_checker_show() {
+function sabmiller_age_gate_show() {
   // User Access.
-  if ((!user_access('administrator')) && (_age_checker_visibility() == 1))
+  if ((!user_access('administrator')) && (sabmiller_age_gate_visibility() == 1))
     return TRUE;
   return FALSE;
 }
