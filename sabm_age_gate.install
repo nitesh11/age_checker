@@ -1,0 +1,48 @@
+<?php
+/**
+ * @file
+ * Install and Uninstall processes for age checker.
+ */
+
+/**
+ * Create tables on install.
+ */
+function sabm_age_gate_install() {
+
+  drupal_set_message(
+    t('Please save default values in configuration settings. To configure your Age checker go to the <a href="!url">Age checker setting page</a>.',
+    array('!url' => base_path() . 'admin/config/people/age_checker'))
+  );
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function sabm_age_gate_uninstall() {
+  /*
+   *variable_del('upload_file_types');
+   */
+
+  // Deleting all the individual variables.
+  variable_del('language');
+  variable_del('option_remember_me');
+  variable_del('countries');
+  variable_del('age_checker_cookie_expiration_time');
+  variable_del('under_age_url');
+  variable_del('age_checker_visibility');
+  variable_del('age_checker_pages');
+  variable_del('age_checker_background_image');
+  variable_del('age_checker_logo');
+  variable_del('default_country');
+
+  // Deleting all the dependent variables.
+  $delete_variables = array('%_select_list_label', '%_country_list', '%_age_gate_header', '%_age_gate_footer', '%_age_checker_blank_error_msg', '%_age_checker_dateformat_error_msg', '%_age_checker_daterange_error_msg', '%_age_checker_underage_error_msg', '%_remember_me_text', '%_age_checker_button_text', '%_age_checker_footer_links', '%_age_checker_copyright', '%_threshold_ages', '%_redirect_link', '%_day_weight', '%_month_weight', '%_year_weight', '%_day_placeholder', '%_month_placeholder', '%_year_placeholder');
+
+	foreach ($delete_variables as $variable) {
+  	db_delete('variable')
+		  ->condition('name', $variable, 'LIKE')
+		  ->execute();
+  }
+
+	cache_clear_all('variables', 'cache_bootstrap');
+}
