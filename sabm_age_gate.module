@@ -19,7 +19,8 @@ function sabm_age_gate_boot() {
   global $user;
   global $base_url;
 
-  $destination = current_path();
+  $path = current_path();
+  $destination = ($path == 'agegate') ? $_GET['destination'] : $path;
   $age_gate_cookie = isset($_COOKIE['age_checker']) ? $_COOKIE['age_checker'] : 0;
   $remember_me_cookie = isset($_COOKIE['remember_me']) ? $_COOKIE['remember_me'] : 0;
 
@@ -52,14 +53,12 @@ function sabm_age_gate_boot() {
           break;
       }
       if ($verify) {
-
         if (current_path() != 'agegate'){
           if (!function_exists('drush_main')) { 
-            drupal_goto($base_url . '/agegate');
+            drupal_goto($base_url . '/agegate',array("query" => array('destination' => $destination)));
           }
         }
         else {
-
           // Disable caching for agegate page.
           drupal_page_is_cacheable(FALSE);
 
