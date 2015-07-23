@@ -19,7 +19,8 @@ function sabm_age_gate_boot() {
   global $user;
   global $base_url;
 
-  $destination = ($path = current_path() == 'agegate') ? $_GET['destination'] : current_path();
+  $path = current_path();
+  $destination = ($path == 'agegate') ? $_GET['destination'] : $path;
   $age_gate_cookie = isset($_COOKIE['age_checker']) ? $_COOKIE['age_checker'] : 0;
   $remember_me_cookie = isset($_COOKIE['remember_me']) ? $_COOKIE['remember_me'] : 0;
 
