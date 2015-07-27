@@ -55,7 +55,7 @@ function sabm_age_gate_boot() {
       if ($verify) {
         if (current_path() != 'agegate'){
           if (!function_exists('drush_main')) { 
-            drupal_goto($base_url . '/agegate',array("query" => array('destination' => $destination)));
+            drupal_goto($base_url . '/agegate', array("query" => array('destination' => request_path())));
           }
         }
         else {
