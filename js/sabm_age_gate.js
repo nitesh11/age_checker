@@ -75,7 +75,7 @@ var age_checker = {};
           return false;
         }
         else if ( (age_checker_year < 1900) || (age_checker_year > year) ) {
-          document.getElementById('age_checker_error_message').innerHTML = Drupal.t(date_rnge_err_msg);
+          document.getElementById('age_checker_error_message').innerHTML = Drupal.t(date_range_err_msg);
           return false;
         }
         else if ( age_checker_year.length != 4 ) {

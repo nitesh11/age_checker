@@ -16,6 +16,7 @@
   </div>
 
   <div id="age_checker_widget">
+		<div id="age_checker_error_message"> </div>
     <?php print ( drupal_render($age_checker_form) );?>
   </div>
 </div>
