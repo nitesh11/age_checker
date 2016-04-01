@@ -1,7 +1,7 @@
 var age_checker = {};
 
 (function ($) {
-  Drupal.behaviors.sab_age_gate = {
+  Drupal.behaviors.age_checker = {
     attach: function (context, settings) {
       $(document).ready(function() {
 
@@ -125,7 +125,6 @@ var age_checker = {};
     }
   };
 })(jQuery);
-
 
 function getCookie(cname) {
   var name = cname + "=";

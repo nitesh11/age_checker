@@ -6,19 +6,19 @@
 }
 
 #age_checker ::-webkit-input-placeholder {
-   color: #fff;
+  color: #fff;
 }
 
 #age_checker :-moz-placeholder { /* Firefox 18- */
-   color: #fff;
+  color: #fff;
 }
 
 #age_checker ::-moz-placeholder {  /* Firefox 19+ */
-   color: #fff;
+  color: #fff;
 }
 
 #age_checker :-ms-input-placeholder {
-   color: #fff;
+  color: #fff;
 }
 
 #age_checker{
@@ -50,12 +50,10 @@
   padding: 0 20px;
 }
 
-
-
 #age_checker_header_message{
   font-size: 14px;
   color: #fff;
-  font-family: Helvetica,Arial,sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   text-align: center;
   line-height: 1.25;
   letter-spacing: 0.3px;
@@ -83,7 +81,6 @@
 #age_checker .form-item-month{}
 #age_checker .form-item-year{}
 
-
 #age_checker .form-item-day input,
 #age_checker .form-item-month input {
   width: 110px;
@@ -108,11 +105,11 @@
   font-weight: 900;
   text-align: center;
   padding: 0 8px;
-  font-family: Helvetica,Arial,sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 #age_checker .form-item-list-of-countries label{
-  font-family: Helvetica,Arial,sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   text-align: center;
   line-height: 1.25;
   letter-spacing: 0.3px;
@@ -147,7 +144,7 @@
   text-align: left;
   color: #fff;
   font-size: 14px;
-  font-family: Helvetica,Arial,sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   font-weight: 900;
 }
 
@@ -157,7 +154,7 @@
   padding-top: 8px;
   width: 305px;
   background: #f8e514;
-  font-family: Helvetica,Arial,sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   font-weight: bold;
   text-transform: uppercase;
   text-shadow: none;
@@ -172,13 +169,13 @@
 }
 
 #age_checker_footer_message {
-  font-family: Helvetica,Arial,sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   text-align: center;
   line-height: 1.25;
   color: #fff;
   letter-spacing: 0px;
   font-size: 11px;
-  padding:5px 30px;
+  padding: 5px 30px;
 }
 
 /******************* Responsive theming ***************
@@ -240,7 +237,7 @@ the container div of agegate
   }
 
   #age_checker_footer_message {
-    padding:5px 10px;
+    padding: 5px 10px;
   }
 }
 
@@ -290,13 +287,14 @@ ul.agegatelinks-menu li.leaf a {
     font-weight: normal;
   }
   .agegatelinks-menu {
-    width:100%;
+    width: 100%;
     padding: 5px 2px;
   }
   .agegate-container-footer {
     position: relative;
   }
 }
+
 @media screen and (max-width: 960px) {
   .agegate-container-footer {
     position: relative;
