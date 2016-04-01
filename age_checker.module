@@ -95,14 +95,14 @@ function age_checker_boot() {
           // Add module variables to JS.
           drupal_add_js(array(
             'age_checker' => array(
-              'cookie_expiration' => variable_get('age_checker_age_checker_cookie_expiration_time', 15),
+              'cookie_expiration' => variable_get('age_checker_cookie_expiration_time', 15),
               'currentdate'       => date("Y/m/d", time()),
               'threshold_age'     => variable_get('age_checker_' . $selected_country . '_threshold_ages'),
               'redirecturl'       => variable_get('age_checker_under_age_url', '/'),
-              'blank_err_message' => variable_get('age_checker_' . $language_code . '_age_checker_blank_error_msg', ''),
-              'dateformat_error'  => variable_get('age_checker_' . $language_code . '_age_checker_dateformat_error_msg', ''),
-              'under_age_err_msg' => variable_get('age_checker_' . $language_code . '_age_checker_underage_error_msg', ''),
-              'date_range_err_msg' => variable_get('age_checker_' . $language_code . '_age_checker_daterange_error_msg', ''),
+              'blank_err_message' => variable_get('age_checker_' . $language_code . '_blank_error_msg', ''),
+              'dateformat_error'  => variable_get('age_checker_' . $language_code . '_dateformat_error_msg', ''),
+              'under_age_err_msg' => variable_get('age_checker_' . $language_code . '_underage_error_msg', ''),
+              'date_range_err_msg' => variable_get('age_checker_' . $language_code . '_daterange_error_msg', ''),
               'destination' => $destination,
               'verify' => $verify,
               'day_placeholder' => variable_get('age_checker_' . $selected_country . '_day_placeholder'),
@@ -248,7 +248,7 @@ function age_checker_permission() {
 /**
  * Function for age checker form.
  */
-function age_checker_form($form,&$form_submit) {
+function age_checker_form($form, &$form_submit) {
 
   // Getting the langauge_code
   $language_code = _get_language_code();
@@ -441,7 +441,7 @@ function _get_language_code() {
 function _get_country_name() {
 
   // Get the country code.
-  $country_code = $_SERVER['HTTP_X_GEO_COUNTRY'];
+  $country_code = _get_country_code();
 
   // Get the default country.
   $default_country = variable_get('age_checker_default_country');
@@ -498,7 +498,7 @@ function age_checker_preprocess_page(&$variables){
 
   // Footer variables.
   $footer = array();
-  $footer_variable = variable_get('age_checker_' . $language_code . '_age_checker_footer_links', '');
+  $footer_variable = variable_get('age_checker_' . $language_code . '_footer_links', '');
   if ($footer_variable != '') {
     $footer_array = explode("\n", $footer_variable);
     foreach($footer_array as $footer_links) {
@@ -510,7 +510,7 @@ function age_checker_preprocess_page(&$variables){
 
   // Copyright text.
   $copyright = '';
-  $copyright_array = variable_get('age_checker_' . $language_code . '_age_checker_copyright', '');
+  $copyright_array = variable_get('age_checker_' . $language_code . '_copyright', '');
   if ($copyright_array != '') {
     $copyright = $copyright_array['value'];
   }
@@ -523,4 +523,33 @@ function age_checker_preprocess_page(&$variables){
     $variables['age_checker_footer_links'] = $footer;
     $variables['age_checker_copyright'] = $copyright;
   }
+}
+
+/**
+ * Implements a function to get country name.
+ */
+function _get_geoip_data($url) {
+  $request = drupal_http_request($url);
+  $json_data = drupal_json_decode($request);
+
+  return $json_data;
+}
+
+/*
+ * Get the country code.
+ *
+ * return country code.
+ */
+function _get_country_code() {
+  $ip_address = ip_address();
+  $url = variable_get('age_checker_country_code_url') . $ip_address;
+  $geoip_data = _get_geoip_data($url);
+
+  if(is_array($geoip_data)) {
+    $country_code = $geoip_data['country']['code'];
+  }
+  else {
+    $country_code = variable_get('age_checker_default_country');
+  }
+  return $country_code;
 }

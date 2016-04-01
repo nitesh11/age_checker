@@ -17,6 +17,13 @@ function age_checker_admin_form() {
     '#default_value' => variable_get('age_checker_option_remember_me', 0),
   );
 
+  // URL from where we need to get the Country code.
+  $form['age_checker_country_code_url'] = array(
+    '#title'            => t('URL'),
+    '#type'             => 'textfield',
+    '#default_value'    => variable_get('age_checker_country_code_url', 'http://geoip.nekudo.com/api/'),
+  );
+
   // Language for age checker.
   $form['lang'] = array(
     '#title'         => t('Age Checker Language'),
@@ -127,38 +134,39 @@ function age_checker_admin_form() {
  * Validate if user entered numeric values.
  */
 function age_checker_admin_form_validate($form, &$form_state) {
-  //validation for countries
-  $countries = $form_state['input']['countries'];
+
+  // validation for countries
+  $countries = $form_state['input']['age_checker_countries'];
   $countries = explode("\n", $countries);
   $country_options = array();
   foreach ($countries as $country) {
     $country = explode('|', $country);
     if ($country[1] == '') {
-      form_set_error('countries', t('Please remove the extra space.'));
+      form_set_error('age_checker_countries', t('Please remove the extra space.'));
     }
     $country_options[$country[0]] = $country[1];
     $countries_list = array_map('trim', $country_options);
   }
   foreach ($countries_list as $country_list) {
    if (preg_match('/[0-9]/', $country_list)) {
-      form_set_error('countries', t('Please enter proper country name'));
+      form_set_error('age_checker_countries', t('Please enter proper country name'));
     }
   }
   //validation for languages
-  $languages = $form_state['input']['language'];
+  $languages = $form_state['input']['age_checker_language'];
   $languages = explode("\n", $languages);
   $languages_options = array();
   foreach ($languages as $language) {
     $language = explode('|', $language);
     if ($language[1] == '') {
-      form_set_error('language', t('Please remove the extra space.'));
+      form_set_error('age_checker_language', t('Please remove the extra space.'));
     }
     $language_options[$language[0]] = $language[1];
     $language_list = array_map('trim', $language_options);
   }
   foreach ($language_list as $language) {
     if (preg_match('/[0-9]/', $language)) {
-      form_set_error('language', t('Please enter proper language name'));
+      form_set_error('age_checker_language', t('Please enter proper language name'));
     }
   }
 }
@@ -342,11 +350,11 @@ function age_checker_mapping_admin_form_validate($form, &$form_state) {
   foreach ($langs as $lang) {
     if (count($countries_array) == 0 && (count($langs) != $count)) {
       $flag = 1;
-      $field_name = $lang . '_country_list';
+      $field_name = 'age_checker_' . $lang . '_country_list';
       break;
     }
     else {
-      $countries_array = array_diff($countries_array, $form_state['input'][$lang . '_country_list']);
+      $countries_array = array_diff($countries_array, $form_state['input']['age_checker_' . $lang . '_country_list']);
     }
     $count++;
   }
