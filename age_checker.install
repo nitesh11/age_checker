@@ -25,5 +25,5 @@ function age_checker_uninstall() {
     ->condition('name', $variable, 'LIKE')
     ->execute();
 
-	cache_clear_all('variables', 'cache_bootstrap');
+  cache_clear_all('variables', 'cache_bootstrap');
 }

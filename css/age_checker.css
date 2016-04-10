@@ -21,7 +21,7 @@
   color: #fff;
 }
 
-#age_checker{
+#age_checker {
   height: 100%;
   background-size: 100% 100%;
   font-family: "Open Sans",Helvetica,Arial,sans-serif;
@@ -29,13 +29,14 @@
   width: 100%;
 }
 
-#age_checker .logo{
+#age_checker .logo {
   text-align: center;
 }
 
 #age_checker .region-footer {
   text-align: center;
 }
+
 #age_checker .region-footer .content {
   margin-top: 0;
 }
@@ -50,7 +51,7 @@
   padding: 0 20px;
 }
 
-#age_checker_header_message{
+#age_checker_header_message {
   font-size: 14px;
   color: #fff;
   font-family: Helvetica, Arial, sans-serif;
@@ -67,32 +68,30 @@
   text-align: center;
 }
 
-#age_checker .form-item{
+#age_checker .form-item {
   margin-bottom: 2px !important;
 }
 
 
 #age_checker .form-item-month,
 #age_checker .form-item-year,
-#age_checker .form-item-day{
+#age_checker .form-item-day {
   display: inline-block;
   padding: 4px;
 }
-#age_checker .form-item-month{}
-#age_checker .form-item-year{}
 
 #age_checker .form-item-day input,
 #age_checker .form-item-month input {
   width: 110px;
 }
 
-#age_checker .form-item-year input{
+#age_checker .form-item-year input {
   width: 175px;
 }
 
 #age_checker .form-item-day input,
 #age_checker .form-item-month input,
-#age_checker .form-item-year input{
+#age_checker .form-item-year input {
   background-color: #1b8ec4;
   color: #fff;
   border: solid 2px #fff !important;
@@ -108,7 +107,7 @@
   font-family: Helvetica, Arial, sans-serif;
 }
 
-#age_checker .form-item-list-of-countries label{
+#age_checker .form-item-list-of-countries label {
   font-family: Helvetica, Arial, sans-serif;
   text-align: center;
   line-height: 1.25;
@@ -116,6 +115,7 @@
   font-size: 14px;
   color: #fff;
 }
+
 #age_checker .form-item-list-of-countries select {
   background: #1b8ec4;
   height: 52px;
@@ -131,7 +131,7 @@
   vertical-align: middle;
 }
 
-#age_checker .form-item-remember-me label{
+#age_checker .form-item-remember-me label {
   padding-left: 10px;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -184,7 +184,7 @@ width of the screen is smaller than the fixed width of
 the container div of agegate
 *******************************************************/
 
-@media screen and (max-width: 550px){
+@media screen and (max-width: 550px) {
   #age_checker .agegate-container {
     width: 96%;
     padding: 2%;
@@ -198,20 +198,20 @@ the container div of agegate
     width: 60px;
   }
 
-  #age_checker .form-item-year input{
+  #age_checker .form-item-year input {
     width: 100px;
   }
 
   #age_checker .form-item-day input,
   #age_checker .form-item-month input,
-  #age_checker .form-item-year input{
+  #age_checker .form-item-year input {
     font-size: 30px;
     height: 60px;
     line-height: 60px;
     font-weight: 500;
     padding: 0 4px;
   }
-  #age_checker .form-item-list-of-countries label{
+  #age_checker .form-item-list-of-countries label {
     font-size: 12px;
   }
   #age_checker .form-item-list-of-countries select {
@@ -222,7 +222,7 @@ the container div of agegate
     font-size: 12px;
   }
 
-  #age_checker .form-item-remember-me label{
+  #age_checker .form-item-remember-me label {
     height: 22px;
     width: 150px;
     font-size: 12px;
@@ -281,7 +281,7 @@ ul.agegatelinks-menu li.leaf a {
   width: 100%;
 }
 
-@media screen and (max-width: 550px){
+@media screen and (max-width: 550px) {
   ul.agegatelinks-menu li.leaf a {
     font-size: 11px;
     font-weight: normal;
