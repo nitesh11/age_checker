@@ -10,36 +10,39 @@
 function age_checker_admin_form() {
   $form = array();
 
-  // Do you want Remember Me option.
+  // Remember me checkbox for Age Gate.
   $form['age_checker_option_remember_me'] = array(
-    '#type'          => 'checkbox',
-    '#title'         => t('Would you like to display remember me check box'),
+    '#type' => 'checkbox',
+    '#title' => t('Would you like to display remember me check box'),
     '#default_value' => variable_get('age_checker_option_remember_me', 0),
+    '#description' => t('If this checkbox is enabled, a remember me checkbox would be seen on the Age gate page.'),
   );
 
   // URL from where we need to get the Country code.
   $form['age_checker_country_code_url'] = array(
-    '#title'            => t('URL'),
-    '#type'             => 'textfield',
-    '#default_value'    => variable_get('age_checker_country_code_url', 'http://geoip.nekudo.com/api/'),
+    '#title' => t('URL for fetching the country code'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('age_checker_country_code_url', 'http://geoip.nekudo.com/api/'),
+    '#description' => t('API for fetching the country code.'),
   );
 
-  // Language for age checker.
+  // Language list for Age Gate.
   $form['lang'] = array(
-    '#title'         => t('Age Checker Language'),
-    '#type'          => 'fieldset',
-    '#collapsible'   => TRUE,
-    '#collapsed'     => TRUE,
+    '#title' => t('Age Checker Language'),
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
   $form['lang']['age_checker_language'] = array(
-    '#type'          => 'textarea',
-    '#title'         => t('Please enter the list of languages in key|value pair.'),
-    '#required'      => TRUE,
-    '#maxlength'     => 255,
+    '#type' => 'textarea',
+    '#title' => t('Please enter the list of languages in key|value pair.'),
+    '#required' => TRUE,
+    '#maxlength' => 255,
     '#default_value' => variable_get('age_checker_language', ''),
-    '#description'   => t('Please enter required language in key|value format for e.g. es|Español. The name of the key should not have any space.'),
+    '#description' => t('Please enter required language in key|value format for e.g. es|Español. The name of the key should not have any space.'),
   );
-  // Countries
+
+  // Country list for Age Gate.
   $form['country'] = array(
     '#title'         => t('Age Checker Countries'),
     '#type'          => 'fieldset',
@@ -47,45 +50,47 @@ function age_checker_admin_form() {
     '#collapsed'     => TRUE,
   );
   $form['country']['age_checker_countries'] = array(
-    '#type'          => 'textarea',
-    '#title'         => t('Please enter the list of countries in key|value pair.'),
-    '#required'      => TRUE,
-    '#maxlength'     => 255,
+    '#type' => 'textarea',
+    '#title' => t('Please enter the list of countries in key|value pair.'),
+    '#required' => TRUE,
+    '#maxlength' => 255,
     '#default_value' => variable_get('age_checker_countries', ''),
-    '#description'   => t('Please enter required country in localized language e.g. ES|España. The key should be picked up from A2 (ISO) column of ' . l('http://www.worldatlas.com/aatlas/ctycodes.htm', 'http://www.worldatlas.com/aatlas/ctycodes.htm', array('attributes' => array('class' => 'sample_link'))) . ' site depending on the value of the country.'),
+    '#description' => t('Please enter required country in localized language e.g. ES|España. The key should be picked up from A2 (ISO) column of ' . l('http://www.worldatlas.com/aatlas/ctycodes.htm', 'http://www.worldatlas.com/aatlas/ctycodes.htm', array('attributes' => array('class' => 'sample_link'))) . ' site depending on the value of the country.'),
   );
+
   // Verification options for age checker.
   $form['options'] = array(
-    '#title'         => t('Age Checker Options'),
-    '#type'          => 'fieldset',
-    '#collapsible'   => TRUE,
-    '#collapsed'     => TRUE,
+    '#title' => t('Age Checker Options'),
+    '#type' => 'fieldset',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
   );
+
   // Cookie Expiration Time.
   $form['options']['age_checker_cookie_expiration_time'] = array(
-    '#title'            => t('Cookie expiration days'),
-    '#type'             => 'textfield',
-    '#field_suffix'     => t('Days'),
-    '#size'             => 6,
+    '#title' => t('Cookie expiration days'),
+    '#type' => 'textfield',
+    '#field_suffix' => t('Days'),
+    '#size' => 6,
     '#element_validate' => array('element_validate_integer'),
-    '#default_value'    => variable_get('age_checker_cookie_expiration_time', '15'),
-    '#description'      => t('The number of days before the cookie set by age checker module expires, and the user must verify their age again (0 days will expire at end of session).'),
+    '#default_value' => variable_get('age_checker_cookie_expiration_time', '15'),
+    '#description' => t('The number of days before the cookie set by age checker module expires, and the user must verify their age again (0 days will expire at end of session).'),
   );
-  // Age Checker URL.
 
+  // Age Checker URL.
   $form['options']['age_checker_under_age_url'] = array(
-    '#title'         => t('Enter underage page url'),
-    '#type'          => 'textfield',
+    '#title' => t('Enter underage page url'),
+    '#type' => 'textfield',
     '#default_value' => check_url(variable_get('age_checker_under_age_url', '')),
-    '#required'      => TRUE,
-    '#description'   => t('Please add http:// or https:// for external url  or create a drupal CMS page and enter Drupal path for internal CMS Page. E.g "under-age" for  http://www.example.com/sitename/under-age'),
+    '#required' => TRUE,
+    '#description' => t('Please add http:// or https:// for external url  or create a drupal CMS page and enter Drupal path for internal CMS Page. E.g "under-age" for  http://www.example.com/sitename/under-age'),
   );
   
   // Age Checker Visibility.
   $form['options']['age_checker_visibility'] = array(
-    '#type'       => 'radios',
-    '#title'      => t('Show Age Gate on specific pages'),
-    '#options'    => array(
+    '#type' => 'radios',
+    '#title' => t('Show Age Gate on specific pages'),
+    '#options' => array(
       AGE_CHECKER_VISIBILITY_NOTLISTED => t('Show on all pages except those listed'),
       AGE_CHECKER_VISIBILITY_LISTED    => t('Show only on the listed pages'),
     ),
@@ -93,37 +98,37 @@ function age_checker_admin_form() {
   );
   // Age checker specific pages.
   $form['options']['age_checker_pages'] = array(
-    '#type'          => 'textarea',
-    '#title'         => t('Age gate exception pages'),
+    '#type' => 'textarea',
+    '#title' => t('Age gate exception pages'),
     '#default_value' => variable_get('age_checker_pages', 'admin/*'),
-    '#description'   => t("Enter the path of the page e.g. enter 'blog' for the blog main page and 'blog/*' for the blog main page and its subpages."),
+    '#description' => t("Enter the path of the page e.g. enter 'blog' for the blog main page and 'blog/*' for the blog main page and its subpages."),
   );
    
-  // Images Age Checker.
+  // Background Image for Age Gate.
   $form['options']['age_checker_background_image'] = array(
-    '#type'                      => 'managed_file',
-    '#name'                      => 'backgroundimage_image',
-    '#title'                     => t('Change the background'),
-    '#default_value'             => variable_get('age_checker_background_image', ''),
-    '#description'               => t("Here you can upload an image to the background!"),
-    '#upload_location'           => 'public://images_age_checker/',
-    '#upload_validators'         => array(
+    '#type' => 'managed_file',
+    '#name' => 'backgroundimage_image',
+    '#title' => t('Add Background image'),
+    '#default_value' => variable_get('age_checker_background_image', ''),
+    '#description' => t("Upload an image for the background of Age Gate. Allowed Extensions for the Image are gif, png, jpg, jpeg"),
+    '#upload_location' => 'public://images_age_checker/',
+    '#upload_validators' => array(
       'file_validate_extensions' => array('gif png jpg jpeg'),
-      'file_validate_size'       => array(1000000),
+      'file_validate_size' => array(1000000),
     ),
   );
   
-  // logo Age Checker.
+  // Logo Image for Age Gate.
   $form['options']['age_checker_logo'] = array(
-    '#type'                      => 'managed_file',
-    '#name'                      => 'logo_agechecker',
-    '#title'                     => t('Change the logo'),
-    '#default_value'             => variable_get('age_checker_logo', ''),
-    '#description'               => t("Here you can upload logo!"),
-    '#upload_location'           => 'public://images_age_checker/',
-    '#upload_validators'         => array(
+    '#type' => 'managed_file',
+    '#name' => 'logo_agechecker',
+    '#title' => t('Add logo image'),
+    '#default_value' => variable_get('age_checker_logo', ''),
+    '#description' => t("Upload an image for the logo of Age Gate. Allowed Extensions for the Image are gif, png, jpg, jpeg"),
+    '#upload_location' => 'public://images_age_checker/',
+    '#upload_validators' => array(
       'file_validate_extensions' => array('gif png jpg jpeg'),
-      'file_validate_size'       => array(1000000),
+      'file_validate_size' => array(1000000),
     ),
   );
   
@@ -135,7 +140,7 @@ function age_checker_admin_form() {
  */
 function age_checker_admin_form_validate($form, &$form_state) {
 
-  // validation for countries
+  // Validation for countries
   $countries = $form_state['input']['age_checker_countries'];
   $countries = explode("\n", $countries);
   $country_options = array();
@@ -152,7 +157,8 @@ function age_checker_admin_form_validate($form, &$form_state) {
       form_set_error('age_checker_countries', t('Please enter proper country name'));
     }
   }
-  //validation for languages
+
+  // Validation for languages
   $languages = $form_state['input']['age_checker_language'];
   $languages = explode("\n", $languages);
   $languages_options = array();
@@ -170,6 +176,7 @@ function age_checker_admin_form_validate($form, &$form_state) {
     }
   }
 }
+
 /**
  * @file
  * Function for creating settings form to for basic configuration.
