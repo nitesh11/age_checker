@@ -348,7 +348,7 @@ function age_checker_form($form, &$form_submit) {
   // Submit button
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => variable_get('age_checker_' . $language_code . '_age_checker_button_text'),
+    '#value' => variable_get('age_checker_' . $language_code . '_button_text'),
     '#weight' => 6,
     '#attributes' => array(
       'onclick' => "age_checker.verify();",
@@ -530,7 +530,7 @@ function age_checker_preprocess_page(&$variables){
  */
 function _get_geoip_data($url) {
   $request = drupal_http_request($url);
-  $json_data = drupal_json_decode($request);
+  $json_data = drupal_json_decode($request->data);
 
   return $json_data;
 }

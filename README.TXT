@@ -9,7 +9,7 @@ What a user has to do:
 Configuration pages:
 1. Settings configuration for adding list of Languages and Countries:
   a. Page that lists the basic configuration of the module.
-  b. URL of the configuration page : admin/config/people/age_checker
+  b. URL of the configuration page : /admin/config/people/age_checker
   b. Fields:
     -> Would you like to display remember me check box - A checkbox field for displaying the Remember me checkbox on the Age Gate page.
     -> URL for fetching the country code - Enter the API for fetching the country code of the user.
@@ -19,3 +19,23 @@ Configuration pages:
     -> Enter underage page url - Text field for adding the underage url.
     -> Add Background image - Adding the background image for the Age Gate.
     -> Add logo image - Adding the logo image for the Age Gate.
+
+2. Mapping and configuring Languages with Countries:
+  a. Page that configures that handles translation of the text appearing on the Age Gate page.
+  b. Configurable on the basis of Language and Country added in the previous configuration page.
+  c. Shows the fieldset of the languages and ability to map country with languages.
+  d. URL of the configuration page - /admin/config/people/age_checker/mapping
+  e. Fields:
+    -> Label for selecting country : Text field for adding label for asking users to select the country.
+    -> Select country : Select list type of field which is used to select country for a specific language.
+    -> Header text for the form : Textarea for adding header text of the form.
+    -> Cookie statement : textarea for adding cookie statement.
+    -> Blank Error Message : Message that gets displayed when the form is directly submitted without filling in the age Gate form.
+    -> Incorrect Date Format Message : Message when that gets displayed when the format of the date is not proper while filling in the Age Gate form.
+    -> Date Out Of Range Message : Message when that gets displayed when the date entered is out of range.
+    -> Under Age Validation Message : Message that gets displayed when a user is under aged.
+    -> Remember Me Text : Remember text configuration.
+    -> Label of submit button : Label of the submit button of the Age Gate.
+    -> Footer text and link : Ability to add a separate footer text and links. It should be added in key|value format. If one of the label of the footer is Google and the url of it is http://google.com, then we should add it in Google|http://google.com.
+    -> Copyright text : Textarea for the copyright text.
+
