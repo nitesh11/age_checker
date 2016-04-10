@@ -529,8 +529,11 @@ function age_checker_preprocess_page(&$variables){
  * Implements a function to get country name.
  */
 function _get_geoip_data($url) {
+  $json_data = FALSE;
   $request = drupal_http_request($url);
-  $json_data = drupal_json_decode($request->data);
+
+  if (isset($request->data))
+    $json_data = drupal_json_decode($request->data);
 
   return $json_data;
 }

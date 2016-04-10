@@ -21,7 +21,7 @@ Configuration pages:
     -> Add logo image - Adding the logo image for the Age Gate.
 
 2. Mapping and configuring Languages with Countries:
-  a. Page that configures that handles translation of the text appearing on the Age Gate page.
+  a. Page that handles translation of the text appearing on the Age Gate page.
   b. Configurable on the basis of Language and Country added in the previous configuration page.
   c. Shows the fieldset of the languages and ability to map country with languages.
   d. URL of the configuration page - /admin/config/people/age_checker/mapping
@@ -39,3 +39,12 @@ Configuration pages:
     -> Footer text and link : Ability to add a separate footer text and links. It should be added in key|value format. If one of the label of the footer is Google and the url of it is http://google.com, then we should add it in Google|http://google.com.
     -> Copyright text : Textarea for the copyright text.
 
+3. Country specific cofigurations:
+  a. Page that handles county specific configuration.
+  b. URL of the page : /admin/config/people/age_checker/country_configuration
+  c. Fields :
+    -> Default Country Configuration: Select list to select the default country of the Age Gate.
+    -> Threshold ages of the country : Add the threshold ages of the country. If the user's age is under these threshold ages, he would be redirected to Underage page.
+    -> Changing the order of the date field : Ability to change the order of the date field. In case if we want the order to be dd/yyyy/mm the weights of the field would be Day - 1, Year - 2 and Month - 3.
+    -> Changing the placeholder of the date field : Ability to change the placeholders of the date fields. For eg for day field we can have either dd or DD as the placeholder of the day field.
+    -> Redirect Link : Only when locale module is enabled, a new configuration comes up giving admin an option to configure the redirect link after the user has passed the Age Gate.

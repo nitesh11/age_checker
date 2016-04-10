@@ -404,7 +404,7 @@ function age_checker_country_configuration() {
   );
 
   $form['ages'] = array(
-    '#title' => t('Legal Drinking Age (LDA) by country'),
+    '#title' => t('Threshold ages of the country'),
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
@@ -454,7 +454,7 @@ function age_checker_country_configuration() {
       );
       // Changing the weight of Day field.
       $form['country_specific'][$country_array[0]]['multilingual']['age_checker_' . $country_array[0] . '_redirect_link'] = array(
-        '#title' => t('Redirect Link for ') . $country_array[1],
+        '#title' => t('Redirect Link'),
         '#default_value' => check_url(variable_get('age_checker_' . $country_array[0] . '_redirect_link', $base_url)),
         '#type' => 'textfield',
         '#size' => 255,
@@ -463,7 +463,7 @@ function age_checker_country_configuration() {
 
     // Fieldset for Changing the Date format.
     $form['country_specific'][$country_array[0]]['weight'] = array(
-      '#title' => t('Changing the weight of the date field'),
+      '#title' => t('Changing the order of the date field'),
       '#type' => 'fieldset',
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
