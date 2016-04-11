@@ -55,7 +55,7 @@ function age_checker_admin_form() {
     '#required' => TRUE,
     '#maxlength' => 255,
     '#default_value' => variable_get('age_checker_countries', ''),
-    '#description' => t('Please enter required country in localized language e.g. ES|España. The key should be picked up from A2 (ISO) column of') . l('http://www.worldatlas.com/aatlas/ctycodes.htm', 'http://www.worldatlas.com/aatlas/ctycodes.htm', array('attributes' => array('class' => 'sample_link'))) . t('site depending on the value of the country.'),
+    '#description' => t('Please enter required country in localized language e.g. ES|España. The key should be picked up from A2 (ISO) column of') . l(t('http://www.worldatlas.com/aatlas/ctycodes.htm'), 'http://www.worldatlas.com/aatlas/ctycodes.htm', array('attributes' => array('class' => 'sample_link'))) . t('site depending on the value of the country.'),
   );
 
   // Verification options for age checker.
@@ -81,7 +81,7 @@ function age_checker_admin_form() {
   $form['options']['age_checker_under_age_url'] = array(
     '#title' => t('Enter underage page url'),
     '#type' => 'textfield',
-    '#default_value' => check_url(variable_get('age_checker_under_age_url', '')),
+    '#default_value' => variable_get('age_checker_under_age_url', ''),
     '#required' => TRUE,
     '#description' => t('Please add http:// or https:// for external url  or create a drupal CMS page and enter Drupal path for internal CMS Page. E.g "under-age" for  http://www.example.com/sitename/under-age'),
   );
@@ -141,7 +141,7 @@ function age_checker_admin_form() {
 function age_checker_admin_form_validate($form, &$form_state) {
 
   // Validation for countries.
-  $countries = $form_state['input']['age_checker_countries'];
+  $countries = $form_state['values']['age_checker_countries'];
   $countries = explode("\n", $countries);
   $country_options = array();
   foreach ($countries as $country) {
@@ -159,9 +159,8 @@ function age_checker_admin_form_validate($form, &$form_state) {
   }
 
   // Validation for languages.
-  $languages = $form_state['input']['age_checker_language'];
+  $languages = $form_state['values']['age_checker_language'];
   $languages = explode("\n", $languages);
-  $languages_options = array();
   foreach ($languages as $language) {
     $language = explode('|', $language);
     if ($language[1] == '') {
@@ -253,7 +252,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title' => t('Blank Error Message'),
       '#required' => TRUE,
       '#maxlength' => 255,
-      '#default_value' => check_plain(variable_get('age_checker_' . $language . '_blank_error_msg', 'Date field can not be blank.')),
+      '#default_value' => variable_get('age_checker_' . $language . '_blank_error_msg', 'Date field can not be blank.'),
       '#description' => t('Enter a helpful and user-friendly message.'),
     );
 
@@ -263,7 +262,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title' => t('Incorrect Date Format Message'),
       '#required' => TRUE,
       '#maxlength' => 255,
-      '#default_value' => check_plain(variable_get('age_checker_' . $language . '_dateformat_error_msg', 'Please enter your date of birth in correct format.')),
+      '#default_value' => variable_get('age_checker_' . $language . '_dateformat_error_msg', 'Please enter your date of birth in correct format.'),
       '#description' => t('Enter a helpful and user-friendly message.'),
     );
     // Date Out of Range Validation Message.
@@ -272,7 +271,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title' => t('Date Out Of Range Message'),
       '#required' => TRUE,
       '#maxlength' => 255,
-      '#default_value' => check_plain(variable_get('age_checker_' . $language . '_daterange_error_msg', 'Please enter your date of birth in valid date range.')),
+      '#default_value' => variable_get('age_checker_' . $language . '_daterange_error_msg', 'Please enter your date of birth in valid date range.'),
       '#description' => t('Enter a helpful and user-friendly message.'),
     );
 
@@ -282,7 +281,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title' => t('Under Age Validation Message'),
       '#required' => TRUE,
       '#maxlength' => 255,
-      '#default_value' => check_plain(variable_get('age_checker_' . $language . '_underage_error_msg', 'Sorry, you are Under age limit and are prohibited from entering this site!')),
+      '#default_value' => variable_get('age_checker_' . $language . '_underage_error_msg', 'Sorry, you are Under age limit and are prohibited from entering this site!'),
       '#description' => t('Enter a helpful and user-friendly message.'),
     );
 
@@ -302,7 +301,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title' => t('Label of submit button'),
       '#maxlength' => 50,
       '#required' => TRUE,
-      '#default_value' => check_plain(variable_get('age_checker_' . $language . '_button_text', 'Submit')),
+      '#default_value' => variable_get('age_checker_' . $language . '_button_text', 'Submit'),
       '#description' => t('Please enter submit button text.'),
     );
 
@@ -363,17 +362,17 @@ function age_checker_mapping_admin_form_validate($form, &$form_state) {
       break;
     }
     else {
-      $countries_array = array_diff($countries_array, $form_state['input']['age_checker_' . $lang . '_country_list']);
+      $countries_array = array_diff($countries_array, $form_state['values']['age_checker_' . $lang . '_country_list']);
     }
     $count++;
   }
 
   if ($flag == 1) {
-    form_set_error($field_name, "Language Mapping is not proper. You have mapped one country with more than one language.");
+    form_set_error($field_name, t('Language Mapping is not proper. You have mapped one country with more than one language.'));
   }
 
   if (count($countries_array) > 0) {
-    drupal_set_message("The mapping of few of the countries are missing.", 'error');
+    drupal_set_message(t('The mapping of few of the countries are missing.'), 'error');
   }
 }
 
@@ -457,7 +456,7 @@ function age_checker_country_configuration() {
       // Changing the weight of Day field.
       $form['country_specific'][$country_array[0]]['multilingual']['age_checker_' . $country_array[0] . '_redirect_link'] = array(
         '#title' => t('Redirect Link'),
-        '#default_value' => check_url(variable_get('age_checker_' . $country_array[0] . '_redirect_link', $base_url)),
+        '#default_value' => variable_get('age_checker_' . $country_array[0] . '_redirect_link', $base_url),
         '#type' => 'textfield',
         '#size' => 255,
       );
@@ -475,7 +474,7 @@ function age_checker_country_configuration() {
       '#title' => t('Weight of Day Field :'),
       '#prefix' => '<div class="container-inline">',
       '#suffix' => '</div>',
-      '#default_value' => check_plain(variable_get('age_checker_' . $country_array[0] . '_day_weight', 1)),
+      '#default_value' => variable_get('age_checker_' . $country_array[0] . '_day_weight', 1),
       '#type' => 'textfield',
       '#size' => 1,
       '#element_validate' => array('element_validate_integer'),
@@ -485,7 +484,7 @@ function age_checker_country_configuration() {
       '#title' => t('Weight of Month Field :'),
       '#prefix' => '<div class="container-inline">',
       '#suffix' => '</div>',
-      '#default_value' => check_plain(variable_get('age_checker_' . $country_array[0] . '_month_weight', 2)),
+      '#default_value' => variable_get('age_checker_' . $country_array[0] . '_month_weight', 2),
       '#type' => 'textfield',
       '#size' => 1,
       '#element_validate' => array('element_validate_integer'),
@@ -495,7 +494,7 @@ function age_checker_country_configuration() {
       '#title' => t('Weight of Year field :'),
       '#prefix' => '<div class="container-inline">',
       '#suffix' => '</div>',
-      '#default_value' => check_plain(variable_get('age_checker_' . $country_array[0] . '_year_weight', 3)),
+      '#default_value' => variable_get('age_checker_' . $country_array[0] . '_year_weight', 3),
       '#type' => 'textfield',
       '#size' => 1,
       '#element_validate' => array('element_validate_integer'),
@@ -517,7 +516,7 @@ function age_checker_country_configuration() {
       '#required' => FALSE,
       '#size' => 2,
       '#maxlength' => 2,
-      '#default_value' => check_plain(variable_get('age_checker_' . $country_array[0] . '_day_placeholder', 'DD')),
+      '#default_value' => variable_get('age_checker_' . $country_array[0] . '_day_placeholder', 'DD'),
     );
     // Placeholder for Month format.
     $form['country_specific'][$country_array[0]]['placeholder']['age_checker_' . $country_array[0] . '_month_placeholder'] = array(
@@ -528,7 +527,7 @@ function age_checker_country_configuration() {
       '#required' => FALSE,
       '#size' => 2,
       '#maxlength' => 2,
-      '#default_value' => check_plain(variable_get('age_checker_' . $country_array[0] . '_month_placeholder', 'MM')),
+      '#default_value' => variable_get('age_checker_' . $country_array[0] . '_month_placeholder', 'MM'),
     );
     // Placeholder for Year format.
     $form['country_specific'][$country_array[0]]['placeholder']['age_checker_' . $country_array[0] . '_year_placeholder'] = array(
@@ -539,7 +538,7 @@ function age_checker_country_configuration() {
       '#required' => FALSE,
       '#size' => 4,
       '#maxlength' => 4,
-      '#default_value' => check_plain(variable_get('age_checker_' . $country_array[0] . '_year_placeholder', 'YYYY')),
+      '#default_value' => variable_get('age_checker_' . $country_array[0] . '_year_placeholder', 'YYYY'),
     );
   }
   return system_settings_form($form);

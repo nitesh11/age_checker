@@ -459,7 +459,6 @@ function age_checker_get_country_name() {
   $countries = explode("\n", $countries);
   foreach ($countries as $country) {
     $country_array = explode('|', $country);
-    $country_list[trim($country_array[0])] = trim($country_array[1]);
     if (trim($country_array[0]) == $country_code) {
       $country_name = $country_code;
       break;
@@ -468,11 +467,11 @@ function age_checker_get_country_name() {
       $country_name = $default_country;
     }
   }
-  return $country_codename;
+  return $country_name;
 }
 
 /**
- * Implements hook_preprocess_page.
+ * Implements hook_preprocess_page().
  */
 function age_checker_preprocess_page(&$variables) {
 
