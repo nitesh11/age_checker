@@ -4,9 +4,9 @@
  * Theme implementation to display age checker on a single Drupal page.
  *
  * Available variables:
- * - $age_cheker_background_img: This variable has the background image of the page.
+ * - $age_cheker_background_img: This variable has the background image.
  * - $age_cheker_logo : This variable has the logo image of the page.
- * - $age_checker_footer_links: This variable is an array having all the values in key value pair.
+ * - $age_checker_footer_links: An array having all the values in key value pair.
  * - $age_checker_copyright : Copyright text for the footer of the age gate.
  */
 ?>
@@ -27,7 +27,7 @@
     <?php if (count($age_checker_footer_links) > 0) { ?>
       <div class="agegate-footer">
         <ul class="agegatelinks-menu">
-          <?php 
+          <?php
             foreach ($age_checker_footer_links as $key => $value) {
               if (end($age_checker_footer_links) == $value) { ?>
                 <li class="leaf last">

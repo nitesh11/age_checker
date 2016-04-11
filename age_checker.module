@@ -77,7 +77,7 @@ function age_checker_boot() {
           // Getting the language_code.
           $language_code = age_checker_get_language_code();
 
-          // Auto Tab
+          // Auto Tab.
           $day_weight = variable_get('age_checker_' . $selected_country . '_day_weight');
           $month_weight = variable_get('age_checker_' . $selected_country . '_month_weight');
           $year_weight = variable_get('age_checker_' . $selected_country . '_year_weight');
@@ -89,7 +89,7 @@ function age_checker_boot() {
           $i = 0;
           foreach ($combine_array as $key => $value) {
             $id[$i] = age_checker_get_id($key);
-            $i ++;
+            $i++;
           }
 
           // Add module variables to JS.
@@ -112,7 +112,7 @@ function age_checker_boot() {
               'id_1' => $id[0],
               'id_2' => $id[1],
               'id_3' => $id[2],
-            )
+            ),
           ), 'setting');
         }
       }
@@ -148,7 +148,7 @@ function age_checker_visibility() {
   $visibility = variable_get('age_checker_visibility', AGE_CHECKER_VISIBILITY_NOTLISTED);
   $pages = variable_get('age_checker_pages');
 
-  // Convert path to lowercase. This allows comparison of the same path with different case. Ex: /Page, /page, /PAGE.
+  // Convert path to lowercase.
   $pages = drupal_strtolower($pages);
   if ($visibility < 2) {
     // Convert the Drupal path to lowercase.
@@ -160,7 +160,6 @@ function age_checker_visibility() {
       $page_match = $page_match || drupal_match_path(current_path(), $pages);
     }
 
-    // When $visibility has a value of 0, the age checker is displayed on all pages except those listed in $pages. When set to 1, it is displayed only on those pages listed in $pages.
     $page_match = !($visibility xor $page_match);
   }
   elseif (module_exists('php')) {
@@ -264,7 +263,6 @@ function age_checker_form($form, &$form_submit) {
   // Country list.
   $countries = variable_get('age_checker_countries', '');
   $countries = explode("\n", $countries);
-  $country_options = array();
   foreach ($countries as $country) {
     $country = explode('|', $country);
     $country = array_map('trim', $country);
@@ -392,7 +390,7 @@ function age_checker_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Function age_checker_template
+ * Function age_checker_template.
  */
 function age_checker_template() {
 
@@ -419,7 +417,9 @@ function age_checker_template() {
   );
 }
 
-// Getting the language_code on the basis of Country selected.
+/**
+ * Getting the language_code on the basis of Country selected.
+ */
 function age_checker_get_language_code() {
 
   $languages_options = array();
@@ -444,6 +444,9 @@ function age_checker_get_language_code() {
   }
 }
 
+/**
+ * Get the country name for Age Gate.
+ */
 function age_checker_get_country_name() {
 
   // Get the country code.
@@ -469,7 +472,7 @@ function age_checker_get_country_name() {
 }
 
 /**
- * @param $variables
+ * @param $variables.
  */
 function age_checker_preprocess_page(&$variables){
 
@@ -546,8 +549,6 @@ function age_checker_get_geoip_data($url) {
 
 /**
  * Get the country code.
- *
- * return country code.
  */
 function age_checker_get_country_code() {
   $ip_address = ip_address();
