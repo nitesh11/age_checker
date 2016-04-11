@@ -291,7 +291,7 @@ function age_checker_mapping_admin_form($form, &$form_state) {
       '#title' => t('Remember Me Text'),
       '#maxlength' => 255,
       '#required' => FALSE,
-      '#default_value' => check_plain(variable_get('age_checker_' . $language . '_remember_me_text', 'Remember my details (Do not select on shared computers)')),
+      '#default_value' => variable_get('age_checker_' . $language . '_remember_me_text', 'Remember my details (Do not select on shared computers)'),
       '#description' => t('Please enter the remember me text.'),
     );
 

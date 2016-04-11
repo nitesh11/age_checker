@@ -1,4 +1,6 @@
 /**
+ * @file age_checker.js
+ *
  * Provides client-side validations for the Age Gate.
  */
 
