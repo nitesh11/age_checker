@@ -6,7 +6,7 @@
  * Available variables:
  * - $age_cheker_background_img: This variable has the background image.
  * - $age_cheker_logo : This variable has the logo image of the page.
- * - $age_checker_footer_links: An array having all the values in key value pair.
+ * - $age_checker_footer_links: An array having the values in key value pair.
  * - $age_checker_copyright : Copyright text for the footer of the age gate.
  */
 ?>

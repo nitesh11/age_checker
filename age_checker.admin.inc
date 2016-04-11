@@ -55,7 +55,7 @@ function age_checker_admin_form() {
     '#required' => TRUE,
     '#maxlength' => 255,
     '#default_value' => variable_get('age_checker_countries', ''),
-    '#description' => t('Please enter required country in localized language e.g. ES|España. The key should be picked up from A2 (ISO) column of ' . l('http://www.worldatlas.com/aatlas/ctycodes.htm', 'http://www.worldatlas.com/aatlas/ctycodes.htm', array('attributes' => array('class' => 'sample_link'))) . ' site depending on the value of the country.'),
+    '#description' => t('Please enter required country in localized language e.g. ES|España. The key should be picked up from A2 (ISO) column of') . l('http://www.worldatlas.com/aatlas/ctycodes.htm', 'http://www.worldatlas.com/aatlas/ctycodes.htm', array('attributes' => array('class' => 'sample_link'))) . t('site depending on the value of the country.'),
   );
 
   // Verification options for age checker.

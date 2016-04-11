@@ -468,15 +468,15 @@ function age_checker_get_country_name() {
       $country_name = $default_country;
     }
   }
-  return $country_name;
+  return $country_codename;
 }
 
 /**
- * @param $variables.
+ * Implements hook_preprocess_page.
  */
-function age_checker_preprocess_page(&$variables){
+function age_checker_preprocess_page(&$variables) {
 
-  // Background image
+  // Background image.
   $age_gate_background_image = '';
   $fid_bgimg = variable_get('age_checker_background_image');
   if (isset($fid_bgimg)) {
@@ -489,7 +489,7 @@ function age_checker_preprocess_page(&$variables){
     }
   }
 
-  // Logo
+  // Logo.
   $age_gate_logo = '';
   $fid_logo = variable_get('age_checker_logo');
   if (isset($fid_logo)) {
