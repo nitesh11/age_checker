@@ -7,9 +7,10 @@
 var age_checker = {};
 
 (function ($) {
+  'use strict';
   Drupal.behaviors.age_checker = {
     attach: function (context, settings) {
-      $(document).ready(function() {
+      $(document).ready(function () {
 
         var agegate_bg = $('.age-checker-bg img').attr('src');
         $('#age_checker').css('background-image', 'url(' + agegate_bg + ')');
@@ -18,24 +19,24 @@ var age_checker = {};
         if (screen.width < 480) {
           $('head').append('<meta name="viewport" content="width=device-width, initial-scale=1">');
         }
-        if (window.location.pathname == '/agegate' && Drupal.settings.age_checker !== undefined) {
+        if (window.location.pathname === '/agegate' && Drupal.settings.age_checker !== 'undefined') {
           var id1 = Drupal.settings.age_checker.id_1;
           var id2 = Drupal.settings.age_checker.id_2;
           var id3 = Drupal.settings.age_checker.id_3;
 
-          $(id1).keyup(function() {
+          $(id1).keyup(function () {
             if (this.value.length === this.maxLength) {
               $(id2).focus();
             }
           });
-          $(id2).keyup(function() {
+          $(id2).keyup(function () {
             if (this.value.length === this.maxLength) {
               $(id3).focus();
             }
           });
         }
 
-        $('#age_checker_country').change(function() {
+        $('#age_checker_country').change(function () {
           var selected_country = $(this).find('option:selected').val();
           var cookie_name = "country_selected=" + selected_country + "; path=/";
           document.cookie = cookie_name;
@@ -62,7 +63,6 @@ var age_checker = {};
         var year_placeholder = Drupal.settings.age_checker.year_placeholder;
         var leapyear          = ((age_checker_year % 4 === 0) && (age_checker_year % 100 !== 0)) || (age_checker_year % 400 === 0);
         var blank_err_message = Drupal.settings.age_checker.blank_err_message;
-        var under_age_err_msg = Drupal.settings.age_checker.under_age_err_msg;
         var dateformat_error  = Drupal.settings.age_checker.dateformat_error;
         var date_range_err_msg = Drupal.settings.age_checker.date_range_err_msg;
         var remember_me = $('#age_checker_remember_me:checked').val();
@@ -72,7 +72,7 @@ var age_checker = {};
           age--;
         }
         else {
-          if (age_checker_month == month && age_checker_day > date) {
+          if (age_checker_month === month && age_checker_day > date) {
             age--;
           }
         }
@@ -90,7 +90,7 @@ var age_checker = {};
           document.getElementById('age_checker_error_message').innerHTML = Drupal.t(date_range_err_msg);
           return false;
         }
-        else if (age_checker_year.length != 4) {
+        else if (age_checker_year.length !== 4) {
           document.getElementById('age_checker_error_message').innerHTML = Drupal.t(dateformat_error);
           return false;
         }
@@ -102,11 +102,11 @@ var age_checker = {};
           document.getElementById('age_checker_error_message').innerHTML = Drupal.t(dateformat_error);
           return false;
         }
-        else if ((age_checker_month == 4 || age_checker_month == 6 || age_checker_month == 9 || age_checker_month == 11) && age_checker_day == 31) {
+        else if ((age_checker_month === 4 || age_checker_month === 6 || age_checker_month === 9 || age_checker_month === 11) && age_checker_day === 31) {
           document.getElementById('age_checker_error_message').innerHTML = Drupal.t(dateformat_error);
           return false;
         }
-        else if (age_checker_month == 2 && (age_checker_day == 29 && !leapyear || age_checker_day > 29)) {
+        else if (age_checker_month === 2 && (age_checker_day === 29 && !leapyear || age_checker_day > 29)) {
           // Check for february 29th.
           document.getElementById('age_checker_error_message').innerHTML = Drupal.t(dateformat_error);
           return false;
@@ -126,7 +126,7 @@ var age_checker = {};
         else {
           var cookie_name = "age_checker=1; path=/;";
           document.cookie = cookie_name;
-          if (remember_me == "1") {
+          if (remember_me === "1") {
             setCookie('remember_me', 1, Drupal.settings.age_checker.cookie_expiration);
           }
           window.location = destination;
@@ -138,6 +138,7 @@ var age_checker = {};
 })(jQuery);
 
 function getCookie(cname) {
+  'use strict';
   var name = cname + "=";
   var ca = document.cookie.split(';');
   for (var i = 0; i < ca.length; i++) {
@@ -153,6 +154,7 @@ function getCookie(cname) {
 }
 
 function setCookie(cname, cvalue, exdays) {
+  'use strict';
   var d = new Date();
   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
   var expires = "expires=" + d.toUTCString();
