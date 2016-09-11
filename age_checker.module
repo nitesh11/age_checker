@@ -189,46 +189,6 @@ function age_checker_show_age_gate() {
  * Implements hook_menu().
  */
 function age_checker_menu() {
-  $items['admin/config/people/age_checker'] = array(
-    'title'  => 'Age Checker Settings',
-    'description' => 'General Age checker configuration of Age Gate Module.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('age_checker_admin_form'),
-    'access callback' => 'user_access',
-    'access arguments' => array('administer age checker settings'),
-    'file' => 'age_checker.admin.inc',
-  );
-
-  $items['admin/config/people/age_checker/settings'] = array(
-    'title' => 'General Settings',
-    'description' => 'General configuration of Age Checker Module',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'weight' => 0,
-  );
-
-  $items['admin/config/people/age_checker/mapping'] = array(
-    'title' => 'Language and Country Mapping',
-    'description' => 'Language to country mapping will take place.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('age_checker_mapping_admin_form'),
-    'access callback' => 'user_access',
-    'access arguments' => array('administer age checker settings'),
-    'file' => 'age_checker.admin.inc',
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 1,
-  );
-
-  $items['admin/config/people/age_checker/country_configuration'] = array(
-    'title' => 'Country Configuration',
-    'description' => 'Country Configuration',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('age_checker_country_configuration'),
-    'access callback' => 'user_access',
-    'access arguments' => array('administer age checker settings'),
-    'file' => 'age_checker.admin.inc',
-    'type' => MENU_LOCAL_TASK,
-    'weight' => 2,
-  );
 
   $items['agegate'] = array(
     'page callback' => 'age_checker_template',
@@ -411,7 +371,8 @@ function age_checker_template() {
 function age_checker_get_language_code() {
 
   $languages_options = array();
-  $languages = variable_get('age_checker_language', '');
+  $age_checker_config = $this->config('age_checker.settings');
+  $languages = $age_checker_config->get('age_checker_language');
   $languages = explode("\n", $languages);
 
   foreach ($languages as $language) {
@@ -423,7 +384,8 @@ function age_checker_get_language_code() {
   $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : age_checker_get_country_name();
 
   foreach ($languages_options as $key => $value) {
-    $countries_array = variable_get('age_checker_' . $key . '_country_list');
+    $age_checker_config = $this->config('age_checker.settings');
+    $countries_array = $age_checker_config->get('age_checker_' . $key . '_country_list');
     foreach ($countries_array as $country) {
       if ($country == $selected_country) {
         return $key;
@@ -441,9 +403,10 @@ function age_checker_get_country_name() {
   $country_code = age_checker_get_country_code();
 
   // Get the default country.
-  $default_country = variable_get('age_checker_default_country');
+  $age_checker_config = $this->config('age_checker.settings');
+  $default_country = $age_checker_config->get('age_checker_default_country');
 
-  $countries = variable_get('age_checker_countries', '');
+  $countries = $age_checker_config->get('age_checker_countries');
   $countries = explode("\n", $countries);
   foreach ($countries as $country) {
     $country_array = explode('|', $country);
@@ -539,14 +502,15 @@ function age_checker_get_geoip_data($url) {
  */
 function age_checker_get_country_code() {
   $ip_address = ip_address();
-  $url = variable_get('age_checker_country_code_url') . $ip_address;
+  $age_checker_config = $this->config('age_checker.settings');
+  $url = $age_checker_config->get('age_checker_country_code_url') . $ip_address;
   $geoip_data = age_checker_get_geoip_data($url);
 
   if (is_array($geoip_data)) {
     $country_code = $geoip_data['country']['code'];
   }
   else {
-    $country_code = variable_get('age_checker_default_country');
+    $country_code = $age_checker_config->get('age_checker_default_country');
   }
   return $country_code;
 }
