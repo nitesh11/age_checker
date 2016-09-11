@@ -14,16 +14,3 @@ function age_checker_install() {
     array('!url' => base_path() . 'admin/config/people/age_checker'))
   );
 }
-
-/**
- * Implements hook_uninstall().
- */
-function age_checker_uninstall() {
-
-  $variable = 'age_checker_%';
-  db_delete('variable')
-    ->condition('name', $variable, 'LIKE')
-    ->execute();
-
-  cache_clear_all('variables', 'cache_bootstrap');
-}
