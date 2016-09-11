@@ -238,18 +238,6 @@ function age_checker_menu() {
 }
 
 /**
- * Implements hook_permission().
- */
-function age_checker_permission() {
-  return array(
-    'administer age checker settings' => array(
-      'title' => t('Administer age checker settings'),
-      'description' => t('Full administration access, only for admin.'),
-    ),
-  );
-}
-
-/**
  * Function for age checker form.
  */
 function age_checker_form($form, &$form_submit) {
