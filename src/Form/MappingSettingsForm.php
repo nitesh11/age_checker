@@ -8,8 +8,6 @@
 namespace Drupal\age_checker\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
-use Drupal\Core\Url;
-use Drupal\user\Entity\User;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\Component\Utility\SafeMarkup;
