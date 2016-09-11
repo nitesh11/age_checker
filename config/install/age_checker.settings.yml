@@ -1,0 +1,10 @@
+age_checker_option_remember_me: 0
+age_checker_country_code_url: 'http://geoip.nekudo.com/api/'
+age_checker_language: ''
+age_checker_countries: ''
+age_checker_cookie_expiration_time: '15'
+age_checker_under_age_url: ''
+age_checker_visibility: 0
+age_checker_pages: 'admin/*'
+age_checker_background_image: ''
+age_checker_logo: ''
