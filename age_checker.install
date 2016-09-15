@@ -8,22 +8,8 @@
  * Create tables on install.
  */
 function age_checker_install() {
-
   drupal_set_message(
-    t('Please save default values in configuration settings. To configure your Age checker go to the <a href="!url">Age checker setting page</a>.',
-    array('!url' => base_path() . 'admin/config/people/age_checker'))
+    t('Please save default values in configuration settings. To configure your Age checker go to the <a href="@url">Age checker setting page</a>.',
+    array('@url' => base_path() . 'admin/config/people/age_checker'))
   );
-}
-
-/**
- * Implements hook_uninstall().
- */
-function age_checker_uninstall() {
-
-  $variable = 'age_checker_%';
-  db_delete('variable')
-    ->condition('name', $variable, 'LIKE')
-    ->execute();
-
-	cache_clear_all('variables', 'cache_bootstrap');
 }
