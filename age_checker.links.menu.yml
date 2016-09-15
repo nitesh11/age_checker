@@ -1,5 +1,6 @@
-age_checker.settings:
+age_checker.admin_config:
   title: 'Age Checker Settings'
-  description: 'General Age checker configuration of Age Gate Module.'
-  route_name: age_checker.settings
-  parent: 'user.admin_index'
+  parent: user.admin_index
+  description: 'General Age checker configuration of Age Gate Module..'
+  route_name: age_checker.admin_config
+
