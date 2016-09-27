@@ -34,7 +34,6 @@ class AgeCheckerAgeGate extends ControllerBase {
     );
   }
 
-
   /**
    * Getting the language_code on the basis of Country selected.
    */
@@ -48,16 +47,13 @@ class AgeCheckerAgeGate extends ControllerBase {
     foreach ($languages as $language) {
       $language = explode('|', $language);
       $language = array_map('trim', $language);
-
       $languages_options[$language[0]] = isset($language[1]) ? $language[1] : NULL;
     }
 
     $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : age_checker_get_country_name();
 
     foreach ($languages_options as $key => $value) {
-
       $countries_array = \Drupal::state()->get('age_checker_' . $key . '_country_list');
-
       foreach ($countries_array as $country) {
         if ($country == $selected_country) {
           return $key;

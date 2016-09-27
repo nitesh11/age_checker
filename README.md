@@ -2,7 +2,7 @@ Age Gate is a simple module that restricts users to access the pages on the site
 
 What a user has to do:
 1. Navigate to the site.
-2. User would be redirected to /agegate page and would have to pass the Age Gate page by filling up the Date of birth.
+2. User would be redirected to /age-gate page and would have to pass the Age Gate page by filling up the Date of birth.
 3. If the user's age is greater than the legal age, then he would be able to navigate to the site and access the content on the site.
 4. If the user is under aged, user would be redirected to the Under age page.
 

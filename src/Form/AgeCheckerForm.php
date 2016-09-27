@@ -129,7 +129,6 @@ class AgeCheckerForm extends FormBase {
       ),
     );
 
-
     $form['#attributes']['onsubmit'] = 'return false;';
 
     return $form;

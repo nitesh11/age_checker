@@ -11,7 +11,6 @@ use Drupal\Core\Datetime\Date;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
-
 class AgeCheckerCountryConfig extends ConfigFormBase {
   public function getFormId() {
     return 'age_checker_country_settings';
@@ -20,8 +19,8 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
     return [
       'age_checker_country.settings',
     ];
-
   }
+
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $config = $this->config('age_checker_country.settings');
@@ -58,7 +57,7 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
     );
-//
+
     // Minimum Age Checker.
     foreach ($countries as $country) {
       $country_array = explode('|', $country);
@@ -67,7 +66,7 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
         '#prefix' => '<div class="container-inline">',
         '#suffix' => '</div>',
         '#title' => $country_array[1],
-        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_threshold_ages', 18),
+        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_threshold_ages'),
         '#type' => 'textfield',
         '#size' => 3,
         '#element_validate' => array('element_validate_integer'),
@@ -117,7 +116,7 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
         '#collapsible' => TRUE,
         '#collapsed' => TRUE,
       );
-//      // Changing the weight of Day field.
+      // Changing the weight of Day field.
       $form['country_specific'][$country_array[0]]['weight']['age_checker_' . $country_array[0] . '_day_weight'] = array(
         '#title' => t('Weight of Day Field :'),
         '#prefix' => '<div class="container-inline">',
@@ -193,7 +192,6 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
     return parent::buildForm($form, $form_state);
   }
 
-
   /**
    * Implements hook_form_submit().
    *
@@ -203,7 +201,6 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Set values in variables.
 
-//    $country_options = array();
     $countries = \Drupal::state()->get('age_checker_countries', '');
     $countries = explode("\n", $countries);
     foreach ($countries as $country) {

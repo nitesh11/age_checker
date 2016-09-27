@@ -12,7 +12,6 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Html;
 
-
 class AgeCheckerMappingAdminForm extends ConfigFormBase {
   public function getFormId() {
     return 'age_checker_mapping_settings';
@@ -178,7 +177,6 @@ class AgeCheckerMappingAdminForm extends ConfigFormBase {
     return parent::buildForm($form, $form_state);
   }
 
-
   /**
    * Implements hook_form_submit().
    *
@@ -194,8 +192,6 @@ class AgeCheckerMappingAdminForm extends ConfigFormBase {
       $language = array_map('trim', $language);
       $language = $language[0];
 
-      // dpm("form state");
-      // dpm($form_state->getValues());
       \Drupal::state()->set('age_checker_' . $language . '_country_list', $form_state->getValues()['age_checker_' . $language . '_country_list']);
       \Drupal::state()->set('age_checker_' . $language . '_age_gate_header', $form_state->getValues()['age_checker_' . $language . '_age_gate_header']);
       \Drupal::state()->set('age_checker_' . $language . '_age_gate_footer', $form_state->getValues()['age_checker_' . $language . '_age_gate_footer']);

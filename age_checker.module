@@ -6,11 +6,31 @@ use Drupal\Component\Serialization\Json;
 use Drupal\age_checker\Controller\AgeCheckerAgeGate;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\age_checker\EventSubscriber\AgeCheckerSubscriber;
+use Drupal\Core\Url;
 
-define('AGE_CHECKER_VISIBILITY_NOTLISTED', 0);
-define('AGE_CHECKER_VISIBILITY_LISTED', 1);
+if(!defined('AGE_CHECKER_VISIBILITY_NOTLISTED')) {
+  define('AGE_CHECKER_VISIBILITY_NOTLISTED', 0);
+}
+if(!defined('AGE_CHECKER_VISIBILITY_LISTED')) {
+  define('AGE_CHECKER_VISIBILITY_LISTED', 1);
+}
 
 function age_checker_theme($existing, $type, $theme, $path) {
+  $age_checker_footer_links = array();
+  $age_checker_copyright = array();
+  $languages = \Drupal::state()->get('age_checker_language', 'Please provide values');
+  $languages = explode("\n", $languages);
+  foreach ($languages as $language) {
+    $language = explode('|', $language);
+    $language = array_map('trim', $language);
+    $language = $language[0];
+
+    $age_checker_footer_links[] = \Drupal::state()->get('age_checker_' . $language . '_footer_links');
+    $age_checker_copyright[] = \Drupal::state()->get('age_checker_' . $language . '_copyright');
+
+  }
+
+  $age_checker_footer_links_count = count($age_checker_footer_links);
   return array(
     'age_checker' => array(
       'variables' => array(
@@ -22,15 +42,28 @@ function age_checker_theme($existing, $type, $theme, $path) {
     'age_checker_page' => array(
       'render element' => 'page',
       'variables' => array(
-        'age_cheker_background_img' => NULL,
-        'age_cheker_logo' => NULL,
+        'age_checker_background_img' => NULL,
+        'age_checker_logo' => NULL,
         'age_checker_footer_links' => NULL,
         'age_checker_copyright' => NULL,
+        'age_checker_footer_links_count' => $age_checker_footer_links_count,
       ),
     ),
   );
 }
 
+/**
+ * Implements hook_theme_suggestion_HOOK_alter
+ * @param array $suggestions
+ * @param array $variables
+ * @param $hook
+ */
+function age_checker_theme_suggestions_page_alter(array &$suggestions, array $variables, $hook) {
+  $internal_path = Url::fromRoute('<current>')->getInternalPath();
+  if($internal_path == 'age-gate') {
+    $suggestions[] = 'age_checker_' . $hook;
+  }
+}
 
 /**
  * Implements hook_page_attachments().
@@ -44,7 +77,8 @@ function age_checker_page_attachments(array &$attachments) {
 
   $current_path = \Drupal::service('path.current')->getPath();
   $is_front = \Drupal::service('path.matcher')->isFrontPage();
-  $destination = ($current_path == '/age-gate') ? $_GET['destination'] : $current_path;
+  $request = \Drupal::request();
+  $destination = ($current_path == '/age-gate') ? $request->query->get('destination') : $current_path;
   $age_gate_cookie = isset($_COOKIE['age_checker']) ? $_COOKIE['age_checker'] : 0;
   $remember_me_cookie = isset($_COOKIE['remember_me']) ? $_COOKIE['remember_me'] : 0;
 
@@ -86,6 +120,7 @@ function age_checker_page_attachments(array &$attachments) {
           if (!function_exists('drush_main')) {
             $request_path = '';
             $url = Drupal::url('age_checker.agegate');
+
             $response = new RedirectResponse($url);
             $response->send();
             return;
@@ -173,8 +208,8 @@ function age_checker_page_attachments(array &$attachments) {
  * Get the country name for Age Gate.
  */
 function age_checker_get_country_name() {
-  // Get the country code.
 
+  // Get the country code.
   $country_code = age_checker_get_country_code();
   // Get the default country.
   $default_country =\Drupal::state()->get('age_checker_default_country');
@@ -199,7 +234,7 @@ function age_checker_get_country_name() {
 function age_checker_get_country_code() {
 
   $ip_address = Drupal::request()->getClientIp();
-  $age_checker_country_code_url = \Drupal::state()->get('age_checker_country_code_url');
+  $age_checker_country_code_url = \Drupal::state()->get('age_checker_country_code_url', 'http://geoip.nekudo.com/api/');
   $url = $age_checker_country_code_url . $ip_address;
   $geoip_data = age_checker_get_geoip_data($url);
 
