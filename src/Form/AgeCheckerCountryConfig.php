@@ -24,10 +24,11 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $config = $this->config('age_checker_country.settings');
-
+    $default_settings = \Drupal::config('age_checker.settings');
     global $base_url;
+
     $country_options = array();
-    $countries = \Drupal::state()->get('age_checker_countries', '');
+    $countries = \Drupal::state()->get('age_checker_countries', '') ? \Drupal::state()->get('age_checker_countries', '') : $default_settings->get('age_checker_countries');
     $countries = explode("\n", $countries);
     foreach ($countries as $country) {
       if(isset($country)) {
@@ -66,7 +67,7 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
         '#prefix' => '<div class="container-inline">',
         '#suffix' => '</div>',
         '#title' => $country_array[1],
-        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_threshold_ages'),
+        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_threshold_ages') ? $config->get('age_checker_' . $country_array[0] . '_threshold_ages') : $default_settings->get('age_checker_threshold_ages'),
         '#type' => 'textfield',
         '#size' => 3,
         '#element_validate' => array('element_validate_integer'),
@@ -121,17 +122,18 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
         '#title' => t('Weight of Day Field :'),
         '#prefix' => '<div class="container-inline">',
         '#suffix' => '</div>',
-        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_day_weight', 1),
+        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_day_weight') ? $config->get('age_checker_' . $country_array[0] . '_day_weight') : $default_settings->get('age_checker_day_weight'),
         '#type' => 'textfield',
         '#size' => 1,
         '#element_validate' => array('element_validate_integer'),
       );
+
       // Changing the weight of Month field.
       $form['country_specific'][$country_array[0]]['weight']['age_checker_' . $country_array[0] . '_month_weight'] = array(
         '#title' => t('Weight of Month Field :'),
         '#prefix' => '<div class="container-inline">',
         '#suffix' => '</div>',
-        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_month_weight', 2),
+        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_month_weight') ? $config->get('age_checker_' . $country_array[0] . '_month_weight') : $default_settings->get('age_checker_month_weight'),
         '#type' => 'textfield',
         '#size' => 1,
         '#element_validate' => array('element_validate_integer'),
@@ -141,7 +143,7 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
         '#title' => t('Weight of Year field :'),
         '#prefix' => '<div class="container-inline">',
         '#suffix' => '</div>',
-        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_year_weight', 3),
+        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_year_weight') ? $config->get('age_checker_' . $country_array[0] . '_year_weight') : $default_settings->get('age_checker_year_weight'),
         '#type' => 'textfield',
         '#size' => 1,
         '#element_validate' => array('element_validate_integer'),
@@ -163,7 +165,7 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
         '#required' => FALSE,
         '#size' => 2,
         '#maxlength' => 2,
-        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_day_placeholder', 'DD'),
+        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_day_placeholder') ? $config->get('age_checker_' . $country_array[0] . '_day_placeholder') : $default_settings->get('age_checker_day_placeholder'),
       );
       // Placeholder for Month format.
       $form['country_specific'][$country_array[0]]['placeholder']['age_checker_' . $country_array[0] . '_month_placeholder'] = array(
@@ -174,7 +176,7 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
         '#required' => FALSE,
         '#size' => 2,
         '#maxlength' => 2,
-        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_month_placeholder', 'MM'),
+        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_month_placeholder') ? $config->get('age_checker_' . $country_array[0] . '_month_placeholder') : $default_settings->get('age_checker_month_placeholder'),
       );
       // Placeholder for Year format.
       $form['country_specific'][$country_array[0]]['placeholder']['age_checker_' . $country_array[0] . '_year_placeholder'] = array(
@@ -185,7 +187,7 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
         '#required' => FALSE,
         '#size' => 4,
         '#maxlength' => 4,
-        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_year_placeholder', 'YYYY'),
+        '#default_value' => $config->get('age_checker_' . $country_array[0] . '_year_placeholder') ? $config->get('age_checker_' . $country_array[0] . '_year_placeholder') : $default_settings->get('age_checker_year_placeholder') ,
       );
     }
 
@@ -201,7 +203,8 @@ class AgeCheckerCountryConfig extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Set values in variables.
 
-    $countries = \Drupal::state()->get('age_checker_countries', '');
+
+    $countries = \Drupal::state()->get('age_checker_countries', '') ? \Drupal::state()->get('age_checker_countries') : \Drupal::config('age_checker.settings')->get('age_checker_countries');
     $countries = explode("\n", $countries);
     foreach ($countries as $country) {
       $country_array = explode('|', $country);

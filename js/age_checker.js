@@ -19,7 +19,7 @@ var age_checker = {};
         if (screen.width < 480) {
           $('head').append('<meta name="viewport" content="width=device-width, initial-scale=1">');
         }
-        if (window.location.pathname === '/agegate' && drupalSettings.age_checker !== 'undefined') {
+        if (window.location.pathname === '/age-gate' && drupalSettings.age_checker !== 'undefined') {
           var id1 = drupalSettings.age_checker.id_1;
           var id2 = drupalSettings.age_checker.id_2;
           var id3 = drupalSettings.age_checker.id_3;

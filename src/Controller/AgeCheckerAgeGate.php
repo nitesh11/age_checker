@@ -54,9 +54,11 @@ class AgeCheckerAgeGate extends ControllerBase {
 
     foreach ($languages_options as $key => $value) {
       $countries_array = \Drupal::state()->get('age_checker_' . $key . '_country_list');
-      foreach ($countries_array as $country) {
-        if ($country == $selected_country) {
-          return $key;
+      if(!empty($countries_array)) {
+        foreach ($countries_array as $country) {
+          if ($country == $selected_country) {
+            return $key;
+          }
         }
       }
     }

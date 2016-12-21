@@ -56,7 +56,7 @@ class AgeCheckerSettingsForm extends ConfigFormBase {
       '#title' => t('Please enter the list of languages in key|value pair.'),
       '#required' => TRUE,
       '#maxlength' => 255,
-      '#default_value' => $config->get('age_checker_language', ''),
+      '#default_value' => $config->get('age_checker_language'),
       '#description' => t('Please enter required language in key|value format for e.g. es|Español. The name of the key should not have any space.'),
     );
 

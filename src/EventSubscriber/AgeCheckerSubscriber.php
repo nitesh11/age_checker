@@ -8,7 +8,6 @@ namespace Drupal\age_checker\EventSubscriber;
 
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Component\Utility\Unicode;
 /**
@@ -17,11 +16,9 @@ use Drupal\Component\Utility\Unicode;
 class AgeCheckerSubscriber implements EventSubscriberInterface {
 
   /**
-   *
-   * @param Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-   *   The Event to process.
+   *  The Event to process.
    */
-  public function AgeCheckerSubscriberLoad(GetResponseEvent $event) {
+  public function AgeCheckerSubscriberLoad() {
     $user = \Drupal::currentUser();
     $age_gate_cookie = isset($_COOKIE['age_checker']) ? $_COOKIE['age_checker'] : 0;
     $remember_me_cookie = isset($_COOKIE['remember_me']) ? $_COOKIE['remember_me'] : 0;
@@ -69,11 +66,6 @@ class AgeCheckerSubscriber implements EventSubscriberInterface {
       }
 
       $age_checker_visibility = !($visibility xor $age_checker_visibility);
-    }
-    elseif (\Drupal::moduleHandler()->moduleExists('php')) {
-      $age_checker_visibility = php_eval($pages);
-    }
-    else {
     }
 
     if ($age_checker_visibility == 1) {

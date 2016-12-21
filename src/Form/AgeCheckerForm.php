@@ -31,7 +31,7 @@ class AgeCheckerForm extends FormBase {
     $selected_country = isset($_COOKIE['country_selected']) ? $_COOKIE['country_selected'] : age_checker_get_country_name();
 
     // Country list.
-    $countries = \Drupal::state()->get('age_checker_countries', '');
+    $countries = \Drupal::state()->get('age_checker_countries') ? (\Drupal::state()->get('age_checker_countries')) : \Drupal::config('age_checker.settings')->get('age_checker_countries');
     $countries = explode("\n", $countries);
     foreach ($countries as $country) {
       $country = explode('|', $country);
