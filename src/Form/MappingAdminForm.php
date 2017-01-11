@@ -188,6 +188,8 @@ class MappingAdminForm extends ConfigFormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+
+    $values = $form_state->getValues();
     $config = $this->config('age_checker_mapping.settings');
     $languages = \Drupal::state()->get('age_checker_language', 'Please provide values');
     $languages = explode("\n", $languages);
@@ -196,31 +198,31 @@ class MappingAdminForm extends ConfigFormBase {
       $language = array_map('trim', $language);
       $language = $language[0];
 
-      \Drupal::state()->set('age_checker_' . $language . '_country_list', $form_state->getValues()['age_checker_' . $language . '_country_list']);
-      \Drupal::state()->set('age_checker_' . $language . '_age_gate_header', $form_state->getValues()['age_checker_' . $language . '_age_gate_header']);
-      \Drupal::state()->set('age_checker_' . $language . '_age_gate_footer', $form_state->getValues()['age_checker_' . $language . '_age_gate_footer']);
-      \Drupal::state()->set('age_checker_' . $language . '_blank_error_msg', $form_state->getValues()['age_checker_' . $language . '_blank_error_msg']);
-      \Drupal::state()->set('age_checker_' . $language . '_dateformat_error_msg', $form_state->getValues()['age_checker_' . $language . '_dateformat_error_msg']);
-      \Drupal::state()->set('age_checker_' . $language . '_daterange_error_msg', $form_state->getValues()['age_checker_' . $language . '_daterange_error_msg']);
-      \Drupal::state()->set('age_checker_' . $language . '_underage_error_msg', $form_state->getValues()['age_checker_' . $language . '_underage_error_msg']);
-      \Drupal::state()->set('age_checker_' . $language . '_remember_me_text', $form_state->getValues()['age_checker_' . $language . '_remember_me_text']);
-      \Drupal::state()->set('age_checker_' . $language . '_button_text', $form_state->getValues()['age_checker_' . $language . '_button_text']);
-      \Drupal::state()->set('age_checker_' . $language . '_footer_links', $form_state->getValues()['age_checker_' . $language . '_footer_links']);
-      \Drupal::state()->set('age_checker_' . $language . '_copyright', $form_state->getValues()['age_checker_' . $language . '_copyright']);
+      \Drupal::state()->set('age_checker_' . $language . '_country_list', $values['age_checker_' . $language . '_country_list']);
+      \Drupal::state()->set('age_checker_' . $language . '_age_gate_header', $values['age_checker_' . $language . '_age_gate_header']);
+      \Drupal::state()->set('age_checker_' . $language . '_age_gate_footer', $values['age_checker_' . $language . '_age_gate_footer']);
+      \Drupal::state()->set('age_checker_' . $language . '_blank_error_msg', $values['age_checker_' . $language . '_blank_error_msg']);
+      \Drupal::state()->set('age_checker_' . $language . '_dateformat_error_msg', $values['age_checker_' . $language . '_dateformat_error_msg']);
+      \Drupal::state()->set('age_checker_' . $language . '_daterange_error_msg', $values['age_checker_' . $language . '_daterange_error_msg']);
+      \Drupal::state()->set('age_checker_' . $language . '_underage_error_msg', $values['age_checker_' . $language . '_underage_error_msg']);
+      \Drupal::state()->set('age_checker_' . $language . '_remember_me_text', $values['age_checker_' . $language . '_remember_me_text']);
+      \Drupal::state()->set('age_checker_' . $language . '_button_text', $values['age_checker_' . $language . '_button_text']);
+      \Drupal::state()->set('age_checker_' . $language . '_footer_links', $values['age_checker_' . $language . '_footer_links']);
+      \Drupal::state()->set('age_checker_' . $language . '_copyright', $values['age_checker_' . $language . '_copyright']);
 
       $this->config('age_checker_mapping.settings')
-        ->set('age_checker_' . $language . '_select_list_label', $form_state->getValues()['age_checker_' . $language . '_select_list_label'])
-        ->set('age_checker_' . $language . '_country_list', $form_state->getValues()['age_checker_' . $language . '_country_list'])
-        ->set('age_checker_' . $language . '_age_gate_header', $form_state->getValues()['age_checker_' . $language . '_age_gate_header'])
-        ->set('age_checker_' . $language . '_age_gate_footer', $form_state->getValues()['age_checker_' . $language . '_age_gate_footer'])
-        ->set('age_checker_' . $language . '_blank_error_msg', $form_state->getValues()['age_checker_' . $language . '_blank_error_msg'])
-        ->set('age_checker_' . $language . '_dateformat_error_msg', $form_state->getValues()['age_checker_' . $language . '_dateformat_error_msg'])
-        ->set('age_checker_' . $language . '_daterange_error_msg', $form_state->getValues()['age_checker_' . $language . '_daterange_error_msg'])
-        ->set('age_checker_' . $language . '_underage_error_msg', $form_state->getValues()['age_checker_' . $language . '_underage_error_msg'])
-        ->set('age_checker_' . $language . '_remember_me_text', $form_state->getValues()['age_checker_' . $language . '_remember_me_text'])
-        ->set('age_checker_' . $language . '_button_text', $form_state->getValues()['age_checker_' . $language . '_button_text'])
-        ->set('age_checker_' . $language . '_footer_links', $form_state->getValues()['age_checker_' . $language . '_footer_links'])
-        ->set('age_checker_' . $language . '_copyright', $form_state->getValues()['age_checker_' . $language . '_copyright'])
+        ->set('age_checker_' . $language . '_select_list_label', $values['age_checker_' . $language . '_select_list_label'])
+        ->set('age_checker_' . $language . '_country_list', $values['age_checker_' . $language . '_country_list'])
+        ->set('age_checker_' . $language . '_age_gate_header', $values['age_checker_' . $language . '_age_gate_header'])
+        ->set('age_checker_' . $language . '_age_gate_footer', $values['age_checker_' . $language . '_age_gate_footer'])
+        ->set('age_checker_' . $language . '_blank_error_msg', $values['age_checker_' . $language . '_blank_error_msg'])
+        ->set('age_checker_' . $language . '_dateformat_error_msg', $values['age_checker_' . $language . '_dateformat_error_msg'])
+        ->set('age_checker_' . $language . '_daterange_error_msg', $values['age_checker_' . $language . '_daterange_error_msg'])
+        ->set('age_checker_' . $language . '_underage_error_msg', $values['age_checker_' . $language . '_underage_error_msg'])
+        ->set('age_checker_' . $language . '_remember_me_text', $values['age_checker_' . $language . '_remember_me_text'])
+        ->set('age_checker_' . $language . '_button_text', $values['age_checker_' . $language . '_button_text'])
+        ->set('age_checker_' . $language . '_footer_links', $values['age_checker_' . $language . '_footer_links'])
+        ->set('age_checker_' . $language . '_copyright', $values['age_checker_' . $language . '_copyright'])
         ->save();
     }
     // Set values in variables.

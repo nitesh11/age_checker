@@ -218,28 +218,29 @@ class SettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Set values in variables.
 
-    \Drupal::state()->set('age_checker_option_remember_me', $form_state->getValues()['age_checker_option_remember_me']);
-    \Drupal::state()->set('age_checker_country_code_url', $form_state->getValues()['age_checker_country_code_url']);
-    \Drupal::state()->set('age_checker_language', $form_state->getValues()['age_checker_language']);
-    \Drupal::state()->set('age_checker_countries', $form_state->getValues()['age_checker_countries']);
-    \Drupal::state()->set('age_checker_cookie_expiration_time', $form_state->getValues()['age_checker_cookie_expiration_time']);
-    \Drupal::state()->set('age_checker_under_age_url', $form_state->getValues()['age_checker_under_age_url']);
-    \Drupal::state()->set('age_checker_visibility', $form_state->getValues()['age_checker_visibility']);
-    \Drupal::state()->set('age_checker_pages', $form_state->getValues()['age_checker_pages']);
-    \Drupal::state()->set('age_checker_background_image', $form_state->getValues()['age_checker_background_image']);
-    \Drupal::state()->set('age_checker_logo', $form_state->getValues()['age_checker_logo']);
+    $values = $form_state->getValues();
+    \Drupal::state()->set('age_checker_option_remember_me', $values['age_checker_option_remember_me']);
+    \Drupal::state()->set('age_checker_country_code_url', $values['age_checker_country_code_url']);
+    \Drupal::state()->set('age_checker_language', $values['age_checker_language']);
+    \Drupal::state()->set('age_checker_countries', $values['age_checker_countries']);
+    \Drupal::state()->set('age_checker_cookie_expiration_time', $values['age_checker_cookie_expiration_time']);
+    \Drupal::state()->set('age_checker_under_age_url', $values['age_checker_under_age_url']);
+    \Drupal::state()->set('age_checker_visibility', $values['age_checker_visibility']);
+    \Drupal::state()->set('age_checker_pages', $values['age_checker_pages']);
+    \Drupal::state()->set('age_checker_background_image', $values['age_checker_background_image']);
+    \Drupal::state()->set('age_checker_logo', $values['age_checker_logo']);
 
     $this->config('age_checker.settings')
-      ->set('age_checker_option_remember_me', $form_state->getValues()['age_checker_option_remember_me'])
-      ->set('age_checker_country_code_url', $form_state->getValues()['age_checker_country_code_url'])
-      ->set('age_checker_language', $form_state->getValues()['age_checker_language'])
-      ->set('age_checker_countries', $form_state->getValues()['age_checker_countries'])
-      ->set('age_checker_cookie_expiration_time', $form_state->getValues()['age_checker_cookie_expiration_time'])
-      ->set('age_checker_under_age_url', $form_state->getValues()['age_checker_under_age_url'])
-      ->set('age_checker_visibility', $form_state->getValues()['age_checker_visibility'])
-      ->set('age_checker_pages', $form_state->getValues()['age_checker_pages'])
-      ->set('age_checker_background_image', $form_state->getValues()['age_checker_background_image'])
-      ->set('age_checker_logo', $form_state->getValues()['age_checker_logo'])
+      ->set('age_checker_option_remember_me', $values['age_checker_option_remember_me'])
+      ->set('age_checker_country_code_url', $values['age_checker_country_code_url'])
+      ->set('age_checker_language', $values['age_checker_language'])
+      ->set('age_checker_countries', $values['age_checker_countries'])
+      ->set('age_checker_cookie_expiration_time', $values['age_checker_cookie_expiration_time'])
+      ->set('age_checker_under_age_url', $values['age_checker_under_age_url'])
+      ->set('age_checker_visibility', $values['age_checker_visibility'])
+      ->set('age_checker_pages', $values['age_checker_pages'])
+      ->set('age_checker_background_image', $values['age_checker_background_image'])
+      ->set('age_checker_logo', $values['age_checker_logo'])
       ->save();
     parent::submitForm($form, $form_state);
   }

@@ -204,7 +204,7 @@ class CountryConfig extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Set values in variables.
-
+    $values = $form_state->getValues();
 
     $countries = \Drupal::state()->get('age_checker_countries', '') ? \Drupal::state()->get('age_checker_countries') : \Drupal::config('age_checker.settings')->get('age_checker_countries');
     $countries = explode("\n", $countries);
@@ -212,25 +212,25 @@ class CountryConfig extends ConfigFormBase {
       $country_array = explode('|', $country);
       $country_array = array_map('trim', $country_array);
 
-      \Drupal::state()->set('age_checker_' . $country_array[0] . '_threshold_ages', $form_state->getValues()['age_checker_' . $country_array[0] . '_threshold_ages']);
-      \Drupal::state()->set('age_checker_' . $country_array[0] . '_redirect_link', $form_state->getValues()['age_checker_' . $country_array[0] . '_redirect_link']);
-      \Drupal::state()->set('age_checker_' . $country_array[0] . '_day_weight', $form_state->getValues()['age_checker_' . $country_array[0] . '_day_weight']);
-      \Drupal::state()->set('age_checker_' . $country_array[0] . '_month_weight', $form_state->getValues()['age_checker_' . $country_array[0] . '_month_weight']);
-      \Drupal::state()->set('age_checker_' . $country_array[0] . '_year_weight', $form_state->getValues()['age_checker_' . $country_array[0] . '_year_weight']);
-      \Drupal::state()->set('age_checker_' . $country_array[0] . '_day_placeholder', $form_state->getValues()['age_checker_' . $country_array[0] . '_day_placeholder']);
-      \Drupal::state()->set('age_checker_' . $country_array[0] . '_month_placeholder', $form_state->getValues()['age_checker_' . $country_array[0] . '_month_placeholder']);
-      \Drupal::state()->set('age_checker_' . $country_array[0] . '_year_placeholder', $form_state->getValues()['age_checker_' . $country_array[0] . '_year_placeholder']);
+      \Drupal::state()->set('age_checker_' . $country_array[0] . '_threshold_ages', $values['age_checker_' . $country_array[0] . '_threshold_ages']);
+      \Drupal::state()->set('age_checker_' . $country_array[0] . '_redirect_link', $values['age_checker_' . $country_array[0] . '_redirect_link']);
+      \Drupal::state()->set('age_checker_' . $country_array[0] . '_day_weight', $values['age_checker_' . $country_array[0] . '_day_weight']);
+      \Drupal::state()->set('age_checker_' . $country_array[0] . '_month_weight', $values['age_checker_' . $country_array[0] . '_month_weight']);
+      \Drupal::state()->set('age_checker_' . $country_array[0] . '_year_weight', $values['age_checker_' . $country_array[0] . '_year_weight']);
+      \Drupal::state()->set('age_checker_' . $country_array[0] . '_day_placeholder', $values['age_checker_' . $country_array[0] . '_day_placeholder']);
+      \Drupal::state()->set('age_checker_' . $country_array[0] . '_month_placeholder', $values['age_checker_' . $country_array[0] . '_month_placeholder']);
+      \Drupal::state()->set('age_checker_' . $country_array[0] . '_year_placeholder', $values['age_checker_' . $country_array[0] . '_year_placeholder']);
 
       $this->config('age_checker_country.settings')
         ->set('age_checker_default_country', $form_state->getValues()['age_checker_default_country'])
-        ->set('age_checker_' . $country_array[0] . '_threshold_ages', $form_state->getValues()['age_checker_' . $country_array[0] . '_threshold_ages'])
-        ->set('age_checker_' . $country_array[0] . '_redirect_link', $form_state->getValues()['age_checker_' . $country_array[0] . '_redirect_link'])
-        ->set('age_checker_' . $country_array[0] . '_day_weight', $form_state->getValues()['age_checker_' . $country_array[0] . '_day_weight'])
-        ->set('age_checker_' . $country_array[0] . '_month_weight', $form_state->getValues()['age_checker_' . $country_array[0] . '_month_weight'])
-        ->set('age_checker_' . $country_array[0] . '_year_weight', $form_state->getValues()['age_checker_' . $country_array[0] . '_year_weight'])
-        ->set('age_checker_' . $country_array[0] . '_day_placeholder', $form_state->getValues()['age_checker_' . $country_array[0] . '_day_placeholder'])
-        ->set('age_checker_' . $country_array[0] . '_month_placeholder', $form_state->getValues()['age_checker_' . $country_array[0] . '_month_placeholder'])
-        ->set('age_checker_' . $country_array[0] . '_year_placeholder', $form_state->getValues()['age_checker_' . $country_array[0] . '_year_placeholder'])
+        ->set('age_checker_' . $country_array[0] . '_threshold_ages', $values['age_checker_' . $country_array[0] . '_threshold_ages'])
+        ->set('age_checker_' . $country_array[0] . '_redirect_link', $values['age_checker_' . $country_array[0] . '_redirect_link'])
+        ->set('age_checker_' . $country_array[0] . '_day_weight', $values['age_checker_' . $country_array[0] . '_day_weight'])
+        ->set('age_checker_' . $country_array[0] . '_month_weight', $values['age_checker_' . $country_array[0] . '_month_weight'])
+        ->set('age_checker_' . $country_array[0] . '_year_weight', $values['age_checker_' . $country_array[0] . '_year_weight'])
+        ->set('age_checker_' . $country_array[0] . '_day_placeholder', $values['age_checker_' . $country_array[0] . '_day_placeholder'])
+        ->set('age_checker_' . $country_array[0] . '_month_placeholder', $values['age_checker_' . $country_array[0] . '_month_placeholder'])
+        ->set('age_checker_' . $country_array[0] . '_year_placeholder', $values['age_checker_' . $country_array[0] . '_year_placeholder'])
         ->save();
     }
     parent::submitForm($form, $form_state);
