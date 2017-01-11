@@ -21,7 +21,8 @@ function age_checker_theme($existing, $type, $theme, $path) {
   $age_checker_copyright = array();
   $default_settings = \Drupal::config('age_checker.settings');
 
-  $languages = \Drupal::state()->get('age_checker_language') ? \Drupal::state()->get('age_checker_language') : $default_settings->get('age_checker_language');
+  $languages = \Drupal::state()->get('age_checker_language');
+  $languages = $languages ? $languages : $default_settings->get('age_checker_language');
   $languages = explode("\n", $languages);
   foreach ($languages as $language) {
     $language = explode('|', $language);
