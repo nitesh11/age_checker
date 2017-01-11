@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\age_checker\Form\AgeCheckerSettingsForm.
+ * Contains \Drupal\age_checker\Form\SettingsForm.
  */
 
 namespace Drupal\age_checker\Form;
@@ -12,16 +12,18 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
-class AgeCheckerSettingsForm extends ConfigFormBase {
+class SettingsForm extends ConfigFormBase {
+
   public function getFormId() {
     return 'age_checker_settings';
   }
+
   public function getEditableConfigNames() {
     return [
       'age_checker.settings',
     ];
-
   }
+
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $config = $this->config('age_checker.settings');
@@ -126,6 +128,7 @@ class AgeCheckerSettingsForm extends ConfigFormBase {
       ),
       '#default_value' => $config->get('age_checker_visibility'),
     );
+
     // Age checker specific pages.
     $form['options']['age_checker_pages'] = array(
       '#type' => 'textarea',
@@ -241,4 +244,3 @@ class AgeCheckerSettingsForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
   }
 }
-

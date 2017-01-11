@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\age_checker\Form\AgeCheckerSettingsForm.
+ * Contains \Drupal\age_checker\Form\MappingAdminForm.
  */
 
 namespace Drupal\age_checker\Form;
@@ -12,16 +12,18 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Html;
 
-class AgeCheckerMappingAdminForm extends ConfigFormBase {
+class MappingAdminForm extends ConfigFormBase {
+
   public function getFormId() {
     return 'age_checker_mapping_settings';
   }
+
   public function getEditableConfigNames() {
     return [
       'age_checker_mapping.settings',
     ];
-
   }
+
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $config = $this->config('age_checker_mapping.settings');
@@ -225,4 +227,3 @@ class AgeCheckerMappingAdminForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
   }
 }
-

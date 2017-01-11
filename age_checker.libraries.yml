@@ -9,7 +9,3 @@ age_checker.admin:
     - core/jquery
     - core/drupal
     - core/drupalSettings
-
-
-
-

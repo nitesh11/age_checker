@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Component\Utility\Unicode;
+
 /**
  * Provides an AgeCheckerSubscriber.
  */
@@ -26,9 +27,11 @@ class AgeCheckerSubscriber implements EventSubscriberInterface {
     if ($user->id() > 0) {
       setcookie('age_checker', 1, 0, $GLOBALS['base_path'], NULL, FALSE, TRUE);
     }
-    if (($age_gate_cookie != 1) && ($remember_me_cookie != 1)) {
-      if ($this->age_checker_show_age_gate()) {
+    else {
+      if (($age_gate_cookie != 1) && ($remember_me_cookie != 1)) {
+        if ($this->age_checker_show_age_gate()) {
 
+        }
       }
     }
   }

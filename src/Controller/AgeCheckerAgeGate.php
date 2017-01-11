@@ -7,9 +7,9 @@ use Drupal\Core\Controller\ControllerBase;
 class AgeCheckerAgeGate extends ControllerBase {
 
   /**
-   * Function age_checker_template.
+   * Function ageCheckerTemplate.
    */
-  public function age_checker_template() {
+  public function ageCheckerTemplate() {
 
     // Getting the language Code.
     $language_code = $this->age_checker_get_language_code();

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\age_checker\Form\AgeCheckerSettingsForm.
+ * Contains \Drupal\age_checker\Form\CountryConfig.
  */
 
 namespace Drupal\age_checker\Form;
@@ -11,10 +11,12 @@ use Drupal\Core\Datetime\Date;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
-class AgeCheckerCountryConfig extends ConfigFormBase {
+class CountryConfig extends ConfigFormBase {
+
   public function getFormId() {
     return 'age_checker_country_settings';
   }
+
   public function getEditableConfigNames() {
     return [
       'age_checker_country.settings',
