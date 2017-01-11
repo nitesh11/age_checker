@@ -1,3 +1,4 @@
 administer age checker settings:
-  description: 'Administer age checker settings'
-  title: 'Full administration access, only for admin.'
+  title: 'Administer age checker settings'
+  description: 'Full administration access, only for admin.'
+  restrict access: TRUE
